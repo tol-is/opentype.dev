@@ -10,10 +10,14 @@
     "emotion": "^10.0.27",
     "emotion-theming": "^10.0.27",
     "fontkit": "^1.8.1",
+    "immer": "^6.0.9",
     "lodash": "^4.17.15",
     "parcel-plugin-static-files-copy": "^2.4.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

@@ -1,37 +1,28 @@
 import { render } from 'react-dom';
 import React, { useCallback, useEffect } from 'react';
-import { css, injectGlobal } from 'emotion';
+import { Provider } from 'react-redux';
 
 import AppHeader from './app-header';
 import AppMain from './app-main';
+import { PersistGate } from 'redux-persist/integration/react';
+
+import configureStore from './configure-store';
 
 import AppContext from './app-context';
 import useLocalStorage from './use-local-storage';
 
 import './app.css';
 
+const { store, persistor } = configureStore();
+
 const App = () => {
-  const [params, setParams] = useLocalStorage('params', { fonts: [] });
-
-  const addFont = useCallback((font) => {
-    const { fonts, ...rest } = params;
-    setParams({
-      ...rest,
-      fonts: [...fonts, font],
-    });
-  });
-
-  useEffect(() => {
-    params.fonts.forEach((f) => {
-      injectGlobal`${f.global}`;
-    });
-  }, [params.fonts]);
-
   return (
-    <AppContext.Provider value={{ ...params, addFont }}>
-      <AppHeader />
-      <AppMain />
-    </AppContext.Provider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppHeader />
+        <AppMain />
+      </PersistGate>
+    </Provider>
   );
 };
 

@@ -1,17 +1,23 @@
 import React, { useContext, useCallback, useEffect, useState } from 'react';
-import { css } from 'emotion';
+import { connect } from 'react-redux';
 import fontkit from 'fontkit';
 import blobToBuffer from 'blob-to-buffer';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
-import get from './get';
-import { isConstructorDeclaration } from 'typescript';
+import { addFont } from './modules/fonts';
 
+import ButtonUpload from './ui/btn-upload';
+
+import get from './get';
 import AppContext from './app-context';
 
-export default () => {
-  const { addFont } = useContext(AppContext);
+const FontLoaderContainer = (props) => {
+  const { addFont } = props;
+
+  useEffect(() => {
+    console.log(props.fonts, props.addFont);
+  }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
@@ -42,7 +48,7 @@ export default () => {
       subfamilyName ||
       'Custom';
 
-    const fontKitData = {
+    const openTypeData = {
       familyName,
       subfamilyName,
       weight,
@@ -55,17 +61,8 @@ export default () => {
     };
 
     addFont({
-      fontData,
-      font: fontKitData,
-      global: `
-        @font-face {
-          font-family: '${font.familyName}';
-          font-weight: ${weight};
-          font-style: ${italic ? 'italic' : 'normal'};
-          src: url('${fontData}')
-              format('opentype');
-        }
-      `,
+      blob: fontData,
+      metrics: openTypeData,
     });
   }, []);
 
@@ -102,23 +99,22 @@ export default () => {
     });
   };
 
-  return (
-    <div className="upload_button" tabIndex={-1} aria-hidden={true}>
-      Upload Font File
-      <input
-        multiple
-        type="file"
-        onChange={onChange}
-        className={css`
-          position: absolute;
-          opacity: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 10;
-          top: 0;
-          left: 0;
-        `}
-      />
-    </div>
-  );
+  return <ButtonUpload onChange={onChange} />;
 };
+
+function mapStateToProps(state) {
+  return {
+    fonts: state.fonts,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addFont: (payload) => dispatch(addFont(payload)),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FontLoaderContainer);
