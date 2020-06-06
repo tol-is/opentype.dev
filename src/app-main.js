@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { injectGlobal } from 'emotion';
 
-import { updateFonts, removeFontByIndex } from './modules/fonts';
+import { updateFonts, removeFont } from './modules/fonts';
 import FontView from './ui/font-view';
 
 const AppMain = styled.main`
@@ -12,7 +12,7 @@ const AppMain = styled.main`
   padding: 8em 0;
 `;
 
-const Main = ({ fonts, updateFonts, removeFontByIndex }) => {
+const Main = ({ fonts, updateFonts, removeFont }) => {
   useEffect(() => {
     fonts.forEach((font) => {
       injectGlobal`
@@ -46,9 +46,9 @@ const Main = ({ fonts, updateFonts, removeFontByIndex }) => {
     [fonts]
   );
 
-  const onDelete = useCallback(
-    (idx) => {
-      removeFontByIndex(idx);
+  const onRemove = useCallback(
+    (fontID) => {
+      removeFont(fontID);
     },
     [fonts]
   );
@@ -73,7 +73,7 @@ const Main = ({ fonts, updateFonts, removeFontByIndex }) => {
                           index={index}
                           metrics={font.metrics}
                           config={font.config}
-                          onDelete={onDelete}
+                          onRemove={onRemove}
                         />
                       </div>
                     )}
@@ -97,7 +97,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeFontByIndex: (index) => dispatch(removeFontByIndex(index)),
+    removeFont: (fontID) => dispatch(removeFont(fontID)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };
 }

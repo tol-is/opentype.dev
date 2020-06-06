@@ -30,12 +30,6 @@ const FontLoaderContainer = (props) => {
     const italic = font['OS/2'].fsSelection.italic;
 
     //
-    // let scripts = get(font, 'GSUB.scriptList', []).concat(
-    //   get(font, 'GPOS.scriptList', [])
-    // );
-    // let scriptTags = Array.from(new Set(scripts.map((s) => s.tag)));
-
-    //
     let defaultSettings = mapValues(font.variationAxes, 'default');
 
     let defaultVariationName =
