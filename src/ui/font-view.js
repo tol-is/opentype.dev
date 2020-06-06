@@ -2,36 +2,43 @@ import React from 'react';
 import propTypes from 'prop-types';
 import { css } from 'emotion';
 
-const FontView = (props) => (
+const FontView = ({ metrics, config }) => (
   <div
     className={css`
-      font-family: ${props.familyName};
-      font-weight: ${props.weight};
-      font-style: ${props.italic ? 'italic' : 'normal'};
+      font-family: ${metrics.familyName};
+      font-weight: ${metrics.weight};
+      font-style: ${metrics.italic ? 'italic' : 'normal'};
+      font-size: ${config.fontSize}px;
+      line-height: ${config.lineHeight};
       position: relative;
       padding: 1rem 2rem;
-      min-height: 60vh;
+      min-height: 40vh;
       display: flex;
       align-items: center;
     `}
   >
-    And then I see the disinfectant where it knocks it out in a minute. One
-    minute. And is there a way we can do something like that, by injection
-    inside or almost a cleaning
+    {config.text}
   </div>
 );
 
 FontView.propTypes = {
   id: propTypes.id,
-  familyName: propTypes.string,
-  subfamilyName: propTypes.string,
-  weight: propTypes.string,
-  italic: propTypes.bool,
-  availableFeatures: propTypes.any,
-  defaultSettings: propTypes.any,
-  defaultVariationName: propTypes.any,
-  variationAxes: propTypes.any,
-  namedVariations: propTypes.any,
+  metrics: propTypes.objectOf({
+    familyName: propTypes.string,
+    subfamilyName: propTypes.string,
+    weight: propTypes.string,
+    italic: propTypes.bool,
+    availableFeatures: propTypes.any,
+    defaultSettings: propTypes.any,
+    defaultVariationName: propTypes.any,
+    variationAxes: propTypes.any,
+    namedVariations: propTypes.any,
+  }),
+  config: propTypes.objectOf({
+    text: propTypes.string,
+    fontSize: propTypes.number,
+    lineHeight: propTypes.number,
+  }),
 };
 
 export default FontView;
