@@ -36,17 +36,7 @@ export const fonts = produce((state = initialState, action) => {
   switch (action.type) {
     case ADD_FONT:
       const { metrics, blob } = action.payload;
-      state.fonts.push({
-        id: uuid(),
-        metrics,
-        blob,
-        config: {
-          text:
-            'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what. ',
-          fontSize: 42,
-          lineHeight: 1.15,
-        },
-      });
+      state.fonts.push({ id: uuid(), metrics, blob });
       break;
     case DELETE_FONT:
       // draft.newToDo = action.value;

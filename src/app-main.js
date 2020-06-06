@@ -61,11 +61,7 @@ const Main = ({ fonts, updateFonts }) => {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <FontView
-                          id={font.id}
-                          metrics={font.metrics}
-                          config={font.config}
-                        />
+                        <FontView id={font.id} {...font.metrics} />
                       </div>
                     )}
                   </Draggable>
