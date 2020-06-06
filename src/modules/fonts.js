@@ -1,8 +1,9 @@
 import produce from 'immer';
 
-const UPDATE_FONTS = 'REORDER_FONTS';
+const UPDATE_FONTS = 'UPDATE_FONTS';
 const ADD_FONT = 'ADD_FONT';
-const DELETE_FONT = 'DELETE_FONT';
+const REMOVE_FONT_BY_INDEX = 'REMOVE_FONT_BY_INDEX';
+const REMOVE_FONT_BY_ID = 'REMOVE_FONT_BY_ID';
 
 export const uuid = () =>
   `${Math.random().toString(36).substring(2) + Date.now().toString(36)}`;
@@ -14,9 +15,17 @@ export function addFont({ metrics, blob }) {
   };
 }
 
-export function removeFont(id) {
+export function removeFontByIndex(idx) {
+  console.log(idx);
   return {
-    type: DELETE_FONT,
+    type: REMOVE_FONT_BY_INDEX,
+    payload: idx,
+  };
+}
+
+export function removeFontById(id) {
+  return {
+    type: REMOVE_FONT_BY_ID,
     payload: id,
   };
 }
@@ -28,15 +37,15 @@ export function updateFonts(fonts) {
   };
 }
 
-const initialState = {
-  fonts: [],
-};
+const initialState = [];
 
 export const fonts = produce((state = initialState, action) => {
+  console.log(action);
+
   switch (action.type) {
     case ADD_FONT:
       const { metrics, blob } = action.payload;
-      state.fonts.push({
+      state.push({
         id: uuid(),
         metrics,
         blob,
@@ -48,12 +57,15 @@ export const fonts = produce((state = initialState, action) => {
         },
       });
       break;
-    case DELETE_FONT:
-      // draft.newToDo = action.value;
+    case REMOVE_FONT_BY_INDEX:
+      console.log('potato');
+      state.splice(action.payload, 1);
+      break;
+    case REMOVE_FONT_BY_ID:
+      // state.splice(action.payload, 1);
       break;
     case UPDATE_FONTS:
-      state.fonts = action.payload;
-
+      state = action.payload;
       break;
     default:
       return state;
