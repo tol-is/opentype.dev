@@ -1,5 +1,5 @@
 {
-  "name": "type-tester",
+  "name": "opentype-tester",
   "version": "0.0.1",
   "author": "Apostolos Christodoulou <me@tol.is>",
   "license": "ISC",
@@ -13,7 +13,9 @@
     "immer": "^6.0.9",
     "lodash": "^4.17.15",
     "parcel-plugin-static-files-copy": "^2.4.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",

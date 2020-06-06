@@ -1,16 +1,18 @@
 import { connect } from 'react-redux';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { injectGlobal } from 'emotion';
+
+import { updateFonts } from './modules/fonts';
+import FontView from './ui/font-view';
 
 const AppMain = styled.main`
   min-height: 100vh;
-  padding-top: 100px;
+  padding: 8em 0;
 `;
 
-injectGlobal;
-
-const Main = ({ fonts }) => {
+const Main = ({ fonts, updateFonts }) => {
   useEffect(() => {
     fonts.forEach((font) => {
       injectGlobal`
@@ -25,13 +27,52 @@ const Main = ({ fonts }) => {
     });
   }, [fonts]);
 
+  const onDragEnd = useCallback(
+    (result) => {
+      // dropped outside the list
+      if (!result.destination) {
+        return;
+      }
+
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+
+      const newFonts = Array.from(fonts);
+      const [removed] = newFonts.splice(startIndex, 1);
+      newFonts.splice(endIndex, 0, removed);
+
+      updateFonts(newFonts);
+    },
+    [fonts]
+  );
+
   return (
-    <AppMain>
-      <div>Main</div>
-      {fonts.map((f) => (
-        <div>{JSON.stringify(f.metrics)}</div>
-      ))}
-    </AppMain>
+    fonts && (
+      <AppMain>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {fonts.map((font, index) => (
+                  <Draggable key={font.id} draggableId={font.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <FontView id={font.id} {...font.metrics} />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </AppMain>
+    )
   );
 };
 
@@ -41,4 +82,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(Main);
+function mapDispatchToProps(dispatch) {
+  return {
+    updateFonts: (fonts) => dispatch(updateFonts(fonts)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

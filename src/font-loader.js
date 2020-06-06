@@ -5,18 +5,15 @@ import blobToBuffer from 'blob-to-buffer';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
-import { addFont } from './modules/fonts';
-
 import ButtonUpload from './ui/btn-upload';
-
+import { addFont } from './modules/fonts';
 import get from './get';
-import AppContext from './app-context';
 
 const FontLoaderContainer = (props) => {
   const { addFont } = props;
 
   useEffect(() => {
-    console.log(props.fonts, props.addFont);
+    // console.log(props.fonts, props.addFont);
   }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
