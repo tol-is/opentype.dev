@@ -4,6 +4,8 @@ const UPDATE_FONTS = 'UPDATE_FONTS';
 const ADD_FONT = 'ADD_FONT';
 const REMOVE_FONT = 'REMOVE_FONT';
 
+const SET_FONT_CONFIG = 'SET_FONT_CONFIG';
+
 import { otFeatures } from '../constants';
 
 export const uuid = () =>
@@ -30,34 +32,63 @@ export function updateFonts(fonts) {
   };
 }
 
+export function setFontConfig(id, config) {
+  console.log(id, config);
+  return {
+    type: SET_FONT_CONFIG,
+    payload: {
+      id,
+      config,
+    },
+  };
+}
+
 const initialState = {
   fonts: [],
+  config: [],
 };
 
 const getFontIndexById = (fonts) => (id) => fonts.findIndex((f) => f.id === id);
 
 export const fonts = produce((state = initialState, action) => {
   const getFontIndex = getFontIndexById(state.fonts);
-
+  let fontIndex = null;
   switch (action.type) {
+    //
     case ADD_FONT:
       const { metrics, blob } = action.payload;
       state.fonts.push(initializeFontEntry(metrics, blob));
       break;
+    //
     case REMOVE_FONT:
-      const fontIndex = getFontIndex(action.payload);
+      fontIndex = getFontIndex(action.payload);
       state.fonts.splice(fontIndex, 1);
-      // draft.newToDo = action.value;
       break;
+    //
+    case SET_FONT_CONFIG:
+      const { id, config } = action.payload;
+      fontIndex = getFontIndex(id);
+
+      // const nextConfig = produce(config, (draft) => {
+      //   draft.features[e.target.value] = e.target.checked;
+      // });
+
+      // console.log(config);
+      state.fonts[fontIndex].config = config;
+      // console.log(state.fonts[fontIndex]);
+      // state.fonts[fontIndex][feature] = enabled;
+      break;
+    //
     case UPDATE_FONTS:
       state.fonts = action.payload;
-
       break;
+    //
     default:
       return state;
   }
 });
 
+//
 const initializeFontEntry = (metrics, blob) => {
   const {
     availableFeatures = [],
@@ -103,6 +134,5 @@ const initializeFontEntry = (metrics, blob) => {
     },
   };
 
-  console.log(config);
   return config;
 };

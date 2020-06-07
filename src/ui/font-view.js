@@ -1,16 +1,30 @@
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
+import produce from 'immer';
+
 import { css } from 'emotion';
 import { otFeatures } from '../constants';
 
-const FontView = ({ id, index, metrics, config, onRemove }) => {
+const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
   //
   const onRemoveClick = useCallback(() => {
-    onRemove(index);
-  }, [index]);
+    onRemove(id);
+  }, []);
 
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
+
+  //
+  const onFontFeatureChange = useCallback(
+    (e) => {
+      const nextConfig = produce(config, (draft) => {
+        draft.features[e.target.value] = e.target.checked;
+      });
+
+      setConfig(id, nextConfig);
+    },
+    [config]
+  );
 
   //
   const fontFeatureSettings = useMemo(() => {
@@ -25,6 +39,7 @@ const FontView = ({ id, index, metrics, config, onRemove }) => {
     }, '');
   }, [config.features]);
 
+  //
   return (
     <div
       className={css`
@@ -110,7 +125,12 @@ const FontView = ({ id, index, metrics, config, onRemove }) => {
             >
               {featureKeys.map((key) => (
                 <label>
-                  <input type="checkbox" name="features[]" value={key} />
+                  <input
+                    type="checkbox"
+                    name="features[]"
+                    value={key}
+                    onChange={onFontFeatureChange}
+                  />
                   {otFeatures[key].title}
                 </label>
               ))}

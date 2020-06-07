@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { injectGlobal } from 'emotion';
 
-import { updateFonts, removeFont } from './modules/fonts';
+import { updateFonts, removeFont, setFontConfig } from './modules/fonts';
 import FontView from './ui/font-view';
 
 const AppMain = styled.main`
@@ -12,7 +12,7 @@ const AppMain = styled.main`
   padding: 8em 0;
 `;
 
-const Main = ({ fonts, updateFonts, removeFont }) => {
+const Main = ({ fonts, updateFonts, removeFont, setFontConfig }) => {
   useEffect(() => {
     fonts.forEach((font) => {
       injectGlobal`
@@ -30,25 +30,29 @@ const Main = ({ fonts, updateFonts, removeFont }) => {
   const onDragEnd = useCallback(
     (result) => {
       // dropped outside the list
-      if (!result.destination) {
-        return;
-      }
+      if (!result.destination) return;
 
       const startIndex = result.source.index;
       const endIndex = result.destination.index;
-
       const newFonts = Array.from(fonts);
       const [removed] = newFonts.splice(startIndex, 1);
       newFonts.splice(endIndex, 0, removed);
-
+      // update font list
       updateFonts(newFonts);
     },
     [fonts]
   );
 
   const onRemove = useCallback(
-    (fontID) => {
-      removeFont(fontID);
+    (id) => {
+      removeFont(id);
+    },
+    [fonts]
+  );
+
+  const onSetConfig = useCallback(
+    (id, config) => {
+      setFontConfig(id, config);
     },
     [fonts]
   );
@@ -73,6 +77,7 @@ const Main = ({ fonts, updateFonts, removeFont }) => {
                           index={index}
                           metrics={font.metrics}
                           config={font.config}
+                          setConfig={onSetConfig}
                           onRemove={onRemove}
                         />
                       </div>
@@ -97,7 +102,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    removeFont: (fontID) => dispatch(removeFont(fontID)),
+    setFontConfig: (id, config) => dispatch(setFontConfig(id, config)),
+    removeFont: (id) => dispatch(removeFont(id)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };
 }
