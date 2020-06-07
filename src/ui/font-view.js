@@ -7,7 +7,7 @@ import { css } from 'emotion';
 import { otFeatures } from '../constants';
 
 const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
-  console.log(config);
+  console.log(config, metrics);
   const [showFeatures, setShowFeatures] = useState(false);
   const [showVariations, setShowVariations] = useState(false);
 
