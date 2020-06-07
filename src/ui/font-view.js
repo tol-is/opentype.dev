@@ -115,7 +115,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
       <div
         className={css`
           display: grid;
-          grid-template-columns: repeat(10, minmax(0, 1fr));
+          grid-template-columns: repeat(7, minmax(0, 1fr));
           grid-gap: 1em;
         `}
       >
@@ -227,7 +227,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
         )}
         <div
           className={css`
-            grid-column: span 10;
+            grid-column: span 7;
           `}
         >
           <Accordion visible={showVariations}>
