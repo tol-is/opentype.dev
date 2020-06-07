@@ -6,6 +6,7 @@ const REMOVE_FONT = 'REMOVE_FONT';
 
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION = 'SET_FONT_VARIATION';
+const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
 
 import { otFeatures } from '../constants';
@@ -56,6 +57,16 @@ export function setFontVariation(id, key, value) {
   };
 }
 
+export function setFontNamedVariation(id, variation) {
+  return {
+    type: SET_FONT_NAMED_VARIATION,
+    payload: {
+      id,
+      variation,
+    },
+  };
+}
+
 export function setFontConfigProp(id, key, value) {
   return {
     type: SET_FONT_CONFIG_PROP,
@@ -99,6 +110,13 @@ export const fonts = produce((state = initialState, action) => {
       fontIndex = getFontIndex(payload.id);
       state.fonts[fontIndex].config.variations[payload.key] = payload.value;
       break;
+    //
+    case SET_FONT_NAMED_VARIATION:
+      console.log(payload);
+      fontIndex = getFontIndex(payload.id);
+      state.fonts[fontIndex].config.variations = payload.variation;
+      break;
+
     //
     case SET_FONT_CONFIG_PROP:
       fontIndex = getFontIndex(payload.id);
@@ -156,7 +174,6 @@ const initializeFontEntry = (metrics, blob) => {
         'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what.',
       fontSize: 32,
       lineHeight: 1.15,
-      letterSpacing: 0,
       direction: 'ltr',
       align: 'left',
       features: featuresConfig,

@@ -9,6 +9,7 @@ import {
   removeFont,
   setFontFeature,
   setFontVariation,
+  setFontNamedVariation,
   setFontConfigProp,
 } from './modules/fonts';
 import FontView from './ui/font-view';
@@ -24,6 +25,7 @@ const Main = ({
   removeFont,
   setFontFeature,
   setFontVariation,
+  setFontNamedVariation,
   setFontConfigProp,
 }) => {
   useEffect(() => {
@@ -68,6 +70,10 @@ const Main = ({
     setFontVariation(id, key, value);
   }, []);
 
+  const onSetFontNamedVariation = useCallback((id, variation) => {
+    setFontNamedVariation(id, variation);
+  }, []);
+
   const onSetConfigProp = useCallback((id, key, value) => {
     setFontConfigProp(id, key, value);
   }, []);
@@ -93,6 +99,7 @@ const Main = ({
                           metrics={font.metrics}
                           config={font.config}
                           setFontVariation={onSetFontVariation}
+                          setNamedVariation={onSetFontNamedVariation}
                           setFontFeature={onSetFontFeature}
                           setConfigProp={onSetConfigProp}
                           onRemove={onRemove}
@@ -125,6 +132,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(setFontFeature(id, key, enabled)),
     setFontVariation: (id, key, value) =>
       dispatch(setFontVariation(id, key, value)),
+    setFontNamedVariation: (id, config) =>
+      dispatch(setFontNamedVariation(id, config)),
     removeFont: (id) => dispatch(removeFont(id)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };

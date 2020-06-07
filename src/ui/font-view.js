@@ -13,6 +13,7 @@ const FontView = ({
   config,
   setFontFeature,
   setFontVariation,
+  setNamedVariation,
   setConfigProp,
   onRemove,
 }) => {
@@ -37,8 +38,12 @@ const FontView = ({
     setFontVariation(id, e.target.name, e.target.value);
   }, []);
 
-  const onLetterSpacingChange = useCallback((e) => {
-    setConfigProp(id, 'letterSpacing', e.target.value);
+  const onNamedVariationSelect = useCallback((key) => {
+    setNamedVariation(id, metrics.namedVariations[key]);
+  }, []);
+
+  const onDirectionChange = useCallback((e) => {
+    setConfigProp(id, 'direction', e.target.value);
   }, []);
 
   const onFontSizeChange = useCallback((e) => {
@@ -156,6 +161,7 @@ const FontView = ({
             onChange={onLineHeightChange}
           />
         </div>
+
         <div
           className={css`
             grid-column: span 1;
@@ -163,16 +169,15 @@ const FontView = ({
             flex-direction: column;
           `}
         >
-          <label htmlFor={`${id}_inputLetterSpacing`}>Letter Spacing</label>
-          <input
-            id={`${id}_inputLetterSpacing`}
-            type="range"
-            min={-0.2}
-            max={0.2}
-            step={0.001}
-            value={config.letterSpacing}
-            onChange={onLetterSpacingChange}
-          />
+          <label htmlFor={`${id}_inputDirection`}>Direction</label>
+          <select onChange={onDirectionChange}>
+            <option value="ltr" selected={config.direction === 'ltr'}>
+              Left-to-Right
+            </option>
+            <option value="rtl" selected={config.direction === 'rtl'}>
+              Right-to-Left
+            </option>
+          </select>
         </div>
         <div
           className={css`
@@ -248,6 +253,23 @@ const FontView = ({
                   ))}
                 </div>
               </fieldset>
+              <div
+                className={css`
+                  padding-top: 16px;
+                  display: grid;
+                  grid-template-columns: repeat(5, minmax(0, 1fr));
+                  grid-gap: 1em;
+                  & > * {
+                    grid-column: span 1;
+                  }
+                `}
+              >
+                {Object.keys(metrics.namedVariations).map((key) => (
+                  <button onClick={() => onNamedVariationSelect(key)}>
+                    {key}
+                  </button>
+                ))}
+              </div>
             </div>
           </Accordion>
         </div>
@@ -306,6 +328,7 @@ const FontView = ({
           letter-spacing: ${config.letterSpacing}em;
           font-feature-settings: ${fontFeatureSettings};
           font-variation-settings: ${fontVariationSettings};
+          direction: ${config.direction};
           padding: 2rem 0;
         `}
       >
