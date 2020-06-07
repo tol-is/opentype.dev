@@ -7,6 +7,7 @@ import { css } from 'emotion';
 import { otFeatures } from '../constants';
 
 const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
+  console.log(config);
   const [showFeatures, setShowFeatures] = useState(false);
   const [showVariations, setShowVariations] = useState(false);
 
@@ -179,22 +180,48 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
             Toggle Features
           </label>
         </div>
+        {config.variations && (
+          <div
+            className={css`
+              grid-column: span 1;
+              display: flex;
+              flex-direction: column;
+            `}
+          >
+            <label>
+              <input
+                type="checkbox"
+                name="showVariations"
+                checked={showVariations}
+                onChange={onToggleVariationsPanel}
+              />
+              Toggle Variations
+            </label>
+          </div>
+        )}
         <div
           className={css`
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
+            grid-column: span 10;
           `}
         >
-          <label>
-            <input
-              type="checkbox"
-              name="showVariations"
-              checked={showVariations}
-              onChange={onToggleVariationsPanel}
-            />
-            Toggle Variations
-          </label>
+          <Accordion visible={showVariations}>
+            <div>
+              <fieldset>
+                <div
+                  className={css`
+                    display: grid;
+                    grid-template-columns: repeat(5, minmax(0, 1fr));
+                    grid-gap: 1em;
+                    & > * {
+                      grid-column: span 1;
+                    }
+                  `}
+                >
+                  adsadadasd
+                </div>
+              </fieldset>
+            </div>
+          </Accordion>
         </div>
         <div
           className={css`

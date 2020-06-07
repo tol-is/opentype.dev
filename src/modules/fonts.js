@@ -104,14 +104,18 @@ const initializeFontEntry = (metrics, blob) => {
     return res;
   }, {});
 
+  const vAxes = Object.keys(variationAxes);
+
+  const isVariable = vAxes.length > 0;
+
   const variationsDefaults =
-    variationAxes && defaultVariationName
+    isVariable && defaultVariationName
       ? namedVariations[defaultVariationName]
       : [];
 
   const variationsConfig =
-    (variationAxes &&
-      Object.keys(variationAxes).reduce((res, cur) => {
+    (isVariable &&
+      vAxes.reduce((res, cur) => {
         res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
         return res;
       }, {})) ||
