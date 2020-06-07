@@ -8,17 +8,17 @@ import { otFeatures } from '../constants';
 
 const FontView = ({
   id,
-  index,
-  metrics,
-  config,
+  font,
   setFontFeature,
   setFontVariationAxis,
   setNamedVariation,
-  setConfigProp,
+  globalConfig,
   onRemove,
 }) => {
   const [showFeatures, setShowFeatures] = useState(false);
   const [showVariations, setShowVariations] = useState(false);
+
+  const { metrics, config } = font;
 
   //
   const onRemoveClick = useCallback(() => {
@@ -28,7 +28,7 @@ const FontView = ({
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
   const variationAxes = useMemo(() => Object.keys(config.variations || {}), []);
-  const namedVariations = useMemo(
+  const variationsNames = useMemo(
     () => Object.keys(metrics.namedVariations || {}),
     []
   );
@@ -44,18 +44,6 @@ const FontView = ({
 
   const onNamedVariationSelect = useCallback((key) => {
     setNamedVariation(id, key);
-  }, []);
-
-  const onDirectionChange = useCallback((e) => {
-    setConfigProp(id, 'direction', e.target.value);
-  }, []);
-
-  const onFontSizeChange = useCallback((e) => {
-    setConfigProp(id, 'fontSize', e.target.value);
-  }, []);
-
-  const onLineHeightChange = useCallback((e) => {
-    setConfigProp(id, 'lineHeight', e.target.value);
   }, []);
 
   const onToggleFeaturesPanel = useCallback(() => {
@@ -94,7 +82,7 @@ const FontView = ({
 
   const selectedVariation = useMemo(() => {
     return (
-      namedVariations.find((vName) => {
+      variationsNames.find((vName) => {
         let isSelected = true;
         variationAxes.forEach((vAxis) => {
           if (
@@ -118,7 +106,6 @@ const FontView = ({
       className={css`
         position: relative;
         padding: 1rem 2rem;
-        min-height: 52vh;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -127,7 +114,7 @@ const FontView = ({
       <div
         className={css`
           display: grid;
-          grid-template-columns: repeat(6, minmax(0, 1fr));
+          grid-template-columns: repeat(5, minmax(0, 1fr));
           grid-gap: 1em;
         `}
       >
@@ -154,56 +141,6 @@ const FontView = ({
             flex-direction: column;
           `}
         >
-          <label htmlFor={`${id}_inputFontSize`}>Font Size</label>
-          <input
-            id={`${id}_inputFontSize`}
-            type="range"
-            min={8}
-            max={400}
-            step={1}
-            value={config.fontSize}
-            onChange={onFontSizeChange}
-          />
-        </div>
-        <div
-          className={css`
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <label htmlFor={`${id}_inputLineHeight`}>Line Height</label>
-          <input
-            id={`${id}_inputLineHeight`}
-            type="range"
-            min={0}
-            max={2}
-            step={0.01}
-            value={config.lineHeight}
-            onChange={onLineHeightChange}
-          />
-        </div>
-
-        <div
-          className={css`
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <label htmlFor={`${id}_inputDirection`}>Direction</label>
-          <select onChange={onDirectionChange} value={config.direction}>
-            <option value="ltr">Left-to-Right</option>
-            <option value="rtl">Right-to-Left</option>
-          </select>
-        </div>
-        <div
-          className={css`
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
-          `}
-        >
           <label>
             <input
               type="checkbox"
@@ -214,7 +151,7 @@ const FontView = ({
             Toggle Features
           </label>
         </div>
-        {config.variations && (
+        {metrics.isVariable && (
           <div
             className={css`
               grid-column: span 1;
@@ -244,7 +181,7 @@ const FontView = ({
                 <div
                   className={css`
                     display: grid;
-                    grid-template-columns: repeat(6, minmax(0, 1fr));
+                    grid-template-columns: repeat(5, minmax(0, 1fr));
                     grid-gap: 1em;
                     & > * {
                       grid-column: span 1;
@@ -273,16 +210,15 @@ const FontView = ({
               </fieldset>
               <div
                 className={css`
-                  padding-top: 16px;
                   display: grid;
-                  grid-template-columns: repeat(6, minmax(0, 1fr));
+                  grid-template-columns: repeat(5, minmax(0, 1fr));
                   grid-gap: 1em;
                   & > * {
                     grid-column: span 1;
                   }
                 `}
               >
-                {namedVariations.map((key) => (
+                {variationsNames.map((key) => (
                   <button
                     key={key}
                     onClick={() => onNamedVariationSelect(key)}
@@ -302,7 +238,7 @@ const FontView = ({
         </div>
         <div
           className={css`
-            grid-column: span 6;
+            grid-column: span 5;
           `}
         >
           <Accordion visible={showFeatures}>
@@ -314,7 +250,7 @@ const FontView = ({
               <div
                 className={css`
                   display: grid;
-                  grid-template-columns: repeat(6, minmax(0, 1fr));
+                  grid-template-columns: repeat(5, minmax(0, 1fr));
                   grid-gap: 1em;
                   & > * {
                     grid-column: span 1;
@@ -338,28 +274,18 @@ const FontView = ({
         </div>
       </div>
       <div
-        suppressContentEditableWarning
-        contentEditable
-        spellCheck={false}
-        onPaste={(e) => {
-          e.preventDefault();
-          const text = e.clipboardData.getData('text');
-          document.execCommand('insertText', false, text);
-        }}
         className={css`
           font-family: ${metrics.familyName};
           font-weight: ${metrics.weight};
           font-style: ${metrics.italic ? 'italic' : 'normal'};
-          font-size: ${config.fontSize}px;
-          line-height: ${config.lineHeight};
-          letter-spacing: ${config.letterSpacing}em;
+          font-size: ${globalConfig.fontSize}px;
+          line-height: ${globalConfig.lineHeight};
           font-feature-settings: ${fontFeatureSettings};
           font-variation-settings: ${fontVariationSettings};
-          direction: ${config.direction};
-          padding: 2rem 0;
+          direction: ${globalConfig.direction};
         `}
       >
-        {config.text}
+        {globalConfig.text}
       </div>
     </div>
   );

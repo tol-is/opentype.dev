@@ -8,6 +8,7 @@ const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
+const SET_GLOBAL_CONFIG_PROP = 'SET_GLOBAL_CONFIG_PROP';
 
 import { otFeatures } from '../constants';
 
@@ -78,14 +79,46 @@ export function setFontConfigProp(id, key, value) {
   };
 }
 
-const initialState = {
+export function setGlobalConfigProp(key, value) {
+  return {
+    type: SET_GLOBAL_CONFIG_PROP,
+    payload: {
+      key,
+      value,
+    },
+  };
+}
+
+const initialFontsState = {
   fonts: [],
-  config: [],
+};
+
+const initialConfigState = {
+  text:
+    'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what.',
+  fontSize: 32,
+  lineHeight: 1.15,
+  direction: 'ltr',
+  align: 'left',
 };
 
 const getFontIndexById = (fonts) => (id) => fonts.findIndex((f) => f.id === id);
 
-export const fonts = produce((state = initialState, action) => {
+export const config = produce((state = initialConfigState, action) => {
+  const { payload } = action;
+  switch (action.type) {
+    //
+    case SET_GLOBAL_CONFIG_PROP:
+      console.log(payload);
+      state[payload.key] = payload.value;
+      break;
+
+    //
+    default:
+      return state;
+  }
+});
+export const fonts = produce((state = initialFontsState, action) => {
   const getFontIndex = getFontIndexById(state.fonts);
   const { payload } = action;
   let fontIndex = null;
@@ -121,7 +154,7 @@ export const fonts = produce((state = initialState, action) => {
     //
     case SET_FONT_CONFIG_PROP:
       fontIndex = getFontIndex(payload.id);
-      state.fonts[fontIndex].config[payload.key] = payload.value;
+
       break;
     //
     case UPDATE_FONTS:
@@ -151,33 +184,20 @@ const initializeFontEntry = (metrics, blob) => {
 
   const vAxes = Object.keys(variationAxes);
 
-  const isVariable = vAxes.length > 0;
+  const variationsDefaults = defaultVariationName
+    ? namedVariations[defaultVariationName]
+    : [];
 
-  const variationsDefaults =
-    isVariable && defaultVariationName
-      ? namedVariations[defaultVariationName]
-      : [];
-
-  const variationsConfig =
-    (isVariable &&
-      vAxes.reduce((res, cur) => {
-        res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
-        return res;
-      }, {})) ||
-    null;
+  const variationsConfig = vAxes.reduce((res, cur) => {
+    res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
+    return res;
+  }, {});
 
   const config = {
     id: uuid(),
     metrics,
     blob,
     config: {
-      isVariable,
-      text:
-        'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what.',
-      fontSize: 32,
-      lineHeight: 1.15,
-      direction: 'ltr',
-      align: 'left',
       features: featuresConfig,
       variations: variationsConfig,
     },

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from '@emotion/styled';
 
-import FontLoader from './font-loader';
+import ConfigPanel from './ui/global-config-panel';
 
-const AppHeader = styled.header`
+const StyledHeader = styled.header`
   position: fixed;
   top: 0;
   width: 100%;
@@ -12,10 +12,12 @@ const AppHeader = styled.header`
   z-index: 100;
 `;
 
-export default () => {
+const AppHeader = () => {
   return (
-    <AppHeader>
-      <FontLoader />
-    </AppHeader>
+    <StyledHeader>
+      <ConfigPanel />
+    </StyledHeader>
   );
 };
+
+export default AppHeader;

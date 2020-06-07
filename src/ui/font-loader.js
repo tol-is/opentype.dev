@@ -5,9 +5,9 @@ import blobToBuffer from 'blob-to-buffer';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
-import ButtonUpload from './ui/btn-upload';
-import { addFont } from './modules/fonts';
-import get from './get';
+import ButtonUpload from './btn-upload';
+import { addFont } from '../modules/fonts';
+import get from '../get';
 
 const FontLoaderContainer = (props) => {
   const { addFont } = props;
@@ -30,22 +30,28 @@ const FontLoaderContainer = (props) => {
     const italic = font['OS/2'].fsSelection.italic;
 
     //
-    let defaultSettings = mapValues(font.variationAxes, 'default');
+    let defaultVariationSettings = mapValues(font.variationAxes, 'default');
 
+    //
     let defaultVariationName =
       Object.keys(font.namedVariations).find((k) => {
-        return isEqual(font.namedVariations[k], defaultSettings);
+        return isEqual(font.namedVariations[k], defaultVariationSettings);
       }) ||
       subfamilyName ||
       'Custom';
 
+    //
+    const isVariable = Object.keys(font.variationAxes).length > 0;
+
+    //
     const openTypeData = {
       familyName,
       subfamilyName,
       weight,
       italic,
+      isVariable,
       availableFeatures: font.availableFeatures,
-      defaultSettings,
+      defaultVariationSettings,
       defaultVariationName,
       variationAxes: font.variationAxes,
       namedVariations: font.namedVariations,
@@ -58,7 +64,6 @@ const FontLoaderContainer = (props) => {
   }, []);
 
   const onChange = (e) => {
-    let file = e.target.files && e.target.files[0];
     if (e.target.files && e.target.files.length > 0) {
       for (let index = 0; index < e.target.files.length; index++) {
         const file = e.target.files[index];

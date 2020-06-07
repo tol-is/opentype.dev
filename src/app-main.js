@@ -1,5 +1,5 @@
-import { connect } from 'react-redux';
 import React, { useEffect, useCallback } from 'react';
+import { connect } from 'react-redux';
 import styled from '@emotion/styled';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { injectGlobal } from 'emotion';
@@ -21,6 +21,7 @@ const AppMain = styled.main`
 
 const Main = ({
   fonts,
+  config,
   updateFonts,
   removeFont,
   setFontFeature,
@@ -96,12 +97,11 @@ const Main = ({
                         <FontView
                           id={font.id}
                           index={index}
-                          metrics={font.metrics}
-                          config={font.config}
-                          setFontVariationAxis={onSetFontVariationAxis}
+                          font={font}
+                          globalConfig={config}
                           setNamedVariation={onSetFontNamedVariation}
+                          setFontVariationAxis={onSetFontVariationAxis}
                           setFontFeature={onSetFontFeature}
-                          setConfigProp={onSetConfigProp}
                           onRemove={onRemove}
                         />
                       </div>
@@ -121,6 +121,7 @@ const Main = ({
 function mapStateToProps(state) {
   return {
     fonts: state.fonts.fonts,
+    config: state.config,
   };
 }
 

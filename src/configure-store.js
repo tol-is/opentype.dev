@@ -1,8 +1,12 @@
+import PouchDB from 'pouchdb';
 import { createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // defaults to localStorage
+import PouchDBStorage from 'redux-persist-pouchdb';
 
-import { fonts } from './modules/fonts';
+const pouchdb = new PouchDB('opentype-tester');
+const storage = new PouchDBStorage(pouchdb);
+
+import { fonts, config } from './modules/fonts';
 
 const persistConfig = {
   key: 'root.0.0.10',
@@ -11,6 +15,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   fonts,
+  config,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
