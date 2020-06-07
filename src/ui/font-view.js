@@ -127,7 +127,7 @@ const FontView = ({
       <div
         className={css`
           display: grid;
-          grid-template-columns: repeat(7, minmax(0, 1fr));
+          grid-template-columns: repeat(6, minmax(0, 1fr));
           grid-gap: 1em;
         `}
       >
@@ -244,7 +244,7 @@ const FontView = ({
                 <div
                   className={css`
                     display: grid;
-                    grid-template-columns: repeat(5, minmax(0, 1fr));
+                    grid-template-columns: repeat(6, minmax(0, 1fr));
                     grid-gap: 1em;
                     & > * {
                       grid-column: span 1;
@@ -275,7 +275,7 @@ const FontView = ({
                 className={css`
                   padding-top: 16px;
                   display: grid;
-                  grid-template-columns: repeat(5, minmax(0, 1fr));
+                  grid-template-columns: repeat(6, minmax(0, 1fr));
                   grid-gap: 1em;
                   & > * {
                     grid-column: span 1;
@@ -302,7 +302,7 @@ const FontView = ({
         </div>
         <div
           className={css`
-            grid-column: span 10;
+            grid-column: span 6;
           `}
         >
           <Accordion visible={showFeatures}>
@@ -314,7 +314,7 @@ const FontView = ({
               <div
                 className={css`
                   display: grid;
-                  grid-template-columns: repeat(5, minmax(0, 1fr));
+                  grid-template-columns: repeat(6, minmax(0, 1fr));
                   grid-gap: 1em;
                   & > * {
                     grid-column: span 1;

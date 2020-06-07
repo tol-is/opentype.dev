@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage
 import { fonts } from './modules/fonts';
 
 const persistConfig = {
-  key: 'root.0.0.8',
+  key: 'root.0.0.10',
   storage,
 };
 
