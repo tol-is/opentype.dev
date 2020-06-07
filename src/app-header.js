@@ -9,6 +9,7 @@ const AppHeader = styled.header`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  z-index: 100;
 `;
 
 export default () => {
