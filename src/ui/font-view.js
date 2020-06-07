@@ -18,7 +18,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
 
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
-  const variationKeys = useMemo(() => Object.keys(config.variations), []);
+  const variationKeys = useMemo(() => Object.keys(config.variations || {}), []);
 
   //
   const onFontFeatureChange = useCallback(
