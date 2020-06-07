@@ -18,6 +18,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
 
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
+  const variationKeys = useMemo(() => Object.keys(config.variations), []);
 
   //
   const onFontFeatureChange = useCallback(
@@ -26,6 +27,16 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
         draft.features[e.target.value] = e.target.checked;
       });
 
+      setConfig(id, nextConfig);
+    },
+    [config]
+  );
+
+  const onVariationChange = useCallback(
+    (e) => {
+      const nextConfig = produce(config, (draft) => {
+        draft.variations[e.target.name] = e.target.value;
+      });
       setConfig(id, nextConfig);
     },
     [config]
@@ -73,6 +84,21 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
       return fRes;
     }, '');
   }, [config.features]);
+
+  //
+  const fontVariationSettings = useMemo(() => {
+    let loop = 0;
+    return variationKeys.reduce((vRes, vKey) => {
+      loop++;
+      vRes += `"${vKey}" ${config.variations[vKey]}`;
+      if (loop < variationKeys.length) {
+        vRes += ', ';
+      }
+      return vRes;
+    }, '');
+  }, [config.variations]);
+
+  //
 
   //
   return (
@@ -217,7 +243,24 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
                     }
                   `}
                 >
-                  adsadadasd
+                  {Object.keys(metrics.variationAxes).map((k) => (
+                    <div>
+                      <label htmlFor={`${k}_axis`}>
+                        {metrics.variationAxes[k].name}
+                      </label>
+                      <br />
+                      <input
+                        id={`${k}_axis`}
+                        type="range"
+                        name={k}
+                        min={metrics.variationAxes[k].min}
+                        max={metrics.variationAxes[k].max}
+                        step={1}
+                        value={config.variations[k]}
+                        onChange={onVariationChange}
+                      />
+                    </div>
+                  ))}
                 </div>
               </fieldset>
             </div>
@@ -229,7 +272,11 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
           `}
         >
           <Accordion visible={showFeatures}>
-            <fieldset>
+            <fieldset
+              className={css`
+                padding: 2rem 0;
+              `}
+            >
               <div
                 className={css`
                   display: grid;
@@ -258,6 +305,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
         </div>
       </div>
       <div
+        contentEditable
         className={css`
           font-family: ${metrics.familyName};
           font-weight: ${metrics.weight};
@@ -266,6 +314,7 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
           line-height: ${config.lineHeight};
           letter-spacing: ${config.letterSpacing}em;
           font-feature-settings: ${fontFeatureSettings};
+          font-variation-settings: ${fontVariationSettings};
           padding: 2rem 0;
         `}
       >
