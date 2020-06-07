@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useEffect, useState } from 'react';
+import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import produce from 'immer';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,8 +6,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { css } from 'emotion';
 import { otFeatures } from '../constants';
 
-const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
-  console.log(config, metrics);
+const FontView = ({
+  id,
+  index,
+  metrics,
+  config,
+  setFontFeature,
+  setFontVariation,
+  setConfigProp,
+  onRemove,
+}) => {
   const [showFeatures, setShowFeatures] = useState(false);
   const [showVariations, setShowVariations] = useState(false);
 
@@ -21,48 +29,25 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
   const variationKeys = useMemo(() => Object.keys(config.variations || {}), []);
 
   //
-  const onFontFeatureChange = useCallback(
-    (e) => {
-      const nextConfig = produce(config, (draft) => {
-        draft.features[e.target.value] = e.target.checked;
-      });
+  const onFontFeatureChange = useCallback((e) => {
+    setFontFeature(id, e.target.name, e.target.checked);
+  }, []);
 
-      setConfig(id, nextConfig);
-    },
-    [config]
-  );
-
-  const onVariationChange = useCallback(
-    (e) => {
-      const nextConfig = produce(config, (draft) => {
-        draft.variations[e.target.name] = e.target.value;
-      });
-      setConfig(id, nextConfig);
-    },
-    [config]
-  );
+  const onVariationChange = useCallback((e) => {
+    setFontVariation(id, e.target.name, e.target.value);
+  }, []);
 
   const onLetterSpacingChange = useCallback((e) => {
-    const nextConfig = produce(config, (draft) => {
-      draft.letterSpacing = e.target.value;
-    });
-    setConfig(id, nextConfig);
-  });
+    setConfigProp(id, 'letterSpacing', e.target.value);
+  }, []);
 
   const onFontSizeChange = useCallback((e) => {
-    const nextConfig = produce(config, (draft) => {
-      draft.fontSize = e.target.value;
-    });
-
-    setConfig(id, nextConfig);
-  });
+    setConfigProp(id, 'fontSize', e.target.value);
+  }, []);
 
   const onLineHeightChange = useCallback((e) => {
-    const nextConfig = produce(config, (draft) => {
-      draft.lineHeight = e.target.value;
-    });
-    setConfig(id, nextConfig);
-  });
+    setConfigProp(id, 'lineHeight', e.target.value);
+  }, []);
 
   const onToggleFeaturesPanel = useCallback(() => {
     setShowFeatures(!showFeatures);
@@ -288,11 +273,10 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
                 `}
               >
                 {featureKeys.map((key) => (
-                  <label>
+                  <label key={key}>
                     <input
                       type="checkbox"
-                      name="features[]"
-                      value={key}
+                      name={key}
                       checked={config.features[key]}
                       onChange={onFontFeatureChange}
                     />
@@ -305,7 +289,14 @@ const FontView = ({ id, index, metrics, config, setConfig, onRemove }) => {
         </div>
       </div>
       <div
+        suppressContentEditableWarning
         contentEditable
+        spellCheck={false}
+        onPaste={(e) => {
+          e.preventDefault();
+          const text = e.clipboardData.getData('text');
+          document.execCommand('insertText', false, text);
+        }}
         className={css`
           font-family: ${metrics.familyName};
           font-weight: ${metrics.weight};
@@ -352,4 +343,4 @@ FontView.propTypes = {
   id: propTypes.string,
 };
 
-export default FontView;
+export default memo(FontView);

@@ -4,7 +4,13 @@ import styled from '@emotion/styled';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { injectGlobal } from 'emotion';
 
-import { updateFonts, removeFont, setFontConfig } from './modules/fonts';
+import {
+  updateFonts,
+  removeFont,
+  setFontFeature,
+  setFontVariation,
+  setFontConfigProp,
+} from './modules/fonts';
 import FontView from './ui/font-view';
 
 const AppMain = styled.main`
@@ -12,7 +18,14 @@ const AppMain = styled.main`
   padding: 8em 0;
 `;
 
-const Main = ({ fonts, updateFonts, removeFont, setFontConfig }) => {
+const Main = ({
+  fonts,
+  updateFonts,
+  removeFont,
+  setFontFeature,
+  setFontVariation,
+  setFontConfigProp,
+}) => {
   useEffect(() => {
     fonts.forEach((font) => {
       injectGlobal`
@@ -43,19 +56,21 @@ const Main = ({ fonts, updateFonts, removeFont, setFontConfig }) => {
     [fonts]
   );
 
-  const onRemove = useCallback(
-    (id) => {
-      removeFont(id);
-    },
-    [fonts]
-  );
+  const onRemove = useCallback((id) => {
+    removeFont(id);
+  }, []);
 
-  const onSetConfig = useCallback(
-    (id, config) => {
-      setFontConfig(id, config);
-    },
-    [fonts]
-  );
+  const onSetFontFeature = useCallback((id, key, value) => {
+    setFontFeature(id, key, value);
+  }, []);
+
+  const onSetFontVariation = useCallback((id, key, value) => {
+    setFontVariation(id, key, value);
+  }, []);
+
+  const onSetConfigProp = useCallback((id, key, value) => {
+    setFontConfigProp(id, key, value);
+  }, []);
 
   return (
     fonts && (
@@ -77,7 +92,9 @@ const Main = ({ fonts, updateFonts, removeFont, setFontConfig }) => {
                           index={index}
                           metrics={font.metrics}
                           config={font.config}
-                          setConfig={onSetConfig}
+                          setFontVariation={onSetFontVariation}
+                          setFontFeature={onSetFontFeature}
+                          setConfigProp={onSetConfigProp}
                           onRemove={onRemove}
                         />
                       </div>
@@ -102,7 +119,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setFontConfig: (id, config) => dispatch(setFontConfig(id, config)),
+    setFontConfigProp: (id, key, value) =>
+      dispatch(setFontConfigProp(id, key, value)),
+    setFontFeature: (id, key, enabled) =>
+      dispatch(setFontFeature(id, key, enabled)),
+    setFontVariation: (id, key, value) =>
+      dispatch(setFontVariation(id, key, value)),
     removeFont: (id) => dispatch(removeFont(id)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };

@@ -26,6 +26,7 @@
     "@babel/core": "^7.10.2",
     "@babel/plugin-proposal-class-properties": "^7.10.1",
     "parcel": "^1.12.4",
+    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "typescript": "^3.9.3"
   },
   "browserslist": "> 1%, not ie 11, not op_mini all",
