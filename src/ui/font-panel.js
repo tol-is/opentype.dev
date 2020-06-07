@@ -12,7 +12,7 @@ const FontView = ({
   metrics,
   config,
   setFontFeature,
-  setFontVariationAxis,
+  setFontVariation,
   setNamedVariation,
   setConfigProp,
   onRemove,
@@ -28,18 +28,14 @@ const FontView = ({
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
   const variationAxes = useMemo(() => Object.keys(config.variations || {}), []);
-  const namedVariations = useMemo(
-    () => Object.keys(metrics.namedVariations || {}),
-    []
-  );
 
   //
   const onFontFeatureChange = useCallback((e) => {
     setFontFeature(id, e.target.name, e.target.checked);
   }, []);
 
-  const onVariationAxisChange = useCallback((e) => {
-    setFontVariationAxis(id, e.target.name, e.target.value);
+  const onVariationChange = useCallback((e) => {
+    setFontVariation(id, e.target.name, e.target.value);
   }, []);
 
   const onNamedVariationSelect = useCallback((key) => {
@@ -65,52 +61,6 @@ const FontView = ({
   const onToggleVariationsPanel = useCallback(() => {
     setShowVariations(!showVariations);
   }, [showVariations]);
-
-  //
-  const fontFeatureSettings = useMemo(() => {
-    let loop = 0;
-    return featureKeys.reduce((fRes, fKey) => {
-      loop++;
-      fRes += `"${fKey}" ${config.features[fKey] ? 1 : 0}`;
-      if (loop < featureKeys.length) {
-        fRes += ', ';
-      }
-      return fRes;
-    }, '');
-  }, [config.features]);
-
-  //
-  const fontVariationSettings = useMemo(() => {
-    let loop = 0;
-    return variationAxes.reduce((vRes, vKey) => {
-      loop++;
-      vRes += `"${vKey}" ${config.variations[vKey]}`;
-      if (loop < variationAxes.length) {
-        vRes += ', ';
-      }
-      return vRes;
-    }, '');
-  }, [config.variations]);
-
-  const selectedVariation = useMemo(() => {
-    return (
-      namedVariations.find((vName) => {
-        let isSelected = true;
-        variationAxes.forEach((vAxis) => {
-          if (
-            parseInt(config.variations[vAxis]) !==
-            parseInt(metrics.namedVariations[vName][vAxis])
-          ) {
-            isSelected = false;
-          }
-        });
-
-        return isSelected;
-      }) || 'Custom'
-    );
-  }, [config.variations]);
-
-  //
 
   //
   return (
@@ -192,9 +142,13 @@ const FontView = ({
           `}
         >
           <label htmlFor={`${id}_inputDirection`}>Direction</label>
-          <select onChange={onDirectionChange} value={config.direction}>
-            <option value="ltr">Left-to-Right</option>
-            <option value="rtl">Right-to-Left</option>
+          <select onChange={onDirectionChange}>
+            <option value="ltr" selected={config.direction === 'ltr'}>
+              Left-to-Right
+            </option>
+            <option value="rtl" selected={config.direction === 'rtl'}>
+              Right-to-Left
+            </option>
           </select>
         </div>
         <div
@@ -252,7 +206,7 @@ const FontView = ({
                   `}
                 >
                   {Object.keys(metrics.variationAxes).map((k) => (
-                    <div key={k}>
+                    <div>
                       <label htmlFor={`${k}_axis`}>
                         {metrics.variationAxes[k].name}
                       </label>
@@ -265,7 +219,7 @@ const FontView = ({
                         max={metrics.variationAxes[k].max}
                         step={1}
                         value={config.variations[k]}
-                        onChange={onVariationAxisChange}
+                        onChange={onVariationChange}
                       />
                     </div>
                   ))}
@@ -282,17 +236,8 @@ const FontView = ({
                   }
                 `}
               >
-                {namedVariations.map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => onNamedVariationSelect(key)}
-                    className={css`
-                      color: ${selectedVariation === key ? '#ffffff' : '#000'};
-                      background-color: ${selectedVariation === key
-                        ? '#0012ff'
-                        : '#e5e5e5'};
-                    `}
-                  >
+                {Object.keys(metrics.namedVariations).map((key) => (
+                  <button onClick={() => onNamedVariationSelect(key)}>
                     {key}
                   </button>
                 ))}
@@ -336,30 +281,6 @@ const FontView = ({
             </fieldset>
           </Accordion>
         </div>
-      </div>
-      <div
-        suppressContentEditableWarning
-        contentEditable
-        spellCheck={false}
-        onPaste={(e) => {
-          e.preventDefault();
-          const text = e.clipboardData.getData('text');
-          document.execCommand('insertText', false, text);
-        }}
-        className={css`
-          font-family: ${metrics.familyName};
-          font-weight: ${metrics.weight};
-          font-style: ${metrics.italic ? 'italic' : 'normal'};
-          font-size: ${config.fontSize}px;
-          line-height: ${config.lineHeight};
-          letter-spacing: ${config.letterSpacing}em;
-          font-feature-settings: ${fontFeatureSettings};
-          font-variation-settings: ${fontVariationSettings};
-          direction: ${config.direction};
-          padding: 2rem 0;
-        `}
-      >
-        {config.text}
       </div>
     </div>
   );

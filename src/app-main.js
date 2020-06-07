@@ -8,7 +8,7 @@ import {
   updateFonts,
   removeFont,
   setFontFeature,
-  setFontVariation,
+  setFontVariationAxis,
   setFontNamedVariation,
   setFontConfigProp,
 } from './modules/fonts';
@@ -24,7 +24,7 @@ const Main = ({
   updateFonts,
   removeFont,
   setFontFeature,
-  setFontVariation,
+  setFontVariationAxis,
   setFontNamedVariation,
   setFontConfigProp,
 }) => {
@@ -66,8 +66,8 @@ const Main = ({
     setFontFeature(id, key, value);
   }, []);
 
-  const onSetFontVariation = useCallback((id, key, value) => {
-    setFontVariation(id, key, value);
+  const onSetFontVariationAxis = useCallback((id, axis, value) => {
+    setFontVariationAxis(id, axis, value);
   }, []);
 
   const onSetFontNamedVariation = useCallback((id, variation) => {
@@ -98,7 +98,7 @@ const Main = ({
                           index={index}
                           metrics={font.metrics}
                           config={font.config}
-                          setFontVariation={onSetFontVariation}
+                          setFontVariationAxis={onSetFontVariationAxis}
                           setNamedVariation={onSetFontNamedVariation}
                           setFontFeature={onSetFontFeature}
                           setConfigProp={onSetConfigProp}
@@ -130,10 +130,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(setFontConfigProp(id, key, value)),
     setFontFeature: (id, key, enabled) =>
       dispatch(setFontFeature(id, key, enabled)),
-    setFontVariation: (id, key, value) =>
-      dispatch(setFontVariation(id, key, value)),
-    setFontNamedVariation: (id, config) =>
-      dispatch(setFontNamedVariation(id, config)),
+    setFontVariationAxis: (id, axis, value) =>
+      dispatch(setFontVariationAxis(id, axis, value)),
+    setFontNamedVariation: (id, name) =>
+      dispatch(setFontNamedVariation(id, name)),
     removeFont: (id) => dispatch(removeFont(id)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };

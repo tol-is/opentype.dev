@@ -5,7 +5,7 @@ const ADD_FONT = 'ADD_FONT';
 const REMOVE_FONT = 'REMOVE_FONT';
 
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
-const SET_FONT_VARIATION = 'SET_FONT_VARIATION';
+const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
 
@@ -46,23 +46,23 @@ export function setFontFeature(id, key, value) {
   };
 }
 
-export function setFontVariation(id, key, value) {
+export function setFontVariationAxis(id, axis, value) {
   return {
-    type: SET_FONT_VARIATION,
+    type: SET_FONT_VARIATION_AXIS,
     payload: {
       id,
-      key,
+      axis,
       value,
     },
   };
 }
 
-export function setFontNamedVariation(id, variation) {
+export function setFontNamedVariation(id, variationName) {
   return {
     type: SET_FONT_NAMED_VARIATION,
     payload: {
       id,
-      variation,
+      variationName,
     },
   };
 }
@@ -106,15 +106,16 @@ export const fonts = produce((state = initialState, action) => {
       state.fonts[fontIndex].config.features[payload.key] = payload.value;
       break;
     //
-    case SET_FONT_VARIATION:
+    case SET_FONT_VARIATION_AXIS:
       fontIndex = getFontIndex(payload.id);
-      state.fonts[fontIndex].config.variations[payload.key] = payload.value;
+      state.fonts[fontIndex].config.variations[payload.axis] = payload.value;
       break;
     //
     case SET_FONT_NAMED_VARIATION:
-      console.log(payload);
       fontIndex = getFontIndex(payload.id);
-      state.fonts[fontIndex].config.variations = payload.variation;
+
+      state.fonts[fontIndex].config.variations =
+        state.fonts[fontIndex].metrics.namedVariations[payload.variationName];
       break;
 
     //
@@ -170,6 +171,7 @@ const initializeFontEntry = (metrics, blob) => {
     metrics,
     blob,
     config: {
+      isVariable,
       text:
         'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what.',
       fontSize: 32,
