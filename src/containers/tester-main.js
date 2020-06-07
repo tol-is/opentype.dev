@@ -11,15 +11,11 @@ import {
   setFontVariationAxis,
   setFontNamedVariation,
   setFontConfigProp,
-} from './modules/fonts';
-import FontView from './ui/font-view';
+} from '../modules/fonts';
 
-const AppMain = styled.main`
-  min-height: 100vh;
-  padding: 8em 0;
-`;
+import FontView from './font-view';
 
-const Main = ({
+const FontsListView = ({
   fonts,
   config,
   updateFonts,
@@ -27,7 +23,6 @@ const Main = ({
   setFontFeature,
   setFontVariationAxis,
   setFontNamedVariation,
-  setFontConfigProp,
 }) => {
   useEffect(() => {
     fonts.forEach((font) => {
@@ -75,46 +70,38 @@ const Main = ({
     setFontNamedVariation(id, variation);
   }, []);
 
-  const onSetConfigProp = useCallback((id, key, value) => {
-    setFontConfigProp(id, key, value);
-  }, []);
-
   return (
-    fonts && (
-      <AppMain>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {fonts.map((font, index) => (
-                  <Draggable key={font.id} draggableId={font.id} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <FontView
-                          id={font.id}
-                          index={index}
-                          font={font}
-                          globalConfig={config}
-                          setNamedVariation={onSetFontNamedVariation}
-                          setFontVariationAxis={onSetFontVariationAxis}
-                          setFontFeature={onSetFontFeature}
-                          onRemove={onRemove}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </AppMain>
-    )
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="droppable">
+        {(provided, snapshot) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {fonts.map((font, index) => (
+              <Draggable key={font.id} draggableId={font.id} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <FontView
+                      id={font.id}
+                      index={index}
+                      font={font}
+                      globalConfig={config}
+                      setNamedVariation={onSetFontNamedVariation}
+                      setFontVariationAxis={onSetFontVariationAxis}
+                      setFontFeature={onSetFontFeature}
+                      onRemove={onRemove}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 
@@ -140,4 +127,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(FontsListView);

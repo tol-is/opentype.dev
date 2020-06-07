@@ -5,9 +5,9 @@ import blobToBuffer from 'blob-to-buffer';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
-import ButtonUpload from './btn-upload';
+import ButtonUpload from '../ui/btn-upload';
 import { addFont } from '../modules/fonts';
-import get from '../get';
+import get from '../utils/get';
 
 const FontLoaderContainer = (props) => {
   const { addFont } = props;

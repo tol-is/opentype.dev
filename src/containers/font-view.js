@@ -1,9 +1,11 @@
 import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import produce from 'immer';
+import { css } from 'emotion';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { css } from 'emotion';
+import Accordion from '../ui/accordion';
+
 import { otFeatures } from '../constants';
 
 const FontView = ({
@@ -288,30 +290,6 @@ const FontView = ({
         {globalConfig.text}
       </div>
     </div>
-  );
-};
-
-const Accordion = ({ visible, children }) => {
-  return (
-    <AnimatePresence initial={false}>
-      {visible && (
-        <motion.div
-          className={css`
-            overflow: hidden;
-          `}
-          initial="collapsed"
-          animate="open"
-          exit="collapsed"
-          variants={{
-            open: { opacity: 1, height: 'auto' },
-            collapsed: { opacity: 1, height: 0 },
-          }}
-          transition={{ type: 'spring', stiffness: 200, damping: 100 }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
   );
 };
 

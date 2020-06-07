@@ -126,7 +126,7 @@ export const fonts = produce((state = initialFontsState, action) => {
     //
     case ADD_FONT:
       const { metrics, blob } = payload;
-      state.fonts.push(initializeFontEntry(metrics, blob));
+      state.fonts.unshift(initializeFontEntry(metrics, blob));
       break;
     //
     case REMOVE_FONT:
