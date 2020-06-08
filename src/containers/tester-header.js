@@ -5,24 +5,24 @@ import { css } from 'emotion';
 import { connect } from 'react-redux';
 import FontLoader from './font-loader';
 
-import { setGlobalConfigProp } from '../modules/fonts';
+import { setTesterProp } from '../modules/tester';
 import TextSampleView from '../ui/text-sample-view';
 
-const TesterHeader = ({ config, setGlobalConfigProp }) => {
+const TesterHeader = ({ config, setTesterProp }) => {
   const onDirectionChange = useCallback((e) => {
-    setGlobalConfigProp('direction', e.target.value);
+    setTesterProp('direction', e.target.value);
   }, []);
 
   const onFontSizeChange = useCallback((e) => {
-    setGlobalConfigProp('fontSize', e.target.value);
+    setTesterProp('fontSize', e.target.value);
   }, []);
 
   const onLineHeightChange = useCallback((e) => {
-    setGlobalConfigProp('lineHeight', e.target.value);
+    setTesterProp('lineHeight', e.target.value);
   }, []);
 
   const onSampleTextChange = useCallback((e) => {
-    setGlobalConfigProp('text', e.target.value);
+    setTesterProp('text', e.target.value);
   }, []);
 
   //
@@ -46,8 +46,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setGlobalConfigProp: (key, value) =>
-      dispatch(setGlobalConfigProp(key, value)),
+    setTesterProp: (key, value) => dispatch(setTesterProp(key, value)),
   };
 }
 

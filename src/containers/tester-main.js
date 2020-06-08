@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -15,7 +17,7 @@ import FontView from './font-view';
 
 const TesterMain = ({
   fonts,
-  config,
+  tester,
   updateFonts,
   removeFont,
   setFontFeature,
@@ -55,7 +57,7 @@ const TesterMain = ({
   }, []);
 
   return (
-    <main>
+    <main css={{ padding: '8rem 0' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
@@ -72,7 +74,7 @@ const TesterMain = ({
                         id={font.id}
                         index={index}
                         font={font}
-                        globalConfig={config}
+                        testerConfig={tester}
                         setNamedVariation={onSetFontNamedVariation}
                         setFontVariationAxis={onSetFontVariationAxis}
                         setFontFeature={onSetFontFeature}
@@ -94,7 +96,7 @@ const TesterMain = ({
 function mapStateToProps(state) {
   return {
     fonts: state.fonts.fonts,
-    config: state.config,
+    tester: state.tester,
   };
 }
 

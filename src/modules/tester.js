@@ -2,7 +2,7 @@ import produce from 'immer';
 
 const SET_TESTER_GLOBAL_PROP = 'SET_TESTER_GLOBAL_PROP';
 
-export function setGlobalConfigProp(key, value) {
+export function setTesterProp(key, value) {
   return {
     type: SET_TESTER_GLOBAL_PROP,
     payload: {

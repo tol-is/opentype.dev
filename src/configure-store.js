@@ -3,7 +3,8 @@ import { createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import idbStorage from 'redux-persist-indexeddb-storage';
 
-import { fonts, config } from './modules/fonts';
+import { fonts } from './modules/fonts';
+import { tester } from './modules/tester';
 
 const storage = idbStorage('opentype-tester');
 
@@ -14,7 +15,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   fonts,
-  config,
+  tester,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -15,7 +15,7 @@ const FontView = ({
   setFontFeature,
   setFontVariationAxis,
   setNamedVariation,
-  globalConfig,
+  testerConfig,
   onRemove,
 }) => {
   const [showPanel, setShowPanel] = useState();
@@ -146,14 +146,14 @@ const FontView = ({
           font-family: ${metrics.familyName};
           font-weight: ${metrics.weight};
           font-style: ${metrics.italic ? 'italic' : 'normal'};
-          font-size: ${globalConfig.fontSize}px;
-          line-height: ${globalConfig.lineHeight};
+          font-size: ${testerConfig.fontSize}px;
+          line-height: ${testerConfig.lineHeight};
           font-feature-settings: ${fontFeatureSettings};
           font-variation-settings: ${fontVariationSettings};
-          direction: ${globalConfig.direction};
+          direction: ${testerConfig.direction};
         `}
       >
-        {globalConfig.text}
+        {testerConfig.text}
       </div>
     </>
   );
