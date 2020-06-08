@@ -109,7 +109,6 @@ export const config = produce((state = initialConfigState, action) => {
   switch (action.type) {
     //
     case SET_GLOBAL_CONFIG_PROP:
-      console.log(payload);
       state[payload.key] = payload.value;
       break;
 

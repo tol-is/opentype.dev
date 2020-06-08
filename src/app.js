@@ -4,9 +4,11 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import styled from '@emotion/styled';
 
-import configureStore from './configure-store';
+import FontFaceLoader from './containers/font-face-loader';
 import TesterMain from './containers/tester-main';
 import ConfigPanel from './containers/global-config-panel';
+
+import configureStore from './configure-store';
 
 import './app.css';
 
@@ -30,6 +32,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <FontFaceLoader />
         <Header>
           <ConfigPanel />
         </Header>

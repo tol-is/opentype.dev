@@ -14,8 +14,6 @@
     "immer": "^6.0.9",
     "lodash": "^4.17.15",
     "parcel-plugin-static-files-copy": "^2.4.1",
-    "pouchdb": "^7.2.1",
-    "pouchdb-adapter-memory": "^7.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
@@ -23,7 +21,7 @@
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "redux-persist-pouchdb": "^0.2.1"
+    "redux-persist-indexeddb-storage": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

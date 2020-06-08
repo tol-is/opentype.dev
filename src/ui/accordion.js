@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { css } from 'emotion';
 
-const Accordion = ({ visible, children }) => {
+const Accordion = ({ visible, children, ...rest }) => {
   return (
     <AnimatePresence initial={false}>
       {visible && (
         <motion.div
+          {...rest}
           className={css`
             overflow: hidden;
           `}
@@ -15,8 +16,8 @@ const Accordion = ({ visible, children }) => {
           animate="open"
           exit="collapsed"
           variants={{
-            open: { opacity: 1, height: 'auto' },
-            collapsed: { opacity: 1, height: 0 },
+            open: { height: 'auto' },
+            collapsed: { height: 0 },
           }}
           transition={{ type: 'spring', stiffness: 200, damping: 100 }}
         >

@@ -1,8 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
-import styled from '@emotion/styled';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { injectGlobal } from 'emotion';
 
 import {
   updateFonts,
@@ -15,7 +13,7 @@ import {
 
 import FontView from './font-view';
 
-const FontsListView = ({
+const TesterMain = ({
   fonts,
   config,
   updateFonts,
@@ -24,20 +22,6 @@ const FontsListView = ({
   setFontVariationAxis,
   setFontNamedVariation,
 }) => {
-  useEffect(() => {
-    fonts.forEach((font) => {
-      injectGlobal`
-        @font-face {
-          font-family: '${font.metrics.familyName}';
-          font-weight: ${font.metrics.weight};
-          font-style: ${font.metrics.italic ? 'italic' : 'normal'};
-          src: url('${font.blob}')
-              format('opentype');
-        }
-        `;
-    });
-  }, [fonts]);
-
   const onDragEnd = useCallback(
     (result) => {
       // dropped outside the list
@@ -127,4 +111,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FontsListView);
+export default connect(mapStateToProps, mapDispatchToProps)(TesterMain);

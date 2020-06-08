@@ -1,12 +1,11 @@
-import PouchDB from 'pouchdb';
+// import PouchDB from 'pouchdb';
 import { createStore, combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
-import PouchDBStorage from 'redux-persist-pouchdb';
-
-const pouchdb = new PouchDB('opentype-tester');
-const storage = new PouchDBStorage(pouchdb);
+import idbStorage from 'redux-persist-indexeddb-storage';
 
 import { fonts, config } from './modules/fonts';
+
+const storage = idbStorage('opentype-tester');
 
 const persistConfig = {
   key: 'root.0.0.10',

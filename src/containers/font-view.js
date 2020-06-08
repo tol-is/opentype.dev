@@ -1,8 +1,9 @@
 import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
-import produce from 'immer';
 import { css } from 'emotion';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import FontVariations from '../ui/font-view/font-variations';
+import FontFeatures from '../ui/font-view/font-features';
 
 import Accordion from '../ui/accordion';
 
@@ -17,8 +18,7 @@ const FontView = ({
   globalConfig,
   onRemove,
 }) => {
-  const [showFeatures, setShowFeatures] = useState(false);
-  const [showVariations, setShowVariations] = useState(false);
+  const [showPanel, setShowPanel] = useState();
 
   const { metrics, config } = font;
 
@@ -29,7 +29,10 @@ const FontView = ({
 
   //
   const featureKeys = useMemo(() => Object.keys(config.features), []);
-  const variationAxes = useMemo(() => Object.keys(config.variations || {}), []);
+  const variationAxesKeys = useMemo(
+    () => Object.keys(config.variations || {}),
+    []
+  );
   const variationsNames = useMemo(
     () => Object.keys(metrics.namedVariations || {}),
     []
@@ -49,12 +52,12 @@ const FontView = ({
   }, []);
 
   const onToggleFeaturesPanel = useCallback(() => {
-    setShowFeatures(!showFeatures);
-  }, [showFeatures]);
+    setShowPanel(showPanel === 'features' ? null : 'features');
+  }, [showPanel]);
 
   const onToggleVariationsPanel = useCallback(() => {
-    setShowVariations(!showVariations);
-  }, [showVariations]);
+    setShowPanel(showPanel === 'variations' ? null : 'variations');
+  }, [showPanel]);
 
   //
   const fontFeatureSettings = useMemo(() => {
@@ -72,21 +75,22 @@ const FontView = ({
   //
   const fontVariationSettings = useMemo(() => {
     let loop = 0;
-    return variationAxes.reduce((vRes, vKey) => {
+    return variationAxesKeys.reduce((vRes, vKey) => {
       loop++;
       vRes += `"${vKey}" ${config.variations[vKey]}`;
-      if (loop < variationAxes.length) {
+      if (loop < variationAxesKeys.length) {
         vRes += ', ';
       }
       return vRes;
     }, '');
   }, [config.variations]);
 
+  //
   const selectedVariation = useMemo(() => {
     return (
       variationsNames.find((vName) => {
         let isSelected = true;
-        variationAxes.forEach((vAxis) => {
+        variationAxesKeys.forEach((vAxis) => {
           if (
             parseInt(config.variations[vAxis]) !==
             parseInt(metrics.namedVariations[vName][vAxis])
@@ -101,180 +105,45 @@ const FontView = ({
   }, [config.variations]);
 
   //
-
-  //
   return (
-    <div
-      className={css`
-        position: relative;
-        padding: 1rem 2rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-      `}
-    >
-      <div
-        className={css`
-          display: grid;
-          grid-template-columns: repeat(5, minmax(0, 1fr));
-          grid-gap: 1em;
-        `}
+    <>
+      <button onClick={onRemoveClick}>REMOVE</button>
+      <button
+        aria-expanded={showPanel === 'features'}
+        aria-controls={`${id}-font-features`}
+        onClick={onToggleFeaturesPanel}
       >
-        <div
-          className={css`
-            grid-column: span 1;
-          `}
+        Font Features
+      </button>
+      {metrics.isVariable && (
+        <button
+          aria-expanded={showPanel === 'variations'}
+          aria-controls={`${id}-font-variations`}
+          onClick={onToggleVariationsPanel}
         >
-          <button
-            className={css`
-              font-size: 18px;
-              position: relative;
-            `}
-            onClick={onRemoveClick}
-          >
-            REMOVE
-          </button>
-        </div>
+          Font Variations
+        </button>
+      )}
 
-        <div
-          className={css`
-            grid-column: span 1;
-            display: flex;
-            flex-direction: column;
-          `}
-        >
-          <label>
-            <input
-              type="checkbox"
-              name="showFeatures"
-              checked={showFeatures}
-              onChange={onToggleFeaturesPanel}
-            />
-            Toggle Features
-          </label>
-        </div>
-        {metrics.isVariable && (
-          <div
-            className={css`
-              grid-column: span 1;
-              display: flex;
-              flex-direction: column;
-            `}
-          >
-            <label>
-              <input
-                type="checkbox"
-                name="showVariations"
-                checked={showVariations}
-                onChange={onToggleVariationsPanel}
-              />
-              Toggle Variations
-            </label>
-          </div>
-        )}
-        <div
-          className={css`
-            grid-column: span 7;
-          `}
-        >
-          <Accordion visible={showVariations}>
-            <div>
-              <fieldset>
-                <div
-                  className={css`
-                    display: grid;
-                    grid-template-columns: repeat(5, minmax(0, 1fr));
-                    grid-gap: 1em;
-                    & > * {
-                      grid-column: span 1;
-                    }
-                  `}
-                >
-                  {Object.keys(metrics.variationAxes).map((k) => (
-                    <div key={k}>
-                      <label htmlFor={`${k}_axis`}>
-                        {metrics.variationAxes[k].name}
-                      </label>
-                      <br />
-                      <input
-                        id={`${k}_axis`}
-                        type="range"
-                        name={k}
-                        min={metrics.variationAxes[k].min}
-                        max={metrics.variationAxes[k].max}
-                        step={1}
-                        value={config.variations[k]}
-                        onChange={onVariationAxisChange}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </fieldset>
-              <div
-                className={css`
-                  display: grid;
-                  grid-template-columns: repeat(5, minmax(0, 1fr));
-                  grid-gap: 1em;
-                  & > * {
-                    grid-column: span 1;
-                  }
-                `}
-              >
-                {variationsNames.map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => onNamedVariationSelect(key)}
-                    className={css`
-                      color: ${selectedVariation === key ? '#ffffff' : '#000'};
-                      background-color: ${selectedVariation === key
-                        ? '#0012ff'
-                        : '#e5e5e5'};
-                    `}
-                  >
-                    {key}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </Accordion>
-        </div>
-        <div
-          className={css`
-            grid-column: span 5;
-          `}
-        >
-          <Accordion visible={showFeatures}>
-            <fieldset
-              className={css`
-                padding: 2rem 0;
-              `}
-            >
-              <div
-                className={css`
-                  display: grid;
-                  grid-template-columns: repeat(5, minmax(0, 1fr));
-                  grid-gap: 1em;
-                  & > * {
-                    grid-column: span 1;
-                  }
-                `}
-              >
-                {featureKeys.map((key) => (
-                  <label key={key}>
-                    <input
-                      type="checkbox"
-                      name={key}
-                      checked={config.features[key]}
-                      onChange={onFontFeatureChange}
-                    />
-                    {otFeatures[key].title}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          </Accordion>
-        </div>
-      </div>
+      <FontVariations
+        id={`${id}-font-variations`}
+        visible={showPanel === 'variations'}
+        values={config.variations}
+        selectedVariation={selectedVariation}
+        variationAxesKeys={variationAxesKeys}
+        variationAxes={metrics.variationAxes}
+        variationsNames={variationsNames}
+        onVariationAxisChange={onVariationAxisChange}
+        onNamedVariationSelect={onNamedVariationSelect}
+      />
+
+      <FontFeatures
+        id={`${id}-font-features`}
+        visible={showPanel === 'features'}
+        fontFeatures={config.features}
+        onFontFeatureChange={onFontFeatureChange}
+      />
+
       <div
         className={css`
           font-family: ${metrics.familyName};
@@ -289,7 +158,7 @@ const FontView = ({
       >
         {globalConfig.text}
       </div>
-    </div>
+    </>
   );
 };
 
