@@ -5,9 +5,11 @@ import blobToBuffer from 'blob-to-buffer';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
+import get from '../utils/get';
+import { uuid } from '../utils/uuid';
+
 import ButtonUpload from '../ui/btn-upload';
 import { addFont } from '../modules/fonts';
-import get from '../utils/get';
 
 const FontLoaderContainer = (props) => {
   const { addFont } = props;
@@ -18,6 +20,8 @@ const FontLoaderContainer = (props) => {
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
+
+    const id = uuid();
 
     //
     const familyName = get(
@@ -58,6 +62,7 @@ const FontLoaderContainer = (props) => {
     };
 
     addFont({
+      id,
       blob: fontData,
       metrics: openTypeData,
     });

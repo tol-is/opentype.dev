@@ -12,13 +12,10 @@ const SET_GLOBAL_CONFIG_PROP = 'SET_GLOBAL_CONFIG_PROP';
 
 import { otFeatures } from '../constants';
 
-export const uuid = () =>
-  `${Math.random().toString(36).substring(2) + Date.now().toString(36)}`;
-
-export function addFont({ metrics, blob }) {
+export function addFont({ id, metrics, blob }) {
   return {
     type: ADD_FONT,
-    payload: { metrics, blob },
+    payload: { id, metrics, blob },
   };
 }
 
@@ -124,8 +121,7 @@ export const fonts = produce((state = initialFontsState, action) => {
   switch (action.type) {
     //
     case ADD_FONT:
-      const { metrics, blob } = payload;
-      state.fonts.unshift(initializeFontEntry(metrics, blob));
+      state.fonts.unshift(initializeFontEntry(payload));
       break;
     //
     case REMOVE_FONT:
@@ -166,7 +162,7 @@ export const fonts = produce((state = initialFontsState, action) => {
 });
 
 //
-const initializeFontEntry = (metrics, blob) => {
+const initializeFontEntry = ({ id, metrics, blob }) => {
   const {
     availableFeatures = [],
     variationAxes,
@@ -193,7 +189,7 @@ const initializeFontEntry = (metrics, blob) => {
   }, {});
 
   const config = {
-    id: uuid(),
+    id,
     metrics,
     blob,
     config: {
