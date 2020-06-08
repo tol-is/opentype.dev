@@ -107,14 +107,14 @@ const FontView = ({
   //
   return (
     <>
-      <button onClick={onRemoveClick}>REMOVE</button>
+      <button onClick={onRemoveClick}>Remove Font</button>{' '}
       <button
         aria-expanded={showPanel === 'features'}
         aria-controls={`${id}-font-features`}
         onClick={onToggleFeaturesPanel}
       >
         Font Features
-      </button>
+      </button>{' '}
       {metrics.isVariable && (
         <button
           aria-expanded={showPanel === 'variations'}
@@ -124,7 +124,6 @@ const FontView = ({
           Font Variations
         </button>
       )}
-
       <FontVariations
         id={`${id}-font-variations`}
         visible={showPanel === 'variations'}
@@ -136,14 +135,12 @@ const FontView = ({
         onVariationAxisChange={onVariationAxisChange}
         onNamedVariationSelect={onNamedVariationSelect}
       />
-
       <FontFeatures
         id={`${id}-font-features`}
         visible={showPanel === 'features'}
         fontFeatures={config.features}
         onFontFeatureChange={onFontFeatureChange}
       />
-
       <div
         className={css`
           font-family: ${metrics.familyName};

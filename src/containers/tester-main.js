@@ -55,37 +55,39 @@ const TesterMain = ({
   }, []);
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable">
-        {(provided, snapshot) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {fonts.map((font, index) => (
-              <Draggable key={font.id} draggableId={font.id} index={index}>
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                  >
-                    <FontView
-                      id={font.id}
-                      index={index}
-                      font={font}
-                      globalConfig={config}
-                      setNamedVariation={onSetFontNamedVariation}
-                      setFontVariationAxis={onSetFontVariationAxis}
-                      setFontFeature={onSetFontFeature}
-                      onRemove={onRemove}
-                    />
-                  </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <main>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {fonts.map((font, index) => (
+                <Draggable key={font.id} draggableId={font.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <FontView
+                        id={font.id}
+                        index={index}
+                        font={font}
+                        globalConfig={config}
+                        setNamedVariation={onSetFontNamedVariation}
+                        setFontVariationAxis={onSetFontVariationAxis}
+                        setFontFeature={onSetFontFeature}
+                        onRemove={onRemove}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </main>
   );
 };
 
