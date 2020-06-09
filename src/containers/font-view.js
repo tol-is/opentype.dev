@@ -5,6 +5,8 @@ import { css } from 'emotion';
 import FontVariations from '../ui/font-view/font-variations';
 import FontFeatures from '../ui/font-view/font-features';
 
+import Button from '../ui/btn';
+import ButtonToggle from '../ui/btn-toggle';
 import Accordion from '../ui/accordion';
 
 import { otFeatures } from '../constants';
@@ -18,29 +20,26 @@ const FontView = ({
   testerConfig,
   onRemove,
 }) => {
+  const [isActive, setIsActive] = useState(false);
   const [showPanel, setShowPanel] = useState();
 
   const { metrics, config } = font;
 
+  const onActivate = useCallback(() => {
+    setIsActive(true);
+  }, []);
+
+  const onDeactivate = useCallback(() => {
+    setIsActive(false);
+  }, []);
   //
   const onRemoveClick = useCallback(() => {
     onRemove(id);
   }, []);
 
   //
-  const featureKeys = useMemo(() => Object.keys(config.features), []);
-  const variationAxesKeys = useMemo(
-    () => Object.keys(config.variations || {}),
-    []
-  );
-  const variationsNames = useMemo(
-    () => Object.keys(metrics.namedVariations || {}),
-    []
-  );
-
-  //
-  const onFontFeatureChange = useCallback((e) => {
-    setFontFeature(id, e.target.name, e.target.checked);
+  const onFontFeatureChange = useCallback((key, enabled) => {
+    setFontFeature(id, key, enabled);
   }, []);
 
   const onVariationAxisChange = useCallback((e) => {
@@ -58,6 +57,17 @@ const FontView = ({
   const onToggleVariationsPanel = useCallback(() => {
     setShowPanel(showPanel === 'variations' ? null : 'variations');
   }, [showPanel]);
+
+  //
+  const featureKeys = useMemo(() => Object.keys(config.features), []);
+  const variationAxesKeys = useMemo(
+    () => Object.keys(config.variations || {}),
+    []
+  );
+  const variationsNames = useMemo(
+    () => Object.keys(metrics.namedVariations || {}),
+    []
+  );
 
   //
   const fontFeatureSettings = useMemo(() => {
@@ -104,29 +114,59 @@ const FontView = ({
     );
   }, [config.variations]);
 
+  const showFeaturesPanel = useMemo(
+    () => isActive && showPanel === 'features',
+    [isActive, showPanel]
+  );
+
+  const showVariationsPanel = useMemo(
+    () => isActive && showPanel === 'variations',
+    [isActive, showPanel]
+  );
+
   //
   return (
-    <>
-      <button onClick={onRemoveClick}>Remove Font</button>{' '}
-      <button
-        aria-expanded={showPanel === 'features'}
-        aria-controls={`${id}-font-features`}
-        onClick={onToggleFeaturesPanel}
+    <div onMouseEnter={onActivate} onMouseLeave={onDeactivate}>
+      <div
+        className={css`
+          opacity: ${isActive ? 1 : 1};
+          padding-top: 24px;
+          display: grid;
+          grid-template-columns: repeat(6, minmax(0, 1fr));
+          width: 100%;
+          & > * {
+            grid-column: span 1;
+          }
+        `}
       >
-        Font Features
-      </button>{' '}
-      {metrics.isVariable && (
-        <button
-          aria-expanded={showPanel === 'variations'}
-          aria-controls={`${id}-font-variations`}
-          onClick={onToggleVariationsPanel}
+        <ButtonToggle
+          selected={showFeaturesPanel}
+          aria-expanded={showFeaturesPanel}
+          aria-controls={`${id}-font-features`}
+          onClick={onToggleFeaturesPanel}
+          label={'Font Features'}
+        />
+        {metrics.isVariable && (
+          <ButtonToggle
+            selected={showVariationsPanel}
+            aria-expanded={showVariationsPanel}
+            aria-controls={`${id}-font-variations`}
+            onClick={onToggleVariationsPanel}
+            label={'Font Variations'}
+          />
+        )}
+        <div
+          className={css`
+            grid-column-start: -2;
+            grid-column-span: 1;
+          `}
         >
-          Font Variations
-        </button>
-      )}
+          <Button onClick={onRemoveClick} label="Delete" />
+        </div>
+      </div>
       <FontVariations
         id={`${id}-font-variations`}
-        visible={showPanel === 'variations'}
+        visible={showVariationsPanel}
         values={config.variations}
         selectedVariation={selectedVariation}
         variationAxesKeys={variationAxesKeys}
@@ -137,12 +177,13 @@ const FontView = ({
       />
       <FontFeatures
         id={`${id}-font-features`}
-        visible={showPanel === 'features'}
+        visible={showFeaturesPanel}
         fontFeatures={config.features}
         onFontFeatureChange={onFontFeatureChange}
       />
       <div
         className={css`
+          padding: 48px 0;
           font-family: ${metrics.familyName};
           font-weight: ${metrics.weight};
           font-style: ${metrics.italic ? 'italic' : 'normal'};
@@ -155,7 +196,7 @@ const FontView = ({
       >
         {testerConfig.text}
       </div>
-    </>
+    </div>
   );
 };
 

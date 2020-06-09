@@ -9,9 +9,9 @@ const Accordion = ({ visible, children, ...rest }) => {
       {visible && (
         <motion.div
           {...rest}
-          className={css`
-            overflow: hidden;
-          `}
+          style={{
+            overflow: 'hidden',
+          }}
           initial="collapsed"
           animate="open"
           exit="collapsed"

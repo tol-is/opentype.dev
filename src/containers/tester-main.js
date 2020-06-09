@@ -57,7 +57,7 @@ const TesterMain = ({
   }, []);
 
   return (
-    <main css={{ padding: '8rem 0' }}>
+    <main css={{ padding: '8rem 5vw' }}>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (

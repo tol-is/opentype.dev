@@ -54,6 +54,15 @@ select {
   font: inherit;
 }
 
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
 fieldset {
   margin: 0;
   padding: 0;
