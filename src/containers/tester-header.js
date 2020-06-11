@@ -35,12 +35,12 @@ const TesterHeader = ({ tester, setTesterProp }) => {
         width: '100%',
         zIndex: 100,
         padding: '0 5vw',
-        backgroundColor: 'white',
+        backgroundColor: '#e5e5e5',
       }}
     >
       <div
         className={css`
-          padding: 24px 0;
+          padding: 24px 0 32px 0;
           display: grid;
           grid-template-columns: repeat(7, minmax(0, 1fr));
           grid-auto-rows: minmax(2em, auto);
