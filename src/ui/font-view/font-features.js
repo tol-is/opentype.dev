@@ -17,7 +17,6 @@ const FontFeatures = ({
   //
   const featureKeys = useMemo(() => Object.keys(fontFeatures), []);
 
-  console.log();
   //
   return (
     <>
@@ -26,16 +25,18 @@ const FontFeatures = ({
           className={css`
             padding-top: 24px;
             display: grid;
-            grid-template-columns: repeat(6, minmax(0, 1fr));
-            grid-gap: 20px;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-auto-rows: minmax(2em, auto);
+            grid-gap: 24px;
             width: 100%;
-            & > * {
-              grid-column: span 1;
-            }
           `}
         >
           {featureKeys.map((key) => (
-            <>
+            <div
+              className={css`
+                display: block;
+              `}
+            >
               <Checkbox
                 key={key}
                 name={key}
@@ -43,7 +44,7 @@ const FontFeatures = ({
                 checked={fontFeatures[key]}
                 onChange={onFontFeatureChange}
               />
-            </>
+            </div>
           ))}
         </div>
       </Accordion>

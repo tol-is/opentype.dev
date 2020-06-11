@@ -55,7 +55,7 @@ export const otFeatures = {
     key: 'case',
   },
   ccmp: {
-    title: 'Glyph Composition / Decomposition',
+    title: 'Glyph Composition',
     string: 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890',
     key: 'ccmp',
   },

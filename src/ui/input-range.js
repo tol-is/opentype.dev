@@ -1,14 +1,12 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { css } from 'emotion';
 
-export default ({ label, name, checked, onChange }) => {
-  const onToggle = useCallback((e) => {
-    onChange(e.target.name, e.target.checked);
-  }, []);
-
+export const Slider = ({ label, min, max, step, value, onChange }) => {
   return (
     <label
       className={css`
+        width: 100%;
+        display: block;
         padding: 1em 0;
         position: relative;
         text-align: left;
@@ -16,9 +14,9 @@ export default ({ label, name, checked, onChange }) => {
         font-weight: 400;
         background-image: linear-gradient(to bottom, #000000 0%, #000000 100%);
         background-repeat: no-repeat;
-        background-position: 0 1.6em;
+        background-position: 0 100%;
         transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        background-size: ${checked ? '100% ' : '0%'} 0.09em;
+        background-size: ${((value - min) / (max - min)) * 100}% 0.09em;
       `}
     >
       <input
@@ -28,12 +26,17 @@ export default ({ label, name, checked, onChange }) => {
           width: 100%;
           height: 100%;
         `}
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
         name={name}
-        type="checkbox"
-        checked={checked}
-        onChange={onToggle}
+        onChange={onChange}
       />
-      {label}
+      {label} : {value}
     </label>
   );
 };
+
+export default Slider;

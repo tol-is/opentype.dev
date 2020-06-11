@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { css } from 'emotion';
-
+import { motion } from 'framer-motion';
 import FontVariations from '../ui/font-view/font-variations';
 import FontFeatures from '../ui/font-view/font-features';
 
@@ -19,23 +19,38 @@ const FontView = ({
   setNamedVariation,
   testerConfig,
   onRemove,
+  onReset,
+  onActivated,
 }) => {
-  const [isActive, setIsActive] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const [showPanel, setShowPanel] = useState();
+
+  useEffect(() => {
+    if (testerConfig.activeFont !== id) {
+      setShowPanel(null);
+    }
+  }, [testerConfig.activeFont]);
 
   const { metrics, config } = font;
 
-  const onActivate = useCallback(() => {
-    setIsActive(true);
+  const onMouseEnter = useCallback(() => {
+    setIsHover(true);
   }, []);
 
-  const onDeactivate = useCallback(() => {
-    setIsActive(false);
+  const onMouseLeave = useCallback(() => {
+    setIsHover(false);
   }, []);
   //
   const onRemoveClick = useCallback(() => {
     onRemove(id);
   }, []);
+
+  const onResetClick = useCallback(() => {
+    if (testerConfig.activeFont === id) {
+      onReset(id);
+      onActivated(null);
+    }
+  }, [testerConfig.activeFont]);
 
   //
   const onFontFeatureChange = useCallback((key, enabled) => {
@@ -51,10 +66,12 @@ const FontView = ({
   }, []);
 
   const onToggleFeaturesPanel = useCallback(() => {
+    onActivated(id);
     setShowPanel(showPanel === 'features' ? null : 'features');
   }, [showPanel]);
 
   const onToggleVariationsPanel = useCallback(() => {
+    onActivated(id);
     setShowPanel(showPanel === 'variations' ? null : 'variations');
   }, [showPanel]);
 
@@ -114,47 +131,62 @@ const FontView = ({
     );
   }, [config.variations]);
 
-  const showFeaturesPanel = useMemo(
-    () => isActive && showPanel === 'features',
-    [isActive, showPanel]
-  );
+  const showFeaturesPanel = useMemo(() => showPanel === 'features', [
+    showPanel,
+  ]);
 
-  const showVariationsPanel = useMemo(
-    () => isActive && showPanel === 'variations',
-    [isActive, showPanel]
-  );
+  const showVariationsPanel = useMemo(() => showPanel === 'variations', [
+    showPanel,
+  ]);
 
   //
   return (
-    <div onMouseEnter={onActivate} onMouseLeave={onDeactivate}>
-      <div
+    <section onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <motion.div
+        initial="collapsed"
+        animate={isHover || showPanel ? 'open' : 'collapsed'}
+        exit="collapsed"
+        variants={{
+          open: { opacity: 1 },
+          collapsed: { opacity: 0 },
+        }}
+        transition={{ type: 'spring', stiffness: 200, damping: 100 }}
         className={css`
-          opacity: ${isActive ? 1 : 1};
           padding-top: 24px;
           display: grid;
-          grid-template-columns: repeat(6, minmax(0, 1fr));
+          grid-gap: 24px;
+          grid-template-columns: repeat(7, minmax(0, 1fr));
           width: 100%;
-          & > * {
-            grid-column: span 1;
-          }
         `}
       >
-        <ButtonToggle
-          selected={showFeaturesPanel}
-          aria-expanded={showFeaturesPanel}
-          aria-controls={`${id}-font-features`}
-          onClick={onToggleFeaturesPanel}
-          label={'Font Features'}
-        />
-        {metrics.isVariable && (
+        <div>
           <ButtonToggle
-            selected={showVariationsPanel}
-            aria-expanded={showVariationsPanel}
-            aria-controls={`${id}-font-variations`}
-            onClick={onToggleVariationsPanel}
-            label={'Font Variations'}
+            selected={showFeaturesPanel}
+            aria-expanded={showFeaturesPanel}
+            aria-controls={`${id}-font-features`}
+            onClick={onToggleFeaturesPanel}
+            label={'Font Features'}
           />
+        </div>
+        {metrics.isVariable && (
+          <div>
+            <ButtonToggle
+              selected={showVariationsPanel}
+              aria-expanded={showVariationsPanel}
+              aria-controls={`${id}-font-variations`}
+              onClick={onToggleVariationsPanel}
+              label={'Font Variations'}
+            />
+          </div>
         )}
+        <div
+          className={css`
+            grid-column-start: -3;
+            grid-column-span: 1;
+          `}
+        >
+          <Button onClick={onResetClick} label="Reset" />
+        </div>
         <div
           className={css`
             grid-column-start: -2;
@@ -163,7 +195,7 @@ const FontView = ({
         >
           <Button onClick={onRemoveClick} label="Delete" />
         </div>
-      </div>
+      </motion.div>
       <FontVariations
         id={`${id}-font-variations`}
         visible={showVariationsPanel}
@@ -196,7 +228,7 @@ const FontView = ({
       >
         {testerConfig.text}
       </div>
-    </div>
+    </section>
   );
 };
 

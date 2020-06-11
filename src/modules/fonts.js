@@ -8,6 +8,7 @@ const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
+const RESET_FONT = 'RESET_FONT';
 
 import { otFeatures } from '../constants';
 
@@ -29,6 +30,12 @@ export function updateFonts(fonts) {
   return {
     type: UPDATE_FONTS,
     payload: fonts,
+  };
+}
+export function resetFont(id) {
+  return {
+    type: RESET_FONT,
+    payload: { id },
   };
 }
 
@@ -100,6 +107,13 @@ export const fonts = produce((state = initialFontsState, action) => {
       fontIndex = getFontIndex(payload.id);
       state.fonts[fontIndex].config.features[payload.key] = payload.value;
       break;
+    case RESET_FONT:
+      fontIndex = getFontIndex(payload.id);
+
+      state.fonts[fontIndex].metrics.availableFeatures.forEach((f) => {
+        state.fonts[fontIndex].config.features[f] = false;
+      });
+      break;
     //
     case SET_FONT_VARIATION_AXIS:
       fontIndex = getFontIndex(payload.id);
@@ -154,7 +168,9 @@ const initializeFontEntry = ({ id, metrics, blob }) => {
     res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
     return res;
   }, {});
-
+  console.log(variationsConfig);
+  console.log(variationsDefaults);
+  console.log(variationAxes);
   const config = {
     id,
     metrics,

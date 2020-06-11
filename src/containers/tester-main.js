@@ -11,7 +11,10 @@ import {
   setFontVariationAxis,
   setFontNamedVariation,
   setFontConfigProp,
+  resetFont,
 } from '../modules/fonts';
+
+import { setActiveFont } from '../modules/tester';
 
 import FontView from './font-view';
 
@@ -20,9 +23,11 @@ const TesterMain = ({
   tester,
   updateFonts,
   removeFont,
+  resetFont,
   setFontFeature,
   setFontVariationAxis,
   setFontNamedVariation,
+  setActiveFont,
 }) => {
   const onDragEnd = useCallback(
     (result) => {
@@ -44,6 +49,10 @@ const TesterMain = ({
     removeFont(id);
   }, []);
 
+  const onReset = useCallback((id) => {
+    resetFont(id);
+  }, []);
+
   const onSetFontFeature = useCallback((id, key, value) => {
     setFontFeature(id, key, value);
   }, []);
@@ -54,6 +63,11 @@ const TesterMain = ({
 
   const onSetFontNamedVariation = useCallback((id, variation) => {
     setFontNamedVariation(id, variation);
+  }, []);
+
+  const onFontActivated = useCallback((id) => {
+    console.log('tester SET_ACTIVE_FONT', id);
+    setActiveFont(id);
   }, []);
 
   return (
@@ -78,7 +92,9 @@ const TesterMain = ({
                         setNamedVariation={onSetFontNamedVariation}
                         setFontVariationAxis={onSetFontVariationAxis}
                         setFontFeature={onSetFontFeature}
+                        onReset={onReset}
                         onRemove={onRemove}
+                        onActivated={onFontActivated}
                       />
                     </div>
                   )}
@@ -102,6 +118,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setActiveFont: (value) => dispatch(setActiveFont(value)),
     setFontConfigProp: (id, key, value) =>
       dispatch(setFontConfigProp(id, key, value)),
     setFontFeature: (id, key, enabled) =>
@@ -111,6 +128,7 @@ function mapDispatchToProps(dispatch) {
     setFontNamedVariation: (id, name) =>
       dispatch(setFontNamedVariation(id, name)),
     removeFont: (id) => dispatch(removeFont(id)),
+    resetFont: (id) => dispatch(resetFont(id)),
     updateFonts: (fonts) => dispatch(updateFonts(fonts)),
   };
 }
