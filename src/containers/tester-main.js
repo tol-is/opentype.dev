@@ -1,8 +1,7 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { css } from 'emotion';
 
 import {
   updateFonts,
@@ -21,6 +20,7 @@ import FontView from '../ui/font-view';
 const TesterMain = ({
   fonts,
   tester,
+  openPanel,
   updateFonts,
   removeFont,
   resetFont,
@@ -71,7 +71,12 @@ const TesterMain = ({
   }, []);
 
   return (
-    <main css={{ padding: '8rem 5vw' }}>
+    <main
+      className={css`
+        padding: ${openPanel === 'text' ? '16rem' : '5rem'} 5vw;
+        transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      `}
+    >
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
@@ -113,6 +118,7 @@ function mapStateToProps(state) {
   return {
     fonts: state.fonts.fonts,
     tester: state.tester,
+    openPanel: state.tester.openPanel,
   };
 }
 

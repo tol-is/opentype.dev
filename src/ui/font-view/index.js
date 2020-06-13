@@ -189,7 +189,7 @@ const FontView = ({
           className={css`
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
-            padding: 3rem 0 1.5rem 0;
+            padding-top: 3rem;
             display: grid;
             grid-gap: 1.5rem;
             grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -203,7 +203,8 @@ const FontView = ({
               aria-expanded={showFeaturesPanel}
               aria-controls={`${id}-font-features`}
               onClick={onToggleFeaturesPanel}
-              label={'Font Features'}
+              line="top"
+              label={'Features'}
             />
           </div>
           {metrics.isVariable && (
@@ -213,7 +214,8 @@ const FontView = ({
                 aria-expanded={showVariationsPanel}
                 aria-controls={`${id}-font-variations`}
                 onClick={onToggleVariationsPanel}
-                label={'Font Variations'}
+                line="top"
+                label={'Variations'}
               />
             </div>
           )}

@@ -2,6 +2,7 @@ import produce from 'immer';
 
 const SET_TESTER_GLOBAL_PROP = 'SET_TESTER_GLOBAL_PROP';
 const SET_ACTIVE_FONT = 'SET_ACTIVE_FONT';
+const SET_OPEN_PANEL = 'SET_OPEN_PANEL';
 
 export function setTesterProp(key, value) {
   return {
@@ -14,10 +15,16 @@ export function setTesterProp(key, value) {
 }
 
 export function setActiveFont(value) {
-  console.log('act SET_ACTIVE_FONT');
   return {
     type: SET_ACTIVE_FONT,
-    payload: value,
+    payload: { value },
+  };
+}
+
+export function setOpenPanel(value) {
+  return {
+    type: SET_OPEN_PANEL,
+    payload: { value },
   };
 }
 
@@ -40,7 +47,10 @@ export const tester = produce((state = initialState, action) => {
       state[payload.key] = payload.value;
       break;
     case SET_ACTIVE_FONT:
-      state.activeFont = payload;
+      state.activeFont = payload.value;
+      break;
+    case SET_OPEN_PANEL:
+      state.openPanel = payload.value;
       break;
 
     //

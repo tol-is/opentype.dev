@@ -29,7 +29,7 @@ export function removeFont(id) {
 export function updateFonts(fonts) {
   return {
     type: UPDATE_FONTS,
-    payload: fonts,
+    payload: { fonts },
   };
 }
 export function resetFont(id) {
@@ -134,7 +134,7 @@ export const fonts = produce((state = initialFontsState, action) => {
       break;
     //
     case UPDATE_FONTS:
-      state.fonts = action.payload;
+      state.fonts = action.payload.fonts;
       break;
     //
     default:

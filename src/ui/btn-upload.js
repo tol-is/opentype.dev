@@ -26,7 +26,7 @@ export default ({ onChange }) => (
       }
     `}
   >
-    Upload
+    Upload Fonts
     <input
       multiple
       type="file"
