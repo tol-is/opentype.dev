@@ -8,22 +8,21 @@ export default ({ onChange }) => (
     aria-hidden={true}
     className={css`
       position: relative;
-      width: 100%;
       padding: 1em 0;
+      display: inline-block;
       text-align: left;
+      line-height: 1.5;
       font-weight: 400;
-      background-image: linear-gradient(to bottom, #000000 0%, #000000 100%);
+      background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
       background-repeat: no-repeat;
       background-position: 0 100%;
       transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       background-size: 0% 0.09em;
       &:focus {
         outline: none;
-        // font-weight: 700;
       }
       &:hover {
         background-size: 100% 0.09em;
-        // font-weight: 700;
       }
     `}
   >

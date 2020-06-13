@@ -16,7 +16,7 @@ import {
 
 import { setActiveFont } from '../modules/tester';
 
-import FontView from './font-view';
+import FontView from '../ui/font-view';
 
 const TesterMain = ({
   fonts,

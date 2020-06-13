@@ -4,16 +4,12 @@ import React, { useCallback } from 'react';
 import { css } from 'emotion';
 import { connect } from 'react-redux';
 import FontLoader from './font-loader';
-import Button from '../ui/btn';
 import Slider from '../ui/input-range';
 import { setTesterProp } from '../modules/tester';
 import TextSampleView from '../ui/text-sample-view';
+import ButtonToggle from '../ui/btn-toggle';
 
 const TesterHeader = ({ tester, setTesterProp }) => {
-  const onDirectionChange = useCallback((e) => {
-    setTesterProp('direction', e.target.value);
-  }, []);
-
   const onFontSizeChange = useCallback((e) => {
     setTesterProp('fontSize', e.target.value);
   }, []);
@@ -35,19 +31,25 @@ const TesterHeader = ({ tester, setTesterProp }) => {
         width: '100%',
         zIndex: 100,
         padding: '0 5vw',
-        backgroundColor: '#e5e5e5',
+        backgroundColor: '#060606',
       }}
     >
       <div
         className={css`
-          padding: 24px 0 32px 0;
+          padding: 0.5rem 0 0 0;
           display: grid;
           grid-template-columns: repeat(7, minmax(0, 1fr));
           grid-auto-rows: minmax(2em, auto);
-          grid-gap: 24px;
+          grid-gap: 1.5rem;
           width: 100%;
         `}
       >
+        <div>
+          <FontLoader />
+        </div>
+        <div>
+          <TextSampleView visible={false} />
+        </div>
         <div>
           <Slider
             label="Font Size"
@@ -67,17 +69,6 @@ const TesterHeader = ({ tester, setTesterProp }) => {
             value={tester.lineHeight}
             onChange={onLineHeightChange}
           />
-        </div>
-        <div>
-          <TextSampleView visible={false} />
-        </div>
-        <div
-          className={css`
-            grid-column-start: -2;
-            grid-column-span: 1;
-          `}
-        >
-          <FontLoader />
         </div>
       </div>
     </header>

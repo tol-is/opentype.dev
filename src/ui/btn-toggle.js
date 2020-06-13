@@ -6,14 +6,15 @@ const ButtonToggle = ({ selected, label, onClick }) => {
     <>
       <button
         className={css`
-          width: 100%;
           padding: 1em 0;
           text-align: left;
+          line-height: 1.5;
           font-weight: 400;
+          color: #fff;
           background-image: linear-gradient(
             to bottom,
-            #000000 0%,
-            #000000 100%
+            #ffffff 0%,
+            #ffffff 100%
           );
           background-repeat: no-repeat;
           background-position: 0 0;

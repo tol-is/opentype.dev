@@ -17,3 +17,8 @@ body {
   font-family: 'JetBrainsMono', 'Courier New', Courier, monospace;
   font-feature-settings: 'kern' on, 'liga' on, 'rlig' on, 'calt' on;
 }
+
+html {
+  background-color: #060606;
+  color: #ffffff;
+}

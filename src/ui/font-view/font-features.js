@@ -23,11 +23,12 @@ const FontFeatures = ({
       <Accordion visible={visible} {...rest}>
         <div
           className={css`
-            padding-top: 24px;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            padding-top: 1rem;
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
-            grid-auto-rows: minmax(2em, auto);
-            grid-gap: 24px;
+            grid-gap: 1.5rem;
             width: 100%;
           `}
         >

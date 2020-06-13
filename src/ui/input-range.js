@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { css } from 'emotion';
 
-export const Slider = ({ label, min, max, step, value, onChange }) => {
+export const Slider = ({ name, label, min, max, step, value, onChange }) => {
   return (
     <label
       className={css`
@@ -12,7 +12,7 @@ export const Slider = ({ label, min, max, step, value, onChange }) => {
         text-align: left;
         line-height: 1.5;
         font-weight: 400;
-        background-image: linear-gradient(to bottom, #000000 0%, #000000 100%);
+        background-image: linear-gradient(to bottom, #fff 0%, #fff 100%);
         background-repeat: no-repeat;
         background-position: 0 100%;
         transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);

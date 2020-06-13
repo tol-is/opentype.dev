@@ -2,7 +2,9 @@ import React, { memo } from 'react';
 import propTypes from 'prop-types';
 import { css } from 'emotion';
 
-import Accordion from '../../ui/accordion';
+import Accordion from '../accordion';
+import Slider from '../input-range';
+import Checkbox from '../input-checkbox';
 
 const FontVariations = ({
   visible,
@@ -18,41 +20,63 @@ const FontVariations = ({
   return (
     <>
       <Accordion visible={visible} {...rest}>
-        <fieldset
+        <div
           className={css`
-            padding: 2em 0;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            padding-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-gap: 1.5rem;
+            width: 100%;
           `}
         >
-          {Object.keys(variationAxes).map((k) => (
-            <div key={k}>
-              <label htmlFor={`${k}_axis`}>{variationAxes[k].name}</label>
-              <input
-                id={`${k}_axis`}
-                type="range"
-                name={k}
-                min={variationAxes[k].min}
-                max={variationAxes[k].max}
-                step={1}
-                value={values[k]}
-                onChange={onVariationAxisChange}
-              />
-            </div>
-          ))}
-        </fieldset>
-
-        {variationsNames.map((key) => (
-          <button
-            key={key}
-            onClick={() => onNamedVariationSelect(key)}
+          <div
             className={css`
-              background-color: ${selectedVariation === key
-                ? '#cccccc'
-                : '#e5e5e5'};
+              grid-column: 3 / span 1;
+              display: grid;
+              grid-template-columns: repeat(1, minmax(0, 1fr));
+              grid-gap: 1rem;
             `}
           >
-            {key}
-          </button>
-        ))}
+            {Object.keys(variationAxes).map((k) => (
+              <div key={k}>
+                <Slider
+                  name={k}
+                  label={variationAxes[k].name}
+                  min={variationAxes[k].min}
+                  max={variationAxes[k].max}
+                  step={1}
+                  value={values[k]}
+                  onChange={onVariationAxisChange}
+                />
+              </div>
+            ))}
+          </div>
+          {variationsNames.length > 0 && (
+            <div
+              className={css`
+                padding-top: 1.5rem;
+                grid-column: 1 / span 7;
+                display: grid;
+                grid-template-columns: repeat(7, minmax(0, 1fr));
+                grid-gap: 1.5rem;
+              `}
+            >
+              {variationsNames.map((key) => (
+                <div>
+                  <Checkbox
+                    key={key}
+                    name={key}
+                    label={key}
+                    checked={selectedVariation === key}
+                    onChange={() => onNamedVariationSelect(key)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </Accordion>
     </>
   );

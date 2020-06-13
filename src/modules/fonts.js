@@ -168,9 +168,7 @@ const initializeFontEntry = ({ id, metrics, blob }) => {
     res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
     return res;
   }, {});
-  console.log(variationsConfig);
-  console.log(variationsDefaults);
-  console.log(variationAxes);
+
   const config = {
     id,
     metrics,

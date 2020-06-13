@@ -14,10 +14,6 @@ import { addFont } from '../modules/fonts';
 const FontLoaderContainer = (props) => {
   const { addFont } = props;
 
-  useEffect(() => {
-    // console.log(props.fonts, props.addFont);
-  }, []);
-
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
 
@@ -49,6 +45,7 @@ const FontLoaderContainer = (props) => {
 
     //
     const openTypeData = {
+      postscriptName: font.postscriptName,
       familyName,
       subfamilyName,
       weight,

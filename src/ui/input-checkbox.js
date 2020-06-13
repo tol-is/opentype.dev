@@ -9,16 +9,16 @@ export default ({ label, name, checked, onChange }) => {
   return (
     <label
       className={css`
-        padding: 1em 0;
         position: relative;
         text-align: left;
         line-height: 1.5;
         font-weight: 400;
-        background-image: linear-gradient(to bottom, #000000 0%, #000000 100%);
+        background-image: linear-gradient(to bottom, #fff 0%, #fff 100%);
         background-repeat: no-repeat;
-        background-position: 0 1.6em;
+        background-position: 0 100%;
         transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         background-size: ${checked ? '100% ' : '0%'} 0.09em;
+        color: ${checked ? '#fff ' : '#bfbfbf'};
       `}
     >
       <input
