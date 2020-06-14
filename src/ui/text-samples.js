@@ -72,12 +72,11 @@ const TextSamples = ({
                 resize: none;
                 border: 0;
                 padding: 1rem 0;
-                text-align: left;
                 font-weight: 400;
                 color: #fff;
                 font-size: 1.15rem;
                 line-height: 1.625;
-
+                direction: ${tester.rtl ? 'rtl' : 'ltr'};
                 outline: none;
                 &:focus: {
                   outline: none;
