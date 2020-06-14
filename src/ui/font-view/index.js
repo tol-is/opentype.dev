@@ -197,16 +197,19 @@ const FontView = ({
           `}
         >
           <FontHeading>{metrics.postscriptName}</FontHeading>
-          <div>
-            <ButtonToggle
-              selected={showFeaturesPanel}
-              aria-expanded={showFeaturesPanel}
-              aria-controls={`${id}-font-features`}
-              onClick={onToggleFeaturesPanel}
-              line="top"
-              label={'Features'}
-            />
-          </div>
+
+          {featureKeys.length > 0 && (
+            <div>
+              <ButtonToggle
+                selected={showFeaturesPanel}
+                aria-expanded={showFeaturesPanel}
+                aria-controls={`${id}-font-features`}
+                onClick={onToggleFeaturesPanel}
+                line="top"
+                label={'Features'}
+              />
+            </div>
+          )}
           {metrics.isVariable && (
             <div>
               <ButtonToggle
@@ -237,23 +240,27 @@ const FontView = ({
             <Button onClick={onRemoveClick} label="Delete" />
           </div>
         </motion.div>
-        <FontFeatures
-          id={`${id}-font-features`}
-          visible={showFeaturesPanel}
-          fontFeatures={config.features}
-          onFontFeatureChange={onFontFeatureChange}
-        />
-        <FontVariations
-          id={`${id}-font-variations`}
-          visible={showVariationsPanel}
-          values={config.variations}
-          selectedVariation={selectedVariation}
-          variationAxesKeys={variationAxesKeys}
-          variationAxes={metrics.variationAxes}
-          variationsNames={variationsNames}
-          onVariationAxisChange={onVariationAxisChange}
-          onNamedVariationSelect={onNamedVariationSelect}
-        />
+        {featureKeys.length > 0 && (
+          <FontFeatures
+            id={`${id}-font-features`}
+            visible={showFeaturesPanel}
+            fontFeatures={config.features}
+            onFontFeatureChange={onFontFeatureChange}
+          />
+        )}
+        {metrics.isVariable && (
+          <FontVariations
+            id={`${id}-font-variations`}
+            visible={showVariationsPanel}
+            values={config.variations}
+            selectedVariation={selectedVariation}
+            variationAxesKeys={variationAxesKeys}
+            variationAxes={metrics.variationAxes}
+            variationsNames={variationsNames}
+            onVariationAxisChange={onVariationAxisChange}
+            onNamedVariationSelect={onNamedVariationSelect}
+          />
+        )}
         <div
           onClick={onTextClick}
           className={css`
@@ -265,7 +272,7 @@ const FontView = ({
             line-height: ${testerConfig.lineHeight};
             font-feature-settings: ${fontFeatureSettings};
             font-variation-settings: ${fontVariationSettings};
-            direction: ${testerConfig.direction};
+            direction: ${testerConfig.rtl ? 'rtl' : 'ltr'};
             transition: font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           `}
         >

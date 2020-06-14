@@ -32,21 +32,30 @@ const FontFeatures = ({
             width: 100%;
           `}
         >
-          {featureKeys.map((key) => (
-            <div
-              className={css`
-                display: block;
-              `}
-            >
-              <Checkbox
+          <div
+            className={css`
+              grid-column: 2 / span 6;
+              display: grid;
+              grid-template-columns: repeat(6, minmax(0, 1fr));
+              grid-gap: 1rem;
+            `}
+          >
+            {featureKeys.map((key) => (
+              <div
                 key={key}
-                name={key}
-                label={otFeatures[key].title}
-                checked={fontFeatures[key]}
-                onChange={onFontFeatureChange}
-              />
-            </div>
-          ))}
+                className={css`
+                  display: block;
+                `}
+              >
+                <Checkbox
+                  name={key}
+                  label={otFeatures[key].title}
+                  checked={fontFeatures[key]}
+                  onChange={onFontFeatureChange}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </Accordion>
     </>

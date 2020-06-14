@@ -1,13 +1,7 @@
-@font-face {
-  font-family: 'JetBrainsMono';
-  src: url('./fonts/JetBrainsMono-Regular.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 400;
-}
-
 body {
-  font-size: 0.8125rem;
-  font-family: 'JetBrainsMono', 'Courier New', Courier, monospace;
+  font-size: 0.875rem;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', sans-serif;
   font-feature-settings: 'kern' on, 'liga' on, 'rlig' on, 'calt' on;
 }
 

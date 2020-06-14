@@ -10,7 +10,7 @@ const FontHeading = ({ children, ...rest }) => {
         text-align: left;
         font-weight: 400;
         color: #fff;
-        font-size: 0.8125rem;
+        font-size: 0.875rem;
         // background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
         // background-repeat: no-repeat;
         // background-position: left top;

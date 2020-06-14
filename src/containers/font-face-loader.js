@@ -11,8 +11,11 @@ const FontFaceLoader = ({ fonts }) => {
           font-family: '${font.metrics.familyName}';
           font-weight: ${font.metrics.weight};
           font-style: ${font.metrics.italic ? 'italic' : 'normal'};
-          src: url('${font.blob}')
-              format('opentype');
+          ${
+            font.blob &&
+            `src: url('${font.blob}')
+              format('opentype');`
+          }
         }
         `;
     });

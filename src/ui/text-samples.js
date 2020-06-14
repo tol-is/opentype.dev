@@ -3,12 +3,29 @@ import propTypes from 'prop-types';
 import { css } from 'emotion';
 import TextareaAutosize from 'react-textarea-autosize';
 
+import Checkbox from './input-checkbox';
 import Accordion from './accordion';
 
-const TextSamples = ({ visible, value, onChange, ...rest }) => {
-  const onTextAreaChange = useCallback((e) => {
-    onChange(e.target.value);
-  }, []);
+const TextSamples = ({
+  visible,
+  tester,
+  onTextChange,
+  onRtlChange,
+  ...rest
+}) => {
+  const onTextAreaChange = useCallback(
+    (e) => {
+      onTextChange(e.target.value);
+    },
+    [tester.text]
+  );
+
+  const onRightToLeftChange = useCallback(
+    (key, value) => {
+      onRtlChange(value);
+    },
+    [tester.rtl]
+  );
 
   //
   return (
@@ -19,7 +36,6 @@ const TextSamples = ({ visible, value, onChange, ...rest }) => {
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
             padding-top: 1.5rem;
-            // padding-bottom: 1.5rem;
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
             grid-gap: 1.5rem;
@@ -28,16 +44,39 @@ const TextSamples = ({ visible, value, onChange, ...rest }) => {
         >
           <div
             className={css`
-              grid-column: 2 / span 2;
+              padding-top: 1rem;
+            `}
+          >
+            <Checkbox
+              name="rtl"
+              label={'Right to Left'}
+              checked={tester.rtl}
+              onChange={onRightToLeftChange}
+            />
+          </div>
+          <div
+            className={css`
+              grid-column: 2 / span 3;
               display: grid;
               grid-template-columns: repeat(1, minmax(0, 1fr));
               grid-gap: 1rem;
+              position: relative;
+              &:before {
+                content: '';
+                display: block;
+                left: -1rem;
+                top: 1rem;
+                bottom: 1rem;
+                width: 1px;
+                background-color: #fff;
+                position: absolute;
+              }
             `}
           >
             <TextareaAutosize
-              value={value}
               min={2}
               max={5}
+              value={tester.text}
               onChange={onTextAreaChange}
               className={css`
                 width: 100%;
@@ -48,9 +87,9 @@ const TextSamples = ({ visible, value, onChange, ...rest }) => {
                 text-align: left;
                 font-weight: 400;
                 color: #fff;
-                font-size: 0.8125rem;
-                line-height: 1.5;
-                border-bottom: 1px solid white;
+                font-size: 1.15rem;
+                line-height: 1.625;
+
                 outline: none;
                 &:focus: {
                   outline: none;

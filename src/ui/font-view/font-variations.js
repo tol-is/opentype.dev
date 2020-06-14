@@ -33,9 +33,9 @@ const FontVariations = ({
         >
           <div
             className={css`
-              grid-column: 3 / span 1;
+              grid-column: 3 / span 5;
               display: grid;
-              grid-template-columns: repeat(1, minmax(0, 1fr));
+              grid-template-columns: repeat(5, minmax(0, 1fr));
               grid-gap: 1rem;
             `}
           >
@@ -56,17 +56,15 @@ const FontVariations = ({
           {variationsNames.length > 0 && (
             <div
               className={css`
-                padding-top: 1.5rem;
-                grid-column: 1 / span 7;
+                grid-column: 3 / span 5;
                 display: grid;
-                grid-template-columns: repeat(7, minmax(0, 1fr));
+                grid-template-columns: repeat(5, minmax(0, 1fr));
                 grid-gap: 1.5rem;
               `}
             >
               {variationsNames.map((key) => (
-                <div>
+                <div key={key}>
                   <Checkbox
-                    key={key}
                     name={key}
                     label={key}
                     checked={selectedVariation === key}

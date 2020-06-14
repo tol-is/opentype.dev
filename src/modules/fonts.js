@@ -10,6 +10,8 @@ const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
 const RESET_FONT = 'RESET_FONT';
 
+import { initialFontsState } from './initial-state';
+
 import { otFeatures } from '../constants';
 
 export function addFont({ id, metrics, blob }) {
@@ -81,10 +83,6 @@ export function setFontConfigProp(id, key, value) {
     },
   };
 }
-
-const initialFontsState = {
-  fonts: [],
-};
 
 const getFontIndexById = (fonts) => (id) => fonts.findIndex((f) => f.id === id);
 

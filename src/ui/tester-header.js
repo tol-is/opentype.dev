@@ -9,7 +9,7 @@ import TextSamplesView from './text-samples';
 import ButtonToggle from '../ui/btn-toggle';
 
 const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
-  const [showPanel, setShowPanel] = useState();
+  const [showPanel, setShowPanel] = useState('text');
 
   useEffect(() => {
     setOpenPanel(showPanel);
@@ -27,8 +27,17 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
     setTesterProp('text', value);
   }, []);
 
+  const onRightToLeftChange = useCallback((value) => {
+    setTesterProp('rtl', value);
+  }, []);
+
   const onToggleTextPanel = useCallback(() => {
     setShowPanel(showPanel === 'text' ? null : 'text');
+  }, [showPanel]);
+
+  const hideAllPanels = useCallback(() => {
+    // console.log('hide');
+    setShowPanel(null);
   }, [showPanel]);
 
   const showTextPanel = useMemo(() => showPanel === 'text', [showPanel]);
@@ -37,8 +46,10 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
   return (
     <>
       <header
+        onMouseLeave={hideAllPanels}
         className={css`
           position: fixed;
+          display: block;
           top: 0;
           width: 100%;
           z-index: 100;
@@ -97,13 +108,15 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
             top: 100%;
             padding: 0 5vw;
             background-color: #060606;
+          }
           `}
         >
           <TextSamplesView
             visible={showTextPanel}
             id={`header-text-samples`}
-            value={tester.text}
-            onChange={onSampleTextChange}
+            tester={tester}
+            onTextChange={onSampleTextChange}
+            onRtlChange={onRightToLeftChange}
           />
         </div>
       </header>

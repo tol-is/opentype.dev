@@ -11,8 +11,16 @@ import { uuid } from '../utils/uuid';
 import ButtonUpload from '../ui/btn-upload';
 import { addFont } from '../modules/fonts';
 
+const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
+
 const FontLoaderContainer = (props) => {
   const { addFont } = props;
+
+  useEffect(() => {
+    if (props.fonts.fonts.length === 0) {
+      loadURL('/Inter.otf');
+    }
+  }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
@@ -69,8 +77,8 @@ const FontLoaderContainer = (props) => {
     if (e.target.files && e.target.files.length > 0) {
       for (let index = 0; index < e.target.files.length; index++) {
         const file = e.target.files[index];
-        // const extension = file.name.split('.').pop();
-        loadBlob(file);
+        const extension = file.name.split('.').pop();
+        if (fontExtensions.includes(extension)) loadBlob(file);
       }
     }
   };
