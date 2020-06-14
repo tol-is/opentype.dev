@@ -30,7 +30,7 @@ export function setOpenPanel(value) {
 
 const initialState = {
   text:
-    'I would like you to speak to the medical doctors to see if there’s any way that you can apply light and heat to cure. You know? If you could? And maybe you can, maybe you can’t. Again, I say maybe you can, maybe you can’t. I’m not a doctor. But I’m a person that has a good… You know what.',
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890({[.,¡!¿?*\'‘’"“”]})$€£%@&¶§¢†‡',
   fontSize: 42,
   lineHeight: 1.4,
   direction: 'ltr',
