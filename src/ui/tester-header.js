@@ -9,7 +9,7 @@ import TextSamplesView from './text-samples';
 import ButtonToggle from '../ui/btn-toggle';
 
 const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
-  const [showPanel, setShowPanel] = useState('text');
+  const [showPanel, setShowPanel] = useState();
 
   useEffect(() => {
     setOpenPanel(showPanel);

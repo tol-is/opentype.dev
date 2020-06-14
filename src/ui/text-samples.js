@@ -57,20 +57,7 @@ const TextSamples = ({
           <div
             className={css`
               grid-column: 2 / span 3;
-              display: grid;
-              grid-template-columns: repeat(1, minmax(0, 1fr));
-              grid-gap: 1rem;
               position: relative;
-              &:before {
-                content: '';
-                display: block;
-                left: -1rem;
-                top: 1rem;
-                bottom: 1rem;
-                width: 1px;
-                background-color: #fff;
-                position: absolute;
-              }
             `}
           >
             <TextareaAutosize
@@ -80,6 +67,7 @@ const TextSamples = ({
               onChange={onTextAreaChange}
               className={css`
                 width: 100%;
+                white-space: pre-wrap;
                 background-color: transparent;
                 resize: none;
                 border: 0;

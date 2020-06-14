@@ -265,6 +265,7 @@ const FontView = ({
           onClick={onTextClick}
           className={css`
             padding: 1.5rem 0 0.5rem 0;
+            white-space: pre-wrap;
             font-family: ${metrics.familyName};
             font-weight: ${metrics.weight};
             font-style: ${metrics.italic ? 'italic' : 'normal'};
