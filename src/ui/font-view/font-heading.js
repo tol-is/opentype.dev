@@ -15,7 +15,7 @@ const FontHeading = ({ children, ...rest }) => {
         // background-repeat: no-repeat;
         // background-position: left top;
         // transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        // background-size: 100% 0.09em;
+        // background-size: 100% 1px;
       `}
     >
       {children}

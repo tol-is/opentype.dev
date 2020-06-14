@@ -17,12 +17,12 @@ export default ({ onChange }) => (
       background-repeat: no-repeat;
       background-position: 0 100%;
       transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      background-size: 0% 0.09em;
+      background-size: 0% 1px;
       &:focus {
         outline: none;
       }
       &:hover {
-        background-size: 100% 0.09em;
+        background-size: 100% 1px;
       }
     `}
   >

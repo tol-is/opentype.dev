@@ -16,7 +16,7 @@ export const Slider = ({ name, label, min, max, step, value, onChange }) => {
         background-repeat: no-repeat;
         background-position: 0 100%;
         transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        background-size: ${((value - min) / (max - min)) * 100}% 0.09em;
+        background-size: ${((value - min) / (max - min)) * 100}% 1px;
       `}
     >
       <input

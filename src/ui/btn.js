@@ -53,13 +53,13 @@ const Button = ({ label, onClick }) => {
         background-repeat: no-repeat;
         background-position: ${bgPosition} top;
         transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        background-size: ${bgSize}% 0.09em;
+        background-size: ${bgSize}% 1px;
         &:focus {
           outline: none;
         }
         &:active:hover {
           background-position: right top;
-          background-size: 0% 0.09em;
+          background-size: 0% 1px;
         }
       `}
       onMouseOver={onMouseOver}
