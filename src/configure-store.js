@@ -9,7 +9,7 @@ import { tester } from './modules/tester';
 const storage = idbStorage('opentype-tester');
 
 const persistConfig = {
-  key: 'root.0.0.10',
+  key: 'root.0.1.0',
   storage,
 };
 
