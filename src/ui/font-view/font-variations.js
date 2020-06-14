@@ -36,7 +36,7 @@ const FontVariations = ({
               grid-column: 3 / span 5;
               display: grid;
               grid-template-columns: repeat(5, minmax(0, 1fr));
-              grid-gap: 1rem;
+              grid-gap: 1.5rem;
             `}
           >
             {Object.keys(variationAxes).map((k) => (
@@ -59,7 +59,7 @@ const FontVariations = ({
                 grid-column: 3 / span 5;
                 display: grid;
                 grid-template-columns: repeat(5, minmax(0, 1fr));
-                grid-gap: 1.5rem;
+                grid-gap: 1rem;
               `}
             >
               {variationsNames.map((key) => (
