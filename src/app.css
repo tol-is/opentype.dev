@@ -5,13 +5,6 @@
   font-weight: 400;
 }
 
-@font-face {
-  font-family: 'JetBrainsMono';
-  src: url('./fonts/JetBrainsMono-Bold.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 700;
-}
-
 body {
   font-size: 0.8125rem;
   font-family: 'JetBrainsMono', 'Courier New', Courier, monospace;
