@@ -36,8 +36,8 @@ abcdefghijklmnopqrstuvwxyz
 1a 2o 9a No.
 3/4 16/9 7*4 7÷8 8:46
 <-+÷×=>`,
-  fontSize: 42,
-  lineHeight: 1.4,
+  fontSize: 72,
+  lineHeight: 1.3,
   rtl: false,
   openPanel: null,
   activeFont: '',
