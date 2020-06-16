@@ -54,6 +54,7 @@ export const tester = produce((state = initialState, action) => {
       state.activeFont = payload.value;
       break;
     case SET_OPEN_PANEL:
+      state.activeFont = null;
       state.openPanel = payload.value;
       break;
 

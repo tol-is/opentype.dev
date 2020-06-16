@@ -33,7 +33,7 @@ const FontVariations = ({
         >
           <div
             className={css`
-              grid-column: 3 / span 5;
+              grid-column: 4 / span 4;
               display: grid;
               grid-template-columns: repeat(5, minmax(0, 1fr));
               grid-gap: 1.5rem;
@@ -56,7 +56,7 @@ const FontVariations = ({
           {variationsNames.length > 0 && (
             <div
               className={css`
-                grid-column: 3 / span 5;
+                grid-column: 4 / span 4;
                 display: grid;
                 grid-template-columns: repeat(5, minmax(0, 1fr));
                 grid-gap: 1rem;

@@ -8,6 +8,7 @@ import ButtonToggle from '../btn-toggle';
 
 import FontVariations from './font-variations';
 import FontFeatures from './font-features';
+import FontText from './font-text';
 import FontHeading from './font-heading';
 import { otFeatures } from '../../constants';
 
@@ -83,6 +84,11 @@ const FontView = ({
     setShowPanel(showPanel === 'variations' ? null : 'variations');
   }, [showPanel]);
 
+  const onToggleTextPanel = useCallback(() => {
+    onActivated(id);
+    setShowPanel(showPanel === 'text' ? null : 'text');
+  }, [showPanel]);
+
   const onTextClick = useCallback(() => {
     onActivated(id);
   }, []);
@@ -151,6 +157,8 @@ const FontView = ({
     showPanel,
   ]);
 
+  const showTextPanel = useMemo(() => showPanel === 'text', [showPanel]);
+
   //
   return (
     <section
@@ -198,6 +206,17 @@ const FontView = ({
         >
           <FontHeading>{metrics.postscriptName}</FontHeading>
 
+          <div>
+            <ButtonToggle
+              selected={showTextPanel}
+              aria-expanded={showTextPanel}
+              aria-controls={`${id}-font-text-sample`}
+              onClick={onToggleTextPanel}
+              line="top"
+              label={'Text'}
+            />
+          </div>
+
           {featureKeys.length > 0 && (
             <div>
               <ButtonToggle
@@ -240,6 +259,7 @@ const FontView = ({
             <Button onClick={onRemoveClick} label="Delete" />
           </div>
         </motion.div>
+        <FontText id={`${id}-font-text-sample`} visible={showTextPanel} />
         {featureKeys.length > 0 && (
           <FontFeatures
             id={`${id}-font-features`}
