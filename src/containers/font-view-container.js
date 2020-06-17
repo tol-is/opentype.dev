@@ -20,6 +20,7 @@ const FontItemContainer = ({
   font,
   global,
   setFontFeature,
+  setFontVariationAxis,
 }) => {
   //
   return (
