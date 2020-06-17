@@ -17,6 +17,7 @@ const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
 const FontLoaderContainer = (props) => {
   const { addFontToLibrary, addFontToTester, library } = props;
 
+  console.log(library);
   useEffect(() => {
     if (Object.keys(library.fonts).length === 0) {
       loadURL('/Inter.otf');
