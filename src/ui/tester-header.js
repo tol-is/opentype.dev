@@ -74,24 +74,6 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
           `}
         >
           <div>
-            <ButtonToggle
-              selected={showFontsLibrary}
-              aria-expanded={showFontsLibrary}
-              aria-controls={`panel-fonts-library`}
-              onClick={onToggleFontsPanel}
-              label={'Fonts'}
-            />
-          </div>
-          <div>
-            <ButtonToggle
-              selected={showTextPanel}
-              aria-expanded={showTextPanel}
-              aria-controls={`header-text-samples`}
-              onClick={onToggleTextPanel}
-              label={'Text Sample'}
-            />
-          </div>
-          <div>
             <Slider
               label="Font Size"
               min={12}
@@ -111,6 +93,20 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
               onChange={onLineHeightChange}
             />
           </div>
+          <div
+            className={css`
+              grid-column-start: -2;
+              grid-column-span: 1;
+            `}
+          >
+            <ButtonToggle
+              selected={showFontsLibrary}
+              aria-expanded={showFontsLibrary}
+              aria-controls={`panel-fonts-library`}
+              onClick={onToggleFontsPanel}
+              label={'Fonts'}
+            />
+          </div>
         </div>
         <div
           className={css`
@@ -122,13 +118,6 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
             background-color: #060606;
           `}
         >
-          <TextSamplesView
-            visible={showTextPanel}
-            id={`header-text-samples`}
-            tester={tester}
-            onTextChange={onSampleTextChange}
-            onRtlChange={onRightToLeftChange}
-          />
           <PanelFontLibrary
             visible={showFontsLibrary}
             id={`panel-fonts-library`}

@@ -250,7 +250,7 @@ const FontView = ({
           font-feature-settings: ${fontFeatureSettings};
           font-variation-settings: ${fontVariationSettings};
           direction: ${global.rtl ? 'rtl' : 'ltr'};
-          transition: font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         `}
       >
         {global.text}
