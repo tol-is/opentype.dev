@@ -53,7 +53,7 @@ const FontVariations = ({
               </div>
             ))}
           </div>
-          {variationsNames.length > 0 && (
+          {/* {variationsNames.length > 0 && (
             <div
               className={css`
                 grid-column: 4 / span 4;
@@ -73,7 +73,7 @@ const FontVariations = ({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
       </Accordion>
     </>

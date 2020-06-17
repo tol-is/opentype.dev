@@ -8,14 +8,9 @@ import Checkbox from '../input-checkbox';
 
 import { otFeatures } from '../../constants';
 
-const FontFeatures = ({
-  visible,
-  fontFeatures,
-  onFontFeatureChange,
-  ...rest
-}) => {
+const FontFeatures = ({ visible, features, onFontFeatureChange, ...rest }) => {
   //
-  const featureKeys = useMemo(() => Object.keys(fontFeatures), []);
+  const featureKeys = useMemo(() => Object.keys(features), []);
 
   //
   return (
@@ -50,7 +45,7 @@ const FontFeatures = ({
                 <Checkbox
                   name={key}
                   label={otFeatures[key].title}
-                  checked={fontFeatures[key]}
+                  checked={features[key]}
                   onChange={onFontFeatureChange}
                 />
               </div>

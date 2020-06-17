@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useMemo, useEffect } from 'react';
 import { css } from 'emotion';
 
-import FontLoader from '../containers/font-loader';
-
 import Slider from '../ui/input-range';
 import { setTesterProp } from '../modules/tester';
 import TextSamplesView from './text-samples';
 import ButtonToggle from '../ui/btn-toggle';
+
+import PanelFontLibrary from './panel-font-library';
 
 const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
   const [showPanel, setShowPanel] = useState();
@@ -35,12 +35,18 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
     setShowPanel(showPanel === 'text' ? null : 'text');
   }, [showPanel]);
 
+  const onToggleFontsPanel = useCallback(() => {
+    setShowPanel(showPanel === 'fonts' ? null : 'fonts');
+  }, [showPanel]);
+
   const hideAllPanels = useCallback(() => {
     // console.log('hide');
     setShowPanel(null);
   }, [showPanel]);
 
   const showTextPanel = useMemo(() => showPanel === 'text', [showPanel]);
+
+  const showFontsLibrary = useMemo(() => showPanel === 'fonts', [showPanel]);
 
   //
   return (
@@ -68,7 +74,13 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
           `}
         >
           <div>
-            <FontLoader />
+            <ButtonToggle
+              selected={showFontsLibrary}
+              aria-expanded={showFontsLibrary}
+              aria-controls={`panel-fonts-library`}
+              onClick={onToggleFontsPanel}
+              label={'Fonts'}
+            />
           </div>
           <div>
             <ButtonToggle
@@ -85,7 +97,7 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
               min={12}
               max={128}
               step={1}
-              value={tester.fontSize}
+              value={tester.global.fontSize}
               onChange={onFontSizeChange}
             />
           </div>
@@ -95,7 +107,7 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
               min={1}
               max={2}
               step={0.01}
-              value={tester.lineHeight}
+              value={tester.global.lineHeight}
               onChange={onLineHeightChange}
             />
           </div>
@@ -108,7 +120,6 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
             top: 100%;
             padding: 0 5vw;
             background-color: #060606;
-          }
           `}
         >
           <TextSamplesView
@@ -117,6 +128,10 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
             tester={tester}
             onTextChange={onSampleTextChange}
             onRtlChange={onRightToLeftChange}
+          />
+          <PanelFontLibrary
+            visible={showFontsLibrary}
+            id={`panel-fonts-library`}
           />
         </div>
       </header>

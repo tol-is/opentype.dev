@@ -17,14 +17,14 @@ const TextSamples = ({
     (e) => {
       onTextChange(e.target.value);
     },
-    [tester.text]
+    [tester.global.text]
   );
 
   const onRightToLeftChange = useCallback(
     (key, value) => {
       onRtlChange(value);
     },
-    [tester.rtl]
+    [tester.global.rtl]
   );
 
   //
@@ -50,7 +50,7 @@ const TextSamples = ({
             <Checkbox
               name="rtl"
               label={'Right to Left'}
-              checked={tester.rtl}
+              checked={tester.global.rtl}
               onChange={onRightToLeftChange}
             />
           </div>
@@ -63,7 +63,7 @@ const TextSamples = ({
             <TextareaAutosize
               min={2}
               max={5}
-              value={tester.text}
+              value={tester.global.text}
               onChange={onTextAreaChange}
               className={css`
                 width: 100%;
@@ -76,7 +76,7 @@ const TextSamples = ({
                 color: #fff;
                 font-size: 1.15rem;
                 line-height: 1.625;
-                direction: ${tester.rtl ? 'rtl' : 'ltr'};
+                direction: ${tester.global.rtl ? 'rtl' : 'ltr'};
                 outline: none;
                 &:focus: {
                   outline: none;
