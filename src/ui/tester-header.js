@@ -5,15 +5,12 @@ import Slider from '../ui/input-range';
 import { setTesterProp } from '../modules/tester';
 import TextSamplesView from './text-samples';
 import ButtonToggle from '../ui/btn-toggle';
+import FontLoader from '../containers/font-loader';
 
 import PanelFontLibrary from './panel-font-library';
 
-const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
+const TesterHeader = ({ tester, setTesterProp }) => {
   const [showPanel, setShowPanel] = useState();
-
-  useEffect(() => {
-    setOpenPanel(showPanel);
-  }, [showPanel]);
 
   const onFontSizeChange = useCallback((e) => {
     setTesterProp('fontSize', e.target.value);
@@ -55,28 +52,31 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
         onMouseLeave={hideAllPanels}
         className={css`
           position: fixed;
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
           display: block;
           top: 0;
-          width: 100%;
-          z-index: 100;
-          padding: 0 5vw;
-          background-color: #060606;
+          right: 0;
+          width: 50%;
+          z-index: 6000;
+          padding: 0 5vw 0 0.82rem;
+          // background-color: #060606;
         `}
       >
         <div
           className={css`
-            padding: 0.5rem 0 0 0;
+            padding: 0;
             display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             grid-auto-rows: minmax(2em, auto);
             grid-gap: 1.5rem;
             width: 100%;
           `}
         >
-          <div>
+          <div className={css``}>
             <Slider
               label="Font Size"
-              min={12}
+              min={6}
               max={128}
               step={1}
               value={tester.global.fontSize}
@@ -93,19 +93,8 @@ const TesterHeader = ({ tester, setTesterProp, setOpenPanel }) => {
               onChange={onLineHeightChange}
             />
           </div>
-          <div
-            className={css`
-              grid-column-start: -2;
-              grid-column-span: 1;
-            `}
-          >
-            <ButtonToggle
-              selected={showFontsLibrary}
-              aria-expanded={showFontsLibrary}
-              aria-controls={`panel-fonts-library`}
-              onClick={onToggleFontsPanel}
-              label={'Fonts'}
-            />
+          <div>
+            <FontLoader />
           </div>
         </div>
         <div

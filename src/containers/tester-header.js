@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import TesterHeader from '../ui/tester-header';
-import { setTesterProp, setOpenPanel } from '../modules/tester';
+import { setTesterProp } from '../modules/tester';
 
 function mapStateToProps(state) {
   return {
@@ -12,7 +12,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setOpenPanel: (value) => dispatch(setOpenPanel(value)),
     setTesterProp: (key, value) => dispatch(setTesterProp(key, value)),
   };
 }

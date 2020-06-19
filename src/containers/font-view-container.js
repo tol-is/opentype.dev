@@ -7,18 +7,15 @@ import { motion } from 'framer-motion';
 import { otFeatures } from '../constants';
 
 import FontView from '../ui/font-view';
-import {
-  tester,
-  setFontFeature,
-  setFontVariationAxis,
-} from '../modules/tester';
+import { setFontFeature, setFontVariationAxis } from '../modules/tester';
 
 const FontItemContainer = ({
   id,
   index,
-  config,
   font,
+  config,
   global,
+  scriptSample,
   setFontFeature,
   setFontVariationAxis,
 }) => {
@@ -31,6 +28,7 @@ const FontItemContainer = ({
         font={font}
         config={config}
         global={global}
+        scriptSample={scriptSample}
         setFontFeature={setFontFeature}
         setFontVariationAxis={setFontVariationAxis}
       />
@@ -39,14 +37,25 @@ const FontItemContainer = ({
 };
 
 function mapStateToProps(state, ownProps) {
-  const config = state.tester.fonts.find((f) => f.id === ownProps.id);
+  // font from library
   const font = state.library.fonts[ownProps.id].metrics;
 
+  // config from tester
+  const config = state.tester.fonts.find((f) => f.id === ownProps.id);
+
+  const adhesion = state.adhesion[config.script];
+
+  const scriptSample = adhesion.samples.find((s) => {
+    return config.sample === 'default'
+      ? s.default === true
+      : s.key === config.sample;
+  });
+
   return {
-    config,
     font,
+    config,
+    scriptSample,
     global: state.tester.global,
-    openPanel: state.tester.openPanel,
   };
 }
 

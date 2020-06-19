@@ -3,38 +3,57 @@ import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { css } from 'emotion';
 
-import { updateFonts } from '../modules/fonts';
+import {} from '../modules/fonts';
 
-import { setActiveFont } from '../modules/tester';
+import { setActiveFont, reorderFonts } from '../modules/tester';
 
 import TesterFontContainer from './font-view-container';
 
-const TesterMain = ({ fonts, openPanel }) => {
-  // const onDragEnd = useCallback(
-  //   (result) => {
-  //     // dropped outside the list
-  //     if (!result.destination) return;
-  //     const startIndex = result.source.index;
-  //     const endIndex = result.destination.index;
-  //     const newFonts = Array.from(fonts);
-  //     const [removed] = newFonts.splice(startIndex, 1);
-  //     newFonts.splice(endIndex, 0, removed);
-  //     // update font list
-  //     updateFonts(newFonts);
-  //   },
-  //   [fonts]
-  // );
+const TesterMain = ({ fonts, reorderFonts }) => {
+  const onDragEnd = useCallback(
+    (result) => {
+      // dropped outside the list
+      if (!result.destination) return;
+      const startIndex = result.source.index;
+      const endIndex = result.destination.index;
+      const newFonts = Array.from(fonts);
+      const [removed] = newFonts.splice(startIndex, 1);
+      newFonts.splice(endIndex, 0, removed);
+      // update font list
+      reorderFonts(newFonts);
+    },
+    [fonts]
+  );
 
   return (
     <main
       className={css`
-        padding: ${openPanel === 'text' ? '16rem' : '5rem'} 5vw;
+        padding: 0 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
-      {fonts.map((id, index) => (
-        <TesterFontContainer key={id} id={id} index={index} />
-      ))}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable">
+          {(provided, snapshot) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {fonts.map((id, index) => (
+                <Draggable key={id} draggableId={id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                    >
+                      <TesterFontContainer key={id} id={id} index={index} />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </main>
   );
 };
@@ -42,7 +61,6 @@ const TesterMain = ({ fonts, openPanel }) => {
 function mapStateToProps(state, ownProps) {
   return {
     fonts: state.tester.fonts.map((f) => f.id),
-    openPanel: state.tester.openPanel,
   };
 }
 
@@ -59,7 +77,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(setFontNamedVariation(id, name)),
     removeFont: (id) => dispatch(removeFont(id)),
     resetFont: (id) => dispatch(resetFont(id)),
-    updateFonts: (fonts) => dispatch(updateFonts(fonts)),
+    reorderFonts: (fonts) => dispatch(reorderFonts(fonts)),
   };
 }
 

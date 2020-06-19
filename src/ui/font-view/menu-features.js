@@ -2,7 +2,7 @@ import React, { memo, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { css } from 'emotion';
 
-import Accordion from '../../ui/accordion';
+import Accordion from '../accordion';
 
 import Checkbox from '../input-checkbox';
 
@@ -20,18 +20,18 @@ const FontFeatures = ({ visible, features, onFontFeatureChange, ...rest }) => {
           className={css`
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
-            padding-top: 1rem;
+            padding: 1.5rem 0;
             display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-template-columns: repeat(8, minmax(0, 1fr));
             grid-gap: 1.5rem;
             width: 100%;
           `}
         >
           <div
             className={css`
-              grid-column: 2 / span 6;
+              grid-column: 2 / span 7;
               display: grid;
-              grid-template-columns: repeat(6, minmax(0, 1fr));
+              grid-template-columns: repeat(7, minmax(0, 1fr));
               grid-gap: 1.5rem;
             `}
           >

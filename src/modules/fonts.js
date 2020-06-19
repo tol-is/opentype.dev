@@ -1,7 +1,6 @@
 import produce from 'immer';
 
 const ADD_FONT_TO_LIBRARY = 'ADD_FONT_TO_LIBRARY';
-const UPDATE_FONTS = 'UPDATE_FONTS';
 const REMOVE_FONT = 'REMOVE_FONT';
 
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
@@ -27,6 +26,8 @@ export function removeFont(id) {
     payload: id,
   };
 }
+
+const UPDATE_FONTS = 'UPDATE_FONTS';
 
 export function updateFonts(fonts) {
   return {
@@ -113,11 +114,7 @@ export const fonts = produce((state = initialFontsState, action) => {
       });
       break;
     //
-    case SET_FONT_VARIATION_AXIS:
-      fontIndex = getFontIndex(payload.id);
-      state.fonts[fontIndex].config.variations[payload.axis] = payload.value;
-      break;
-    //
+
     case SET_FONT_NAMED_VARIATION:
       fontIndex = getFontIndex(payload.id);
 
@@ -130,10 +127,7 @@ export const fonts = produce((state = initialFontsState, action) => {
       fontIndex = getFontIndex(payload.id);
 
       break;
-    //
-    case UPDATE_FONTS:
-      state.fonts = action.payload.fonts;
-      break;
+
     //
     default:
       return state;

@@ -6,10 +6,10 @@ import { motion } from 'framer-motion';
 import Button from '../btn';
 import ButtonToggle from '../btn-toggle';
 
-import FontVariations from './font-variations';
-import FontFeatures from './font-features';
-import FontText from './font-text';
-import FontHeading from './font-heading';
+import MenuVariations from './menu-variations';
+import MenuFeatures from './menu-features';
+import MenuScript from './menu-script';
+import FontSample from './font-view-sample';
 import { otFeatures } from '../../constants';
 
 const FontView = ({
@@ -17,14 +17,11 @@ const FontView = ({
   config,
   global,
   font,
+  scriptSample,
   setFontFeature,
   setFontVariationAxis,
 }) => {
-  const {
-    availableFeatures,
-    availableVariationAxes,
-    availableVariations,
-  } = font;
+  const { availableVariationAxes, availableVariations } = font;
 
   const [willDelete, setWillDelete] = useState(false);
   const [isHover, setIsHover] = useState(false);
@@ -86,39 +83,15 @@ const FontView = ({
     setShowPanel(showPanel === 'variations' ? null : 'variations');
   }, [showPanel]);
 
-  const onToggleTextPanel = useCallback(() => {
+  const onToggleScriptPanel = useCallback(() => {
     // onActivated(id);
-    setShowPanel(showPanel === 'text' ? null : 'text');
+    setShowPanel(showPanel === 'script' ? null : 'script');
   }, [showPanel]);
 
   const onTextClick = useCallback(() => {
     // onActivated(id);
+    setShowPanel(null);
   }, []);
-  //
-  const fontFeatureSettings = useMemo(() => {
-    let loop = 0;
-    return availableFeatures.reduce((fRes, fKey) => {
-      loop++;
-      fRes += `"${fKey}" ${config.features[fKey] ? 1 : 0}`;
-      if (loop < availableFeatures.length) {
-        fRes += ', ';
-      }
-      return fRes;
-    }, '');
-  }, [config.features]);
-
-  //
-  const fontVariationSettings = useMemo(() => {
-    let loop = 0;
-    return availableVariationAxes.reduce((vRes, vKey) => {
-      loop++;
-      vRes += `"${vKey}" ${config.variations[vKey]}`;
-      if (loop < availableVariationAxes.length) {
-        vRes += ', ';
-      }
-      return vRes;
-    }, '');
-  }, [config.variations]);
 
   //
   const selectedVariation = useMemo(() => {
@@ -147,7 +120,7 @@ const FontView = ({
     showPanel,
   ]);
 
-  const showTextPanel = useMemo(() => showPanel === 'text', [showPanel]);
+  const showScriptPanel = useMemo(() => showPanel === 'script', [showPanel]);
 
   //
   return (
@@ -162,23 +135,36 @@ const FontView = ({
         }}
         transition={{ type: 'spring', stiffness: 200, damping: 100 }}
         className={css`
+          position: sticky;
+          z-index: 4;
+          background-color: #060606;
+          top: 0;
           transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
-          padding-top: 3rem;
           display: grid;
-          grid-gap: 1.5rem;
-          grid-template-columns: repeat(7, minmax(0, 1fr));
+          grid-column-gap: 1.5rem;
+          grid-template-columns: repeat(8, minmax(0, 1fr));
           width: 100%;
         `}
       >
+        <div
+          className={css`
+            padding: 1em 0;
+            text-align: left;
+            font-weight: 400;
+            line-height: 1;
+            color: #fff;
+          `}
+        >
+          {font.postscriptName}
+        </div>
         <div>
           <ButtonToggle
-            selected={showTextPanel}
-            aria-expanded={showTextPanel}
+            selected={showScriptPanel}
+            aria-expanded={showScriptPanel}
             aria-controls={`${id}-font-text-sample`}
-            onClick={onToggleTextPanel}
-            line="top"
-            label={'Text'}
+            onClick={onToggleScriptPanel}
+            label={'Script'}
           />
         </div>
 
@@ -189,7 +175,6 @@ const FontView = ({
               aria-expanded={showFeaturesPanel}
               aria-controls={`${id}-font-features`}
               onClick={onToggleFeaturesPanel}
-              line="top"
               label={'Features'}
             />
           </div>
@@ -201,7 +186,6 @@ const FontView = ({
               aria-expanded={showVariationsPanel}
               aria-controls={`${id}-font-variations`}
               onClick={onToggleVariationsPanel}
-              line="top"
               label={'Variations'}
             />
           </div>
@@ -209,52 +193,45 @@ const FontView = ({
 
         <div
           className={css`
-            grid-column-start: -2;
-            grid-column-span: 1;
+            grid-column: -2 / span 1;
+          `}
+        ></div>
+        <div
+          className={css`
+            grid-column: 1 / span 8;
           `}
         >
-          <FontHeading>{font.postscriptName}</FontHeading>
+          <MenuScript id={`${id}-menu-script`} visible={showScriptPanel} />
+          {font.availableFeatures.length > 0 && (
+            <MenuFeatures
+              id={`${id}-menu-features`}
+              visible={showFeaturesPanel}
+              features={config.features}
+              onFontFeatureChange={onFontFeatureChange}
+            />
+          )}
+          {font.isVariable && (
+            <MenuVariations
+              id={`${id}-menu-variations`}
+              visible={showVariationsPanel}
+              values={config.variations}
+              selectedVariation={selectedVariation}
+              variationAxesKeys={font.availableVariationAxes}
+              variationAxes={font.variationAxes}
+              variationsNames={font.ava}
+              onVariationAxisChange={onVariationAxisChange}
+              onNamedVariationSelect={onNamedVariationSelect}
+            />
+          )}
         </div>
       </motion.div>
-      <FontText id={`${id}-font-text-sample`} visible={showTextPanel} />
-      {font.availableFeatures.length > 0 && (
-        <FontFeatures
-          id={`${id}-font-features`}
-          visible={showFeaturesPanel}
-          features={config.features}
-          onFontFeatureChange={onFontFeatureChange}
-        />
-      )}
-      {font.isVariable && (
-        <FontVariations
-          id={`${id}-font-variations`}
-          visible={showVariationsPanel}
-          values={config.variations}
-          selectedVariation={selectedVariation}
-          variationAxesKeys={font.availableVariationAxes}
-          variationAxes={font.variationAxes}
-          variationsNames={font.ava}
-          onVariationAxisChange={onVariationAxisChange}
-          onNamedVariationSelect={onNamedVariationSelect}
-        />
-      )}
-      <div
-        className={css`
-          padding: 1.5rem 0 0.5rem 0;
-          white-space: pre-wrap;
-          font-family: ${font.familyName};
-          font-weight: ${font.weight};
-          font-style: ${font.italic ? 'italic' : 'normal'};
-          font-size: ${global.fontSize}px;
-          line-height: ${global.lineHeight};
-          font-feature-settings: ${fontFeatureSettings};
-          font-variation-settings: ${fontVariationSettings};
-          direction: ${global.rtl ? 'rtl' : 'ltr'};
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        `}
-      >
-        {global.text}
-      </div>
+
+      <FontSample
+        font={font}
+        config={config}
+        global={global}
+        scriptSample={scriptSample}
+      />
     </section>
   );
 };

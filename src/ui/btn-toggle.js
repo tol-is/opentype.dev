@@ -59,7 +59,7 @@ const Button = ({ selected, label, line = 'bottom', onClick }) => {
         padding: 1em 0;
         text-align: left;
         font-weight: 400;
-        line-height: 1.5;
+        line-height: 1;
         color: #fff;
         background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
         background-repeat: no-repeat;

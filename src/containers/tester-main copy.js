@@ -20,7 +20,6 @@ import FontView from '../ui/font-view';
 const TesterMain = ({
   fonts,
   tester,
-  openPanel,
   updateFonts,
   removeFont,
   resetFont,
@@ -73,7 +72,6 @@ const TesterMain = ({
   return (
     <main
       className={css`
-        padding: ${openPanel === 'text' ? '16rem' : '5rem'} 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
@@ -118,7 +116,6 @@ function mapStateToProps(state) {
   return {
     fonts: state.fonts.fonts,
     tester: state.tester,
-    openPanel: state.tester.openPanel,
   };
 }
 

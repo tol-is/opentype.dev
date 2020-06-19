@@ -42,7 +42,7 @@ export default ({ label, name, checked, onChange }) => {
         padding: 1em 0;
         text-align: left;
         font-weight: 400;
-        line-height: 1.5;
+        line-height: 1;
         background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
         background-repeat: no-repeat;
         background-position: ${bgPositionX} 2.15em;
@@ -61,6 +61,7 @@ export default ({ label, name, checked, onChange }) => {
           position: absolute;
           width: 100%;
           height: 100%;
+          top: 0;
         `}
         name={name}
         type="checkbox"

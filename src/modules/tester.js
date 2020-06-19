@@ -8,8 +8,17 @@ const SET_ACTIVE_FONT = 'SET_ACTIVE_FONT';
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
+const REORDER_FONTS = 'REORDER_FONTS';
 
 import { otFeatures } from '../constants';
+import { reduce } from 'lodash';
+
+export function reorderFonts(fonts) {
+  return {
+    type: REORDER_FONTS,
+    payload: { fonts },
+  };
+}
 
 export function addFontToTester({ id, metrics }) {
   console.log(id, metrics);
@@ -59,19 +68,11 @@ export function setFontVariationAxis(id, axis, value) {
   };
 }
 
-export function setOpenPanel(value) {
-  return {
-    type: SET_OPEN_PANEL,
-    payload: { value },
-  };
-}
-
 const initialState = {
-  openPanel: null,
   activeFont: '',
   global: {
     text: `ABCDEFGHIJKLMNOPQRSTUVWXYZ
-abcdefghijklmnopqrstuvwxyz
+    'abcdefghijklmnopqrstuvwxyz',
 :;,.*‘?’“!”(%)[#]{@}/&
 1234567890
 1a 2o 9a No.
@@ -108,7 +109,6 @@ export const tester = produce((state = initialState, action) => {
       break;
     //
     case SET_FONT_VARIATION_AXIS:
-      console.log(fontIndex, payload.axis, payload.value);
       state.fonts[fontIndex].variations[payload.axis] = payload.value;
       break;
 
@@ -116,9 +116,13 @@ export const tester = produce((state = initialState, action) => {
     case SET_ACTIVE_FONT:
       state.activeFont = payload.value;
       break;
-    case SET_OPEN_PANEL:
-      state.activeFont = null;
-      state.openPanel = payload.value;
+
+    //
+    case REORDER_FONTS:
+      state.fonts = payload.fonts.reduce((res, cur) => {
+        res.push(state.fonts.find((f) => f.id === cur));
+        return res;
+      }, []);
       break;
 
     //
@@ -152,9 +156,9 @@ const initializeFontEntry = ({ id, metrics }) => {
     id,
     features: featuresConfig,
     variations: variationsConfig,
+    script: 'latin',
+    sample: 'default',
   };
 
   return config;
 };
-
-//

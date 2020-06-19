@@ -10,7 +10,7 @@ export const Slider = ({ name, label, min, max, step, value, onChange }) => {
         padding: 1em 0;
         position: relative;
         text-align: left;
-        line-height: 1.5;
+        line-height: 1;
         font-weight: 400;
         background-image: linear-gradient(to bottom, #fff 0%, #fff 100%);
         background-repeat: no-repeat;
@@ -25,6 +25,7 @@ export const Slider = ({ name, label, min, max, step, value, onChange }) => {
           position: absolute;
           width: 100%;
           height: 100%;
+          top: 0;
         `}
         type="range"
         min={min}

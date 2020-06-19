@@ -1,0 +1,65 @@
+{
+  "direction": "ltr",
+  "samples": [
+    {
+      "default": true,
+      "key": "grumpy-wizards",
+      "name": "Grumpy wizards",
+      "layout": "stack",
+      "strings": [
+        "Grumpy wizards make toxic brew for the evil Queen and Jack. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his bed into a horrible vermin. He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. The bedding was hardly able to cover it and seemed ready to slide off any moment. His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked."
+      ]
+    },
+    {
+      "key": "hamburgerfostiv",
+      "name": "Hamburgerfostiv",
+      "layout": "stack",
+      "strings": [
+        "fortieth boring trait favoring barrage referring thrusting tannest embargo sausage gaining astutest augur hibernate variant hearse beggaring foresee eagerer hearten ensnaring tufting interstate meager veneration stigma feminine tabbing noising trimming throbbing ransoming stiffen oaring fishing rehire overbore bonniest ravishment teensiest mintier shriven unforeseen overrate surgeon smarter submarine revenging assuaging masher amnesia insentient rehashing fresher buttering sorghum thine sitter month serer minting variate torsion gaunt berthing goofiest sober informing sourer tonight neigh iratest torte situate rheumier antagonist serening motion guise unseeing masseuse."
+      ]
+    },
+    {
+      "key": "characters",
+      "name": "Characters",
+      "layout": "stack",
+      "strings": [
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "abcdefghijklmnopqrstuvwxyz",
+        ":;,.*‘?’“!”(%)[#]{@}/&",
+        "1234567890",
+        "1a 2o 9a No.",
+        "3/4 16/9 7*4 7÷8 8:46",
+        "<-+÷×=>"
+      ]
+    },
+    {
+      "key": "lettering",
+      "name": "Lettering",
+      "layout": "stack",
+      "strings": [
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "abcdefghijklmnopqrstuvwxyz",
+        "1234567890",
+        "({[.,¡!¿?*'‘’\"“”]})",
+        "$€£%@&¶§¢†‡"
+      ]
+    },
+    {
+      "key": "kern-uc",
+      "name": "Kern UC",
+      "layout": "stack",
+      "strings": [
+        "AABACADAEAFAGAHAIAJAKALAMANAOAPAQARASATAUAVAWAXAYAZABABBCBDBEBFBGBHBIBJBKBLBMBNBOBPBQBRBSBTBUBVBWBXBYBZBCACBCCDCECFCGCHCICJCKCLCMCNCOCPCQCRCSCTCUCVCWCXCYCZCDADBDCDDEDFDGDHDIDJDKDLDMDNDODPDQDRDSDTDUDVDWDXDYDZDEAEBECEDEEFEGEHEIEJEKELEMENEOEPEQERESETEUEVEWEXEYEZEFAFBFCFDFEFFGFHFIFJFKFLFMFNFOFPFQFRFSFTFUFVFWFXFYFZFGAGBGCGDGEGFGGHGIGJGKGLGMGNGOGPGQGRGSGTGUGVGWGXGYGZGHAHBHCHDHEHFHGHHIHJHKHLHMHNHOHPHQHRHSHTHUHVHWHXHYHZHIAIBICIDIEIFIGIHIIJIKILIMINIOIPIQIRISITIUIVIWIXIYIZIJAJBJCJDJEJFJGJHJIJJKJLJMJNJOJPJRJSJTJUJVJWJXJYJZJKAKBKCKDKEKFKGKHKIKJKKLKMKNKOKPKQKRKSKTKUKVKWKXKYKZKLALBLCLDLELFLGLHLILJLKLLMLNLOLPLQLRLSLTLULVLWLXLYLZLMAMBMCMDMEMFMGMHMIMJMKMLMMNMOMPMQMRMSMTMUMVMWMXMYMZMNANBNCNDNENFNGNHNINJNKNLNMNNONPNQNRNSNTNUNVNWNXNYNZNOAOBOCODOEOFOGOHOIOJOKOLOMONOOPOQOROSOTOUOVOWOXOYOZOPAPBPCPDPEPFPGPHPIPJPKPLPMPNPOPPQPRPSPTPUPVPWPXPYPZPQAQBQCQDQEQFQGQHQIQJQKQLQMQNQOQPQQRQSQTQUQVQWQXQYQZQRARBRCRDRERFRGRHRIRJRKRLRMRNRORPRQRRSRTRURVRWRXRYRZRSASBSCSDSESFSGSHSISJSKSLSMSNSOSPSQSRSSTSUSVSWSXSYSZSTATBTCTDTETFTGTHTITJTKTLTMTNTOTPTQTRTSTTUTVTWTXTYTZTUAUBUCUDUEUFUGUHUIUJUKULUMUNUOUPUQURUSUTUUVUWUXUYUZUVAVBVCVDVEVFVGVHVIVJVKVLVMVNVOVPVQVRVSVTVUVVWVXVYVZVWAWBWCWDWEWFWGWHWIWJWKWLWMWNWOWPWQWRWSWTWUWVWWXWYWZWXAXBXCXDXEXFXGXHXIXJXKXLXMXNXOXPXQXRXSXTXUXVXWXXYXZXYAYBYCYDYEYFYGYHYIYJYKYLYMYNYOYPYQYRYSYTYUYVYWYYZYZAZBZCZDZEZFZGZHZIZJZKZLZMZNZOZPZQZRZSZTZUZVZWZXZYZZ"
+      ]
+    },
+    {
+      "key": "ruder",
+      "name": "Ruder",
+      "layout": "columns",
+      "strings": [
+        "bibel malhabile modo biegen peuple punibile blind qualifier quindi damals quelle dinamica china quelque analiso schaden salomon macchina schein sellier secondo lager sommier singolo legion unique possibile mime unanime unico mohn usuel legge nagel abonner unione puder agir punizione quälen aiglon dunque huldigen allégir quando geduld alliance uomini",
+        "vertrag crainte screw verwalter croyant science verzicht fratricide sketchy vorrede frivolité story yankee instruction take zwetschge lyre treaty zypresse navette tricycle fraktur nocturne typograph kraft pervertir vanity raffeln presto victory reaktion prévoyant vivacity rekord priorité wayward revolte proscrire efficiency tritt raviver without trotzkopf tactilité through tyrann arrêt known"
+      ]
+    }
+  ]
+}

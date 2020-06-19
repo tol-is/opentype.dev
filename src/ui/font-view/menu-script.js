@@ -6,8 +6,15 @@ import Accordion from '../accordion';
 import Slider from '../input-range';
 import Checkbox from '../input-checkbox';
 
-const FontText = ({ visible, ...rest }) => {
+const FontText = ({
+  visible,
+  adhesion,
+  selectedLanguage,
+  selectedSample,
+  ...rest
+}) => {
   //
+  console.log(adhesion);
   return (
     <>
       <Accordion visible={visible} {...rest}>
@@ -22,7 +29,7 @@ const FontText = ({ visible, ...rest }) => {
             width: 100%;
           `}
         >
-          TEXT SAMPLES
+          {JSON.stringify(adhesion)}
         </div>
       </Accordion>
     </>
