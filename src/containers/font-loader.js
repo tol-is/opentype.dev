@@ -83,6 +83,7 @@ const FontLoaderContainer = (props) => {
   }, []);
 
   const onChange = (e) => {
+    console.log(e.target.files);
     if (e.target.files && e.target.files.length > 0) {
       for (let index = 0; index < e.target.files.length; index++) {
         const file = e.target.files[index];

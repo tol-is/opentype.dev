@@ -63,7 +63,7 @@ export default ({ label, name, checked, onChange }) => {
         padding: 1em 0;
         text-align: left;
         font-weight: 400;
-        line-height: 1.5;
+        line-height: 1;
         background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
         background-repeat: no-repeat;
         background-position: ${bgPositionX} 2.15em;
