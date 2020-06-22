@@ -11,7 +11,7 @@ import { adhesion } from './modules/adhesion';
 
 const storage = idbStorage('opentype-tester');
 
-const loggerMiddleware = createLogger();
+// const loggerMiddleware = createLogger();
 
 const persistConfig = {
   key: 'root.0.1.1',
@@ -28,8 +28,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export default () => {
   let store = createStore(
-    persistedReducer,
-    applyMiddleware(thunkMiddleware, loggerMiddleware)
+    persistedReducer
+    // applyMiddleware(thunkMiddleware, loggerMiddleware)
   );
 
   let persistor = persistStore(store);

@@ -28,7 +28,11 @@ const FontView = ({
   setFontFeature,
   setFontVariationAxis,
 }) => {
-  const { availableVariationAxes, availableVariations } = font;
+  const {
+    availableFeatures,
+    availableVariationAxes,
+    availableVariations,
+  } = font;
 
   const { height } = useViewportSize();
   const [willDelete, setWillDelete] = useState(false);
