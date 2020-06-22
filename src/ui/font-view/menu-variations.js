@@ -33,21 +33,26 @@ const FontVariations = ({
         >
           <div
             className={css`
-              grid-column: 3 / span 6;
+              grid-column: 4 / span 5;
               display: grid;
-              grid-template-columns: repeat(6, minmax(0, 1fr));
+              grid-template-columns: repeat(5, minmax(0, 1fr));
               grid-gap: 1.5rem;
             `}
           >
-            {Object.keys(variationAxes).map((k) => (
-              <div key={k}>
+            {Object.keys(variationAxes).map((key) => (
+              <div
+                key={key}
+                className={css`
+                  display: block;
+                `}
+              >
                 <Slider
-                  name={k}
-                  label={variationAxes[k].name}
-                  min={variationAxes[k].min}
-                  max={variationAxes[k].max}
+                  name={key}
+                  label={variationAxes[key].name}
+                  min={variationAxes[key].min}
+                  max={variationAxes[key].max}
                   step={1}
-                  value={values[k]}
+                  value={values[key]}
                   onChange={onVariationAxisChange}
                 />
               </div>

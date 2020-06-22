@@ -2,14 +2,27 @@ import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { css } from 'emotion';
-
-import {} from '../modules/fonts';
+import { motion, useViewportScroll } from 'framer-motion';
 
 import { setActiveFont, reorderFonts } from '../modules/tester';
 
-import TesterFontContainer from './font-view-container';
+import FontContainer from './font-container';
 
 const TesterMain = ({ fonts, reorderFonts }) => {
+  const { scrollY } = useViewportScroll();
+
+  // useEffect(() => {
+  //   function updateOpacity() {
+  //     // console.log(scrollY.get());
+  //   }
+
+  //   const unsubscribeY = scrollY.onChange(updateOpacity);
+
+  //   return () => {
+  //     unsubscribeY();
+  //   };
+  // }, [scrollY]);
+
   const onDragEnd = useCallback(
     (result) => {
       // dropped outside the list
@@ -25,14 +38,18 @@ const TesterMain = ({ fonts, reorderFonts }) => {
     [fonts]
   );
 
+  const onDragStart = useCallback(() => {
+    setActiveFont(null);
+  }, []);
+
   return (
     <main
       className={css`
-        padding: 0 5vw;
+        padding: 0 5vw 6rem 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -40,11 +57,15 @@ const TesterMain = ({ fonts, reorderFonts }) => {
                 <Draggable key={id} draggableId={id} index={index}>
                   {(provided, snapshot) => (
                     <div
+                      className={css`
+                        padding: 0 0 8rem 0;
+                        transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                      `}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <TesterFontContainer key={id} id={id} index={index} />
+                      <FontContainer key={id} id={id} index={index} />
                     </div>
                   )}
                 </Draggable>
@@ -66,17 +87,7 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setActiveFont: (value) => dispatch(setActiveFont(value)),
-    setFontConfigProp: (id, key, value) =>
-      dispatch(setFontConfigProp(id, key, value)),
-    setFontFeature: (id, key, enabled) =>
-      dispatch(setFontFeature(id, key, enabled)),
-    setFontVariationAxis: (id, axis, value) =>
-      dispatch(setFontVariationAxis(id, axis, value)),
-    setFontNamedVariation: (id, name) =>
-      dispatch(setFontNamedVariation(id, name)),
-    removeFont: (id) => dispatch(removeFont(id)),
-    resetFont: (id) => dispatch(resetFont(id)),
+    setActiveFont: (id) => dispatch(setActiveFont(id)),
     reorderFonts: (fonts) => dispatch(reorderFonts(fonts)),
   };
 }

@@ -4,17 +4,22 @@ import { css } from 'emotion';
 
 import Accordion from '../accordion';
 import Slider from '../input-range';
-import Checkbox from '../input-checkbox';
+import Radio from '../input-radio';
 
 const FontText = ({
   visible,
   adhesion,
-  selectedLanguage,
+  selectedScript,
   selectedSample,
+  onChange,
   ...rest
 }) => {
+  const onSampleToggleChange = (key, checked) => {
+    if (checked) {
+      onChange(selectedScript, key);
+    }
+  };
   //
-  console.log(adhesion);
   return (
     <>
       <Accordion visible={visible} {...rest}>
@@ -22,14 +27,41 @@ const FontText = ({
           className={css`
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
-            padding-bottom: 1.5rem;
+            padding: 1.5rem 0;
             display: grid;
-            grid-template-columns: repeat(7, minmax(0, 1fr));
+            grid-template-columns: repeat(8, minmax(0, 1fr));
             grid-gap: 1.5rem;
             width: 100%;
           `}
         >
-          {JSON.stringify(adhesion)}
+          <div
+            className={css`
+              grid-column: 1 / span 4;
+              display: grid;
+              grid-template-columns: repeat(4, minmax(0, 1fr));
+              grid-gap: 1.5rem;
+            `}
+          >
+            {adhesion[selectedScript].samples.map((sample) => (
+              <div
+                key={sample.key}
+                className={css`
+                  display: block;
+                `}
+              >
+                <Radio
+                  id={sample.key}
+                  name={`${sample.selectedScript}-sample`}
+                  label={sample.name}
+                  checked={
+                    sample.key === selectedSample ||
+                    (selectedSample === 'default' && sample.default === true)
+                  }
+                  onChange={onSampleToggleChange}
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </Accordion>
     </>

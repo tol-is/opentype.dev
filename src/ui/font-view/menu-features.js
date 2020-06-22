@@ -16,42 +16,34 @@ const FontFeatures = ({ visible, features, onFontFeatureChange, ...rest }) => {
   return (
     <>
       <Accordion visible={visible} {...rest}>
-        <div
+        <ul
           className={css`
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
             padding: 1.5rem 0;
             display: grid;
-            grid-template-columns: repeat(8, minmax(0, 1fr));
-            grid-gap: 1.5rem;
-            width: 100%;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-column-gap: 1.5rem;
+            grid-row-gap: 1rem;
+            width: 50%;
           `}
         >
-          <div
-            className={css`
-              grid-column: 2 / span 7;
-              display: grid;
-              grid-template-columns: repeat(7, minmax(0, 1fr));
-              grid-gap: 1.5rem;
-            `}
-          >
-            {featureKeys.map((key) => (
-              <div
-                key={key}
-                className={css`
-                  display: block;
-                `}
-              >
-                <Checkbox
-                  name={key}
-                  label={otFeatures[key].title}
-                  checked={features[key]}
-                  onChange={onFontFeatureChange}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+          {featureKeys.map((key) => (
+            <li
+              key={key}
+              className={css`
+                display: block;
+              `}
+            >
+              <Checkbox
+                name={key}
+                label={otFeatures[key].title}
+                checked={features[key]}
+                onChange={onFontFeatureChange}
+              />
+            </li>
+          ))}
+        </ul>
       </Accordion>
     </>
   );

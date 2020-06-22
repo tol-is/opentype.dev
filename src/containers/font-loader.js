@@ -11,14 +11,12 @@ import { uuid } from '../utils/uuid';
 import ButtonUpload from '../ui/btn-upload';
 import { addFontToLibrary } from '../modules/library';
 import { addFontToTester } from '../modules/tester';
-import { isConstTypeReference } from 'typescript';
 
 const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
 
 const FontLoaderContainer = (props) => {
   const { addFontToLibrary, addFontToTester, library } = props;
 
-  console.log(library);
   useEffect(() => {
     if (Object.keys(library.fonts).length === 0) {
       loadURL('/Inter.otf');

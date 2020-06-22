@@ -70,6 +70,8 @@ const Button = ({ selected, label, line = 'bottom', onClick }) => {
           outline: none;
         }
       `}
+      onFocus={onMouseOver}
+      onBlur={onMouseOut}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={onClick}

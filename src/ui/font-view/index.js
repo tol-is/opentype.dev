@@ -2,36 +2,55 @@ import React, { memo, useCallback, useMemo, useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import { css } from 'emotion';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
-import Button from '../btn';
 import ButtonToggle from '../btn-toggle';
 
 import MenuVariations from './menu-variations';
 import MenuFeatures from './menu-features';
 import MenuScript from './menu-script';
-import FontSample from './font-view-sample';
-import { otFeatures } from '../../constants';
 
 const FontView = ({
   id,
+  font,
   config,
   global,
-  font,
+  adhesion,
+  direction,
   scriptSample,
+  setTopFont,
+  setActiveFont,
+  setFontSample,
   setFontFeature,
   setFontVariationAxis,
 }) => {
-  const { availableVariationAxes, availableVariations } = font;
+  const {
+    availableFeatures,
+    availableVariationAxes,
+    availableVariations,
+  } = font;
 
   const [willDelete, setWillDelete] = useState(false);
   const [isHover, setIsHover] = useState(false);
   const [showPanel, setShowPanel] = useState();
 
-  // useEffect(() => {
-  //   if (testerConfig.activeFont !== id) {
-  //     setShowPanel(null);
-  //   }
-  // }, [testerConfig.activeFont]);
+  const [ref, inView] = useInView({
+    threshold: 1,
+    rootMargin: '10px 0px -850px 0px',
+  });
+
+  useEffect(() => {
+    if (inView) {
+      console.log(id, font.postscriptName);
+      setTopFont(id);
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    if (global.activeFont !== id) {
+      setShowPanel(null);
+    }
+  }, [global.activeFont]);
 
   const onMouseEnter = useCallback(() => {
     setIsHover(true);
@@ -69,22 +88,29 @@ const FontView = ({
     [id]
   );
 
+  const onSampleChange = useCallback(
+    (script, sample) => {
+      setFontSample(id, script, sample);
+    },
+    [id]
+  );
+
   const onNamedVariationSelect = useCallback((key) => {
     // setNamedVariation(id, key);
   }, []);
 
   const onToggleFeaturesPanel = useCallback(() => {
-    // onActivated(id);
+    setActiveFont(id);
     setShowPanel(showPanel === 'features' ? null : 'features');
   }, [showPanel]);
 
   const onToggleVariationsPanel = useCallback(() => {
-    // onActivated(id);
+    setActiveFont(id);
     setShowPanel(showPanel === 'variations' ? null : 'variations');
   }, [showPanel]);
 
   const onToggleScriptPanel = useCallback(() => {
-    // onActivated(id);
+    setActiveFont(id);
     setShowPanel(showPanel === 'script' ? null : 'script');
   }, [showPanel]);
 
@@ -112,6 +138,31 @@ const FontView = ({
     );
   }, [config.variations]);
 
+  const fontFeatureSettings = useMemo(() => {
+    let loop = 0;
+    return availableFeatures.reduce((fRes, fKey) => {
+      loop++;
+      fRes += `"${fKey}" ${config.features[fKey] ? 1 : 0}`;
+      if (loop < availableFeatures.length) {
+        fRes += ', ';
+      }
+      return fRes;
+    }, '');
+  }, [config.features]);
+
+  //
+  const fontVariationSettings = useMemo(() => {
+    let loop = 0;
+    return availableVariationAxes.reduce((vRes, vKey) => {
+      loop++;
+      vRes += `"${vKey}" ${config.variations[vKey]}`;
+      if (loop < availableVariationAxes.length) {
+        vRes += ', ';
+      }
+      return vRes;
+    }, '');
+  }, [config.variations]);
+
   const showFeaturesPanel = useMemo(() => showPanel === 'features', [
     showPanel,
   ]);
@@ -122,16 +173,25 @@ const FontView = ({
 
   const showScriptPanel = useMemo(() => showPanel === 'script', [showPanel]);
 
+  const isTopFont = useMemo(() => global.topFont === id);
+
   //
   return (
-    <section>
+    <section
+      onMouseOver={onMouseEnter}
+      onMouseOut={onMouseLeave}
+      className={css`
+        padding: 0 0 0 0;
+      `}
+    >
       <motion.div
+        ref={ref}
         initial="hidden"
-        animate={isHover || showPanel ? 'visible' : 'hidden'}
+        animate={isTopFont || isHover || showPanel ? 'visible' : 'hidden'}
         exit="hidden"
         variants={{
           visible: { opacity: 1 },
-          hidden: { opacity: 1 },
+          hidden: { opacity: 0 },
         }}
         transition={{ type: 'spring', stiffness: 200, damping: 100 }}
         className={css`
@@ -201,7 +261,14 @@ const FontView = ({
             grid-column: 1 / span 8;
           `}
         >
-          <MenuScript id={`${id}-menu-script`} visible={showScriptPanel} />
+          <MenuScript
+            id={`${id}-menu-script`}
+            visible={showScriptPanel}
+            selectedScript={config.script}
+            selectedSample={config.sample}
+            adhesion={adhesion}
+            onChange={onSampleChange}
+          />
           {font.availableFeatures.length > 0 && (
             <MenuFeatures
               id={`${id}-menu-features`}
@@ -226,12 +293,70 @@ const FontView = ({
         </div>
       </motion.div>
 
-      <FontSample
-        font={font}
-        config={config}
-        global={global}
-        scriptSample={scriptSample}
-      />
+      <div
+        className={css`
+          padding: 6rem 0 0 0;
+        `}
+      >
+        {scriptSample.layout === 'stack' &&
+          scriptSample.strings.map((v, i) => (
+            <div
+              key={`${id}-sample-${i}`}
+              contentEditable={true}
+              suppressContentEditableWarning={true}
+              className={css`
+                white-space: pre-wrap;
+                font-family: ${font.familyName};
+                font-weight: ${font.weight};
+                font-style: ${font.italic ? 'italic' : 'normal'};
+                font-size: ${global.fontSize}px;
+                line-height: ${global.lineHeight};
+                font-feature-settings: ${fontFeatureSettings};
+                font-variation-settings: ${fontVariationSettings};
+                direction: ${direction};
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+              `}
+            >
+              {v}
+            </div>
+          ))}
+        {scriptSample.layout === 'columns' && (
+          <div
+            className={css`
+              display: grid;
+              grid-gap: 1.5rem;
+              grid-template-columns: repeat(
+                ${scriptSample.strings.length},
+                1fr
+              );
+              direction: ${direction};
+            `}
+          >
+            {scriptSample.strings.map((v, i) => (
+              <div
+                key={`${id}-sample-${i}`}
+                contentEditable={true}
+                suppressContentEditableWarning={true}
+                className={css`
+                  flex: 1;
+                  white-space: pre-wrap;
+                  font-family: ${font.familyName};
+                  font-weight: ${font.weight};
+                  font-style: ${font.italic ? 'italic' : 'normal'};
+                  font-size: ${global.fontSize}px;
+                  line-height: ${global.lineHeight};
+                  font-feature-settings: ${fontFeatureSettings};
+                  font-variation-settings: ${fontVariationSettings};
+                  direction: ${direction};
+                  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                `}
+              >
+                {v}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 };

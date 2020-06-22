@@ -6,8 +6,8 @@
 }
 
 /* Remove default padding */
-ul[class],
-ol[class],
+ul,
+ol,
 fieldset {
   padding: 0;
 }

@@ -5,9 +5,11 @@ const SET_OPEN_PANEL = 'SET_OPEN_PANEL';
 const ADD_FONT_TO_TESTER = 'ADD_FONT_TO_TESTER';
 
 const SET_ACTIVE_FONT = 'SET_ACTIVE_FONT';
+const SET_TOP_FONT = 'SET_TOP_FONT';
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
+const SET_FONT_SAMPLE = 'SET_FONT_SAMPLE';
 const REORDER_FONTS = 'REORDER_FONTS';
 
 import { otFeatures } from '../constants';
@@ -21,7 +23,6 @@ export function reorderFonts(fonts) {
 }
 
 export function addFontToTester({ id, metrics }) {
-  console.log(id, metrics);
   return {
     type: ADD_FONT_TO_TESTER,
     payload: { id, metrics },
@@ -38,10 +39,17 @@ export function setTesterProp(key, value) {
   };
 }
 
-export function setActiveFont(value) {
+export function setActiveFont(id) {
   return {
     type: SET_ACTIVE_FONT,
-    payload: { value },
+    payload: { id },
+  };
+}
+
+export function setTopFont(id) {
+  return {
+    type: SET_TOP_FONT,
+    payload: { id },
   };
 }
 
@@ -56,8 +64,18 @@ export function setFontFeature(id, key, value) {
   };
 }
 
+export function setFontSample(id, script, sample) {
+  return {
+    type: SET_FONT_SAMPLE,
+    payload: {
+      id,
+      script,
+      sample,
+    },
+  };
+}
+
 export function setFontVariationAxis(id, axis, value) {
-  console.log(id, axis, value);
   return {
     type: SET_FONT_VARIATION_AXIS,
     payload: {
@@ -69,18 +87,11 @@ export function setFontVariationAxis(id, axis, value) {
 }
 
 const initialState = {
-  activeFont: '',
   global: {
-    text: `ABCDEFGHIJKLMNOPQRSTUVWXYZ
-    'abcdefghijklmnopqrstuvwxyz',
-:;,.*‘?’“!”(%)[#]{@}/&
-1234567890
-1a 2o 9a No.
-3/4 16/9 7*4 7÷8 8:46
-<-+÷×=>`,
+    topFont: '',
+    activeFont: '',
     fontSize: 72,
     lineHeight: 1.3,
-    rtl: false,
   },
   fonts: [],
 };
@@ -88,7 +99,6 @@ const initialState = {
 const getFontIndexById = (fonts) => (id) => fonts.findIndex((f) => f.id === id);
 
 export const tester = produce((state = initialState, action) => {
-  console.log(action);
   const { payload = {} } = action;
   let fontIndex;
 
@@ -104,6 +114,7 @@ export const tester = produce((state = initialState, action) => {
     case SET_TESTER_GLOBAL_PROP:
       state.global[payload.key] = payload.value;
       break;
+    //
     case SET_FONT_FEATURE:
       state.fonts[fontIndex].features[payload.key] = payload.value;
       break;
@@ -111,10 +122,18 @@ export const tester = produce((state = initialState, action) => {
     case SET_FONT_VARIATION_AXIS:
       state.fonts[fontIndex].variations[payload.axis] = payload.value;
       break;
-
+    //
+    case SET_FONT_SAMPLE:
+      state.fonts[fontIndex].script = payload.script;
+      state.fonts[fontIndex].sample = payload.sample;
+      break;
     //
     case SET_ACTIVE_FONT:
-      state.activeFont = payload.value;
+      state.global.activeFont = payload.id;
+      break;
+    //
+    case SET_TOP_FONT:
+      state.global.topFont = payload.id;
       break;
 
     //

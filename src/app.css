@@ -9,3 +9,9 @@ html {
   background-color: #060606;
   color: #ffffff;
 }
+
+#top-bar {
+  position: fixed;
+  top: 0;
+  height: 42px;
+}

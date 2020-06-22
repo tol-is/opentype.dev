@@ -7,7 +7,13 @@ import { motion } from 'framer-motion';
 import { otFeatures } from '../constants';
 
 import FontView from '../ui/font-view';
-import { setFontFeature, setFontVariationAxis } from '../modules/tester';
+import {
+  setActiveFont,
+  setTopFont,
+  setFontSample,
+  setFontFeature,
+  setFontVariationAxis,
+} from '../modules/tester';
 
 const FontItemContainer = ({
   id,
@@ -15,7 +21,12 @@ const FontItemContainer = ({
   font,
   config,
   global,
+  adhesion,
+  direction,
   scriptSample,
+  setTopFont,
+  setActiveFont,
+  setFontSample,
   setFontFeature,
   setFontVariationAxis,
 }) => {
@@ -28,7 +39,12 @@ const FontItemContainer = ({
         font={font}
         config={config}
         global={global}
+        adhesion={adhesion}
+        direction={direction}
         scriptSample={scriptSample}
+        setActiveFont={setActiveFont}
+        setTopFont={setTopFont}
+        setFontSample={setFontSample}
         setFontFeature={setFontFeature}
         setFontVariationAxis={setFontVariationAxis}
       />
@@ -43,9 +59,7 @@ function mapStateToProps(state, ownProps) {
   // config from tester
   const config = state.tester.fonts.find((f) => f.id === ownProps.id);
 
-  const adhesion = state.adhesion[config.script];
-
-  const scriptSample = adhesion.samples.find((s) => {
+  const scriptSample = state.adhesion[config.script].samples.find((s) => {
     return config.sample === 'default'
       ? s.default === true
       : s.key === config.sample;
@@ -54,6 +68,8 @@ function mapStateToProps(state, ownProps) {
   return {
     font,
     config,
+    adhesion: state.adhesion,
+    direction: state.adhesion[config.script].direction,
     scriptSample,
     global: state.tester.global,
   };
@@ -61,13 +77,14 @@ function mapStateToProps(state, ownProps) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    // setActiveFont: (value) => dispatch(setActiveFont(value)),
-    // setFontConfigProp: (id, key, value) =>
-    //   dispatch(setFontConfigProp(id, key, value)),
+    setTopFont: (value) => dispatch(setTopFont(value)),
+    setActiveFont: (value) => dispatch(setActiveFont(value)),
     setFontFeature: (id, key, enabled) =>
       dispatch(setFontFeature(id, key, enabled)),
     setFontVariationAxis: (id, axis, value) =>
       dispatch(setFontVariationAxis(id, axis, value)),
+    setFontSample: (id, script, sample) =>
+      dispatch(setFontSample(id, script, sample)),
     // setFontNamedVariation: (id, name) =>
     //   dispatch(setFontNamedVariation(id, name)),
   };

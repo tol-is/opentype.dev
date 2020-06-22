@@ -7,31 +7,13 @@ import React, {
 } from 'react';
 import { css } from 'emotion';
 
-export default ({ label, name, checked, onChange }) => {
+export default ({ label, id, name, checked, onChange }) => {
   const onToggle = useCallback((e) => {
-    onChange(e.target.name, e.target.checked);
+    onChange(e.target.id, e.target.checked);
   }, []);
 
   const [state, setState] = useState('normal');
   const timeout = useRef();
-
-  const onMouseOver = useCallback(() => {
-    clearInterval(timeout.current);
-    setState('hover');
-  }, [state]);
-
-  const onMouseOut = useCallback(() => {
-    if (checked) {
-      clearInterval(timeout.current);
-      setState('checked');
-      return;
-    }
-    clearInterval(timeout.current);
-    setState('out');
-    timeout.current = setTimeout(() => {
-      setState('normal');
-    }, 300);
-  }, [state]);
 
   useEffect(() => {
     if (checked) {
@@ -51,10 +33,7 @@ export default ({ label, name, checked, onChange }) => {
     state,
   ]);
 
-  const bgSize = useMemo(
-    () => (state === 'hover' || state === 'checked' ? '100' : '0'),
-    [state]
-  );
+  const bgSize = useMemo(() => (state === 'checked' ? '100' : '0'), [state]);
 
   return (
     <label
@@ -84,12 +63,9 @@ export default ({ label, name, checked, onChange }) => {
           height: 100%;
           top: 0;
         `}
+        id={id}
         name={name}
-        type="checkbox"
-        onFocus={onMouseOver}
-        onBlur={onMouseOut}
-        onMouseOver={onMouseOver}
-        onMouseOut={onMouseOut}
+        type="radio"
         checked={checked}
         onChange={onToggle}
       />
