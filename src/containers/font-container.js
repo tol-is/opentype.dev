@@ -10,6 +10,7 @@ import FontView from '../ui/font-view';
 import {
   setActiveFont,
   setTopFont,
+  setFontProp,
   setFontSample,
   setFontFeature,
   setFontVariationAxis,
@@ -25,6 +26,7 @@ const FontItemContainer = ({
   direction,
   scriptSample,
   setTopFont,
+  setFontProp,
   setActiveFont,
   setFontSample,
   setFontFeature,
@@ -32,32 +34,32 @@ const FontItemContainer = ({
 }) => {
   //
   return (
-    <div>
-      <FontView
-        id={id}
-        index={index}
-        font={font}
-        config={config}
-        global={global}
-        adhesion={adhesion}
-        direction={direction}
-        scriptSample={scriptSample}
-        setActiveFont={setActiveFont}
-        setTopFont={setTopFont}
-        setFontSample={setFontSample}
-        setFontFeature={setFontFeature}
-        setFontVariationAxis={setFontVariationAxis}
-      />
-    </div>
+    <FontView
+      id={id}
+      index={index}
+      font={font}
+      config={config}
+      global={global}
+      adhesion={adhesion}
+      direction={direction}
+      scriptSample={scriptSample}
+      setActiveFont={setActiveFont}
+      setTopFont={setTopFont}
+      setFontProp={setFontProp}
+      setFontSample={setFontSample}
+      setFontFeature={setFontFeature}
+      setFontVariationAxis={setFontVariationAxis}
+    />
   );
 };
 
 function mapStateToProps(state, ownProps) {
   // font from library
-  const font = state.library.fonts[ownProps.id].metrics;
+  const config = state.tester.fonts.find((f) => f.id === ownProps.id);
+
+  const font = state.library.fonts[config.font_id].metrics;
 
   // config from tester
-  const config = state.tester.fonts.find((f) => f.id === ownProps.id);
 
   const scriptSample = state.adhesion[config.script].samples.find((s) => {
     return config.sample === 'default'
@@ -79,6 +81,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setTopFont: (value) => dispatch(setTopFont(value)),
     setActiveFont: (value) => dispatch(setActiveFont(value)),
+    setFontProp: (id, key, value) => dispatch(setFontProp(id, key, value)),
     setFontFeature: (id, key, enabled) =>
       dispatch(setFontFeature(id, key, enabled)),
     setFontVariationAxis: (id, axis, value) =>

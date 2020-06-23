@@ -25,7 +25,7 @@ const FontFeatures = ({ visible, features, onFontFeatureChange, ...rest }) => {
             grid-template-columns: repeat(4, minmax(0, 1fr));
             grid-column-gap: 1.5rem;
             grid-row-gap: 1rem;
-            width: 50%;
+            width: calc(50% - 0.75rem);
           `}
         >
           {featureKeys.map((key) => (

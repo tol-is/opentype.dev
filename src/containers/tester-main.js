@@ -39,13 +39,13 @@ const TesterMain = ({ fonts, reorderFonts }) => {
   );
 
   const onDragStart = useCallback(() => {
-    setActiveFont(null);
+    // setActiveFont(null);
   }, []);
 
   return (
     <main
       className={css`
-        padding: 0 5vw 6rem 5vw;
+        padding: 0 5vw 100vh 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
@@ -58,7 +58,7 @@ const TesterMain = ({ fonts, reorderFonts }) => {
                   {(provided, snapshot) => (
                     <div
                       className={css`
-                        padding: 0 0 8rem 0;
+                        padding: 0 0 6.5rem 0;
                         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
                       `}
                       ref={provided.innerRef}

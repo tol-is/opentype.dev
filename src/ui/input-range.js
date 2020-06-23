@@ -1,7 +1,25 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { css } from 'emotion';
 
-export const Slider = ({ name, label, min, max, step, value, onChange }) => {
+export const Slider = ({
+  name,
+  label,
+  min,
+  max,
+  step,
+  value = 1,
+  onChange,
+}) => {
+  const [state, setState] = useState('normal');
+
+  const onMouseOver = useCallback(() => {
+    setState('hover');
+  }, [state]);
+
+  const onMouseOut = useCallback(() => {
+    setState('normal');
+  }, [state]);
+
   return (
     <label
       className={css`
@@ -12,6 +30,7 @@ export const Slider = ({ name, label, min, max, step, value, onChange }) => {
         text-align: left;
         line-height: 1;
         font-weight: 400;
+        opacity: ${state === 'hover' ? 1 : 0.5};
         background-image: linear-gradient(to bottom, #fff 0%, #fff 100%);
         background-repeat: no-repeat;
         background-position: 0 100%;
@@ -34,6 +53,10 @@ export const Slider = ({ name, label, min, max, step, value, onChange }) => {
         value={value}
         name={name}
         onChange={onChange}
+        onFocus={onMouseOver}
+        onBlur={onMouseOut}
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
       />
       {label} : {value}
     </label>

@@ -78,7 +78,14 @@ const FontLoaderContainer = (props) => {
     });
 
     addFontToTester({
-      id,
+      id: uuid(),
+      font_id: id,
+      metrics: openTypeData,
+    });
+
+    addFontToTester({
+      id: uuid(),
+      font_id: id,
       metrics: openTypeData,
     });
   }, []);

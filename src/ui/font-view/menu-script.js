@@ -39,7 +39,8 @@ const FontText = ({
               grid-column: 1 / span 4;
               display: grid;
               grid-template-columns: repeat(4, minmax(0, 1fr));
-              grid-gap: 1.5rem;
+              grid-column-gap: 1.5rem;
+              grid-row-gap: 1rem;
             `}
           >
             {adhesion[selectedScript].samples.map((sample) => (

@@ -1,11 +1,11 @@
 import produce from 'immer';
 
-const SET_TESTER_GLOBAL_PROP = 'SET_TESTER_GLOBAL_PROP';
-const SET_OPEN_PANEL = 'SET_OPEN_PANEL';
+const TOGGLE_FOCUS_MODE = 'TOGGLE_FOCUS_MODE';
 const ADD_FONT_TO_TESTER = 'ADD_FONT_TO_TESTER';
 
 const SET_ACTIVE_FONT = 'SET_ACTIVE_FONT';
 const SET_TOP_FONT = 'SET_TOP_FONT';
+const SET_FONT_PROP = 'SET_FONT_PROP';
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
 const SET_FONT_VARIATION_AXIS = 'SET_FONT_VARIATION_AXIS';
 const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
@@ -22,20 +22,27 @@ export function reorderFonts(fonts) {
   };
 }
 
-export function addFontToTester({ id, metrics }) {
+export function addFontToTester({ id, font_id, metrics }) {
   return {
     type: ADD_FONT_TO_TESTER,
-    payload: { id, metrics },
+    payload: { id, font_id, metrics },
   };
 }
 
-export function setTesterProp(key, value) {
+export function setFontProp(id, key, value) {
   return {
-    type: SET_TESTER_GLOBAL_PROP,
+    type: SET_FONT_PROP,
     payload: {
+      id,
       key,
       value,
     },
+  };
+}
+
+export function toggleFocusMode() {
+  return {
+    type: TOGGLE_FOCUS_MODE,
   };
 }
 
@@ -88,6 +95,7 @@ export function setFontVariationAxis(id, axis, value) {
 
 const initialState = {
   global: {
+    focus: false,
     topFont: '',
     activeFont: '',
     fontSize: 72,
@@ -111,8 +119,13 @@ export const tester = produce((state = initialState, action) => {
       state.fonts.unshift(initializeFontEntry(payload));
       break;
     //
-    case SET_TESTER_GLOBAL_PROP:
-      state.global[payload.key] = payload.value;
+    case TOGGLE_FOCUS_MODE:
+      state.global.activeFont = null;
+      state.global.focus = !state.global.focus;
+      break;
+    //
+    case SET_FONT_PROP:
+      state.fonts[fontIndex][payload.key] = payload.value;
       break;
     //
     case SET_FONT_FEATURE:
@@ -151,7 +164,7 @@ export const tester = produce((state = initialState, action) => {
 });
 
 //
-const initializeFontEntry = ({ id, metrics }) => {
+const initializeFontEntry = ({ id, font_id, metrics }) => {
   const {
     availableFeatures = [],
     availableVariationAxes = [],
@@ -173,6 +186,9 @@ const initializeFontEntry = ({ id, metrics }) => {
 
   const config = {
     id,
+    font_id,
+    fontSize: 42,
+    lineHeight: 1.25,
     features: featuresConfig,
     variations: variationsConfig,
     script: 'latin',

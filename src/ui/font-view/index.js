@@ -4,7 +4,10 @@ import { css } from 'emotion';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
+import useViewportSize from '../../hooks/use-viewport-size';
+
 import ButtonToggle from '../btn-toggle';
+import Slider from '../input-range';
 
 import MenuVariations from './menu-variations';
 import MenuFeatures from './menu-features';
@@ -20,6 +23,7 @@ const FontView = ({
   scriptSample,
   setTopFont,
   setActiveFont,
+  setFontProp,
   setFontSample,
   setFontFeature,
   setFontVariationAxis,
@@ -30,18 +34,21 @@ const FontView = ({
     availableVariations,
   } = font;
 
+  const { height } = useViewportSize();
   const [willDelete, setWillDelete] = useState(false);
-  const [isHover, setIsHover] = useState(false);
   const [showPanel, setShowPanel] = useState();
 
-  const [ref, inView] = useInView({
+  const [ref, inView, entry] = useInView({
     threshold: 1,
-    rootMargin: '10px 0px -850px 0px',
+    rootMargin: `0px 0px -${height - 80}px 0px`,
   });
 
   useEffect(() => {
+    console.log(entry);
+  }, [entry]);
+
+  useEffect(() => {
     if (inView) {
-      console.log(id, font.postscriptName);
       setTopFont(id);
     }
   }, [inView]);
@@ -52,13 +59,6 @@ const FontView = ({
     }
   }, [global.activeFont]);
 
-  const onMouseEnter = useCallback(() => {
-    setIsHover(true);
-  }, []);
-
-  const onMouseLeave = useCallback(() => {
-    setIsHover(false);
-  }, []);
   //
   const onRemoveClick = useCallback(() => {
     setWillDelete(true);
@@ -75,6 +75,16 @@ const FontView = ({
     //   if (testerConfig.activeFont === id) {
     //     onActivated(null);
     // }
+  }, []);
+
+  const onFontSizeChange = useCallback((e) => {
+    setActiveFont(id);
+    setFontProp(id, 'fontSize', e.target.value);
+  }, []);
+
+  const onLineHeightChange = useCallback((e) => {
+    setActiveFont(id);
+    setFontProp(id, 'lineHeight', e.target.value);
   }, []);
   //
   const onFontFeatureChange = useCallback((key, enabled) => {
@@ -114,8 +124,13 @@ const FontView = ({
     setShowPanel(showPanel === 'script' ? null : 'script');
   }, [showPanel]);
 
-  const onTextClick = useCallback(() => {
-    // onActivated(id);
+  const onTextFocus = useCallback(() => {
+    setActiveFont(id);
+    setShowPanel(null);
+  }, []);
+
+  const onTextBlur = useCallback(() => {
+    setActiveFont(null);
     setShowPanel(null);
   }, []);
 
@@ -173,25 +188,36 @@ const FontView = ({
 
   const showScriptPanel = useMemo(() => showPanel === 'script', [showPanel]);
 
-  const isTopFont = useMemo(() => global.topFont === id);
+  const isActiveFont = useMemo(() => global.activeFont === id, [
+    global.activeFont,
+  ]);
+
+  const isFocusModeEnabled = useMemo(() => global.focus, [global.focus]);
 
   //
   return (
     <section
-      onMouseOver={onMouseEnter}
-      onMouseOut={onMouseLeave}
       className={css`
         padding: 0 0 0 0;
       `}
     >
       <motion.div
         ref={ref}
-        initial="hidden"
-        animate={isTopFont || isHover || showPanel ? 'visible' : 'hidden'}
-        exit="hidden"
+        initial="visible"
+        animate={isFocusModeEnabled ? 'hidden' : 'visible'}
         variants={{
-          visible: { opacity: 1 },
-          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            height: 'auto',
+            display: 'grid',
+          },
+          hidden: {
+            opacity: 0,
+            height: 0,
+            transitionEnd: {
+              display: 'none',
+            },
+          },
         }}
         transition={{ type: 'spring', stiffness: 200, damping: 100 }}
         className={css`
@@ -253,9 +279,29 @@ const FontView = ({
 
         <div
           className={css`
-            grid-column: -2 / span 1;
+            grid-column: 5 / span 1;
           `}
-        ></div>
+        >
+          <Slider
+            label="Font Size"
+            min={6}
+            max={128}
+            step={1}
+            value={config.fontSize}
+            onChange={onFontSizeChange}
+          />
+        </div>
+        <div>
+          <Slider
+            label="Line Height"
+            min={1}
+            max={2}
+            step={0.01}
+            value={config.lineHeight}
+            onChange={onLineHeightChange}
+          />
+        </div>
+
         <div
           className={css`
             grid-column: 1 / span 8;
@@ -295,31 +341,46 @@ const FontView = ({
 
       <div
         className={css`
-          padding: 6rem 0 0 0;
+          padding: ${isFocusModeEnabled ? 0 : '1.5rem'} 0 0 0;
         `}
       >
-        {scriptSample.layout === 'stack' &&
-          scriptSample.strings.map((v, i) => (
-            <div
-              key={`${id}-sample-${i}`}
-              contentEditable={true}
-              suppressContentEditableWarning={true}
-              className={css`
-                white-space: pre-wrap;
-                font-family: ${font.familyName};
-                font-weight: ${font.weight};
-                font-style: ${font.italic ? 'italic' : 'normal'};
-                font-size: ${global.fontSize}px;
-                line-height: ${global.lineHeight};
-                font-feature-settings: ${fontFeatureSettings};
-                font-variation-settings: ${fontVariationSettings};
-                direction: ${direction};
-                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-              `}
-            >
-              {v}
-            </div>
-          ))}
+        {scriptSample.layout === 'stack' && (
+          <div
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            onFocus={onTextFocus}
+            spellcheck={false}
+            className={css`
+              padding: 1rem 0;
+              &:focus {
+                outline: none;
+                background-color: rgba(255, 255, 255, 0.05);
+              }
+            `}
+          >
+            {scriptSample.strings.map((v, i) => (
+              <span
+                key={`${id}-sample-${i}`}
+                className={css`
+                  display: block;
+                  white-space: pre-wrap;
+                  font-family: ${font.familyName};
+                  font-weight: ${font.weight};
+                  font-style: ${font.italic ? 'italic' : 'normal'};
+                  font-size: ${config.fontSize}px;
+                  line-height: ${config.lineHeight};
+                  font-feature-settings: ${fontFeatureSettings};
+                  font-variation-settings: ${fontVariationSettings};
+                  direction: ${direction};
+                  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                `}
+              >
+                {v}
+              </span>
+            ))}
+          </div>
+        )}
+
         {scriptSample.layout === 'columns' && (
           <div
             className={css`
@@ -336,19 +397,27 @@ const FontView = ({
               <div
                 key={`${id}-sample-${i}`}
                 contentEditable={true}
+                spellcheck={false}
                 suppressContentEditableWarning={true}
+                onFocus={onTextFocus}
+                onBlur={onTextBlur}
                 className={css`
+                  padding: 1rem 0;
                   flex: 1;
                   white-space: pre-wrap;
                   font-family: ${font.familyName};
                   font-weight: ${font.weight};
                   font-style: ${font.italic ? 'italic' : 'normal'};
-                  font-size: ${global.fontSize}px;
-                  line-height: ${global.lineHeight};
+                  font-size: ${config.fontSize}px;
+                  line-height: ${config.lineHeight};
                   font-feature-settings: ${fontFeatureSettings};
                   font-variation-settings: ${fontVariationSettings};
                   direction: ${direction};
                   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                  &:focus {
+                    outline: none;
+                    background-color: rgba(255, 255, 255, 0.05);
+                  }
                 `}
               >
                 {v}

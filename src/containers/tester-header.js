@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import TesterHeader from '../ui/tester-header';
-import { setTesterProp } from '../modules/tester';
+import { toggleFocusMode } from '../modules/tester';
 
 function mapStateToProps(state) {
   return {
@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setTesterProp: (key, value) => dispatch(setTesterProp(key, value)),
+    toggleFocusMode: () => dispatch(toggleFocusMode()),
   };
 }
 
