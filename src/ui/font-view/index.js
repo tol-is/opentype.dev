@@ -342,6 +342,7 @@ const FontView = ({
       <div
         className={css`
           padding: ${isFocusModeEnabled ? 0 : '1.5rem'} 0 0 0;
+          transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         `}
       >
         {scriptSample.layout === 'stack' && (

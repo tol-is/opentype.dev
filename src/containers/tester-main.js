@@ -8,7 +8,7 @@ import { setActiveFont, reorderFonts } from '../modules/tester';
 
 import FontContainer from './font-container';
 
-const TesterMain = ({ fonts, reorderFonts }) => {
+const TesterMain = ({ focus, fonts, reorderFonts }) => {
   const { scrollY } = useViewportScroll();
 
   // useEffect(() => {
@@ -45,7 +45,7 @@ const TesterMain = ({ fonts, reorderFonts }) => {
   return (
     <main
       className={css`
-        padding: 0 5vw 100vh 5vw;
+        padding: ${focus ? '5rem' : 0} 5vw 100vh 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
@@ -81,6 +81,7 @@ const TesterMain = ({ fonts, reorderFonts }) => {
 
 function mapStateToProps(state, ownProps) {
   return {
+    focus: state.tester.global.focus,
     fonts: state.tester.fonts.map((f) => f.id),
   };
 }
