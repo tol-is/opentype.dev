@@ -26,7 +26,7 @@ export default ({ onChange }) => (
       }
     `}
   >
-    F
+    Fonts
     <input
       multiple
       type="file"

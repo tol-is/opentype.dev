@@ -36,7 +36,7 @@ const TesterHeader = ({ tester, toggleFocusMode }) => {
         `}
       >
         <ButtonToggle
-          label="F"
+          label="Focus"
           onClick={onFocusToggleClick}
           selected={tester.global.focus}
         />
