@@ -12,7 +12,7 @@
     "fontkit": "^1.8.1",
     "framer-motion": "^1.11.0",
     "immer": "^6.0.9",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "parcel-plugin-static-files-copy": "^2.4.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
