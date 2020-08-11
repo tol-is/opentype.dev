@@ -28,11 +28,7 @@ const FontLoaderContainer = (props) => {
     const id = uuid();
 
     //
-    const familyName = get(
-      font,
-      'name.records.preferredFamily.en',
-      font.familyName
-    );
+    const familyName = font.familyName;
     const subfamilyName = font.subfamilyName;
     const weight = font['OS/2'].usWeightClass;
     const italic = font['OS/2'].fsSelection.italic;
@@ -65,6 +61,8 @@ const FontLoaderContainer = (props) => {
       variationAxes: font.variationAxes,
       namedVariations: font.namedVariations,
     };
+
+    console.log(openTypeData);
 
     addFont({
       id,
