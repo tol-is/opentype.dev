@@ -235,25 +235,11 @@ const FontView = ({
       >
         <div
           className={css`
-<<<<<<< HEAD
-            padding: 1.5rem 0 0.5rem 0;
-            white-space: pre-wrap;
-            font-family: "${metrics.familyName}";
-            font-weight: ${metrics.weight};
-            font-style: ${metrics.italic ? 'italic' : 'normal'};
-            font-size: ${testerConfig.fontSize}px;
-            line-height: ${testerConfig.lineHeight};
-            font-feature-settings: ${fontFeatureSettings};
-            font-variation-settings: ${fontVariationSettings};
-            direction: ${testerConfig.rtl ? 'rtl' : 'ltr'};
-            transition: font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-=======
             padding: 1em 0;
             text-align: left;
             font-weight: 400;
             line-height: 1;
             color: #fff;
->>>>>>> origin/feature/text
           `}
         >
           {font.postscriptName}

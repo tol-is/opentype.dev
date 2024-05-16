@@ -67,13 +67,7 @@ const FontLoaderContainer = (props) => {
       variationsNamed: font.namedVariations,
     };
 
-<<<<<<< HEAD
-    console.log(openTypeData);
-
-    addFont({
-=======
     addFontToLibrary({
->>>>>>> origin/feature/text
       id,
       blob: fontData,
       metrics: openTypeData,
