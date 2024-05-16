@@ -17,11 +17,11 @@ const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
 const FontLoaderContainer = (props) => {
   const { addFontToLibrary, addFontToTester, library } = props;
 
-  // useEffect(() => {
-  //   if (Object.keys(library.fonts).length === 0) {
-  //     loadURL('/Inter.otf');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (Object.keys(library.fonts).length === 0) {
+      loadURL('/Inter.otf');
+    }
+  }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
