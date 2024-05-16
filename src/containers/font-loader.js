@@ -17,11 +17,11 @@ const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
 const FontLoaderContainer = (props) => {
   const { addFontToLibrary, addFontToTester, library } = props;
 
-  useEffect(() => {
-    if (Object.keys(library.fonts).length === 0) {
-      loadURL('/Inter.otf');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Object.keys(library.fonts).length === 0) {
+  //     loadURL('/Inter.otf');
+  //   }
+  // }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
@@ -83,15 +83,9 @@ const FontLoaderContainer = (props) => {
       metrics: openTypeData,
     });
 
-    addFontToTester({
-      id: uuid(),
-      font_id: id,
-      metrics: openTypeData,
-    });
   }, []);
 
   const onChange = (e) => {
-    console.log(e.target.files);
     if (e.target.files && e.target.files.length > 0) {
       for (let index = 0; index < e.target.files.length; index++) {
         const file = e.target.files[index];

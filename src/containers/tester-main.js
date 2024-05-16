@@ -11,18 +11,6 @@ import FontContainer from './font-container';
 const TesterMain = ({ focus, fonts, reorderFonts }) => {
   const { scrollY } = useViewportScroll();
 
-  // useEffect(() => {
-  //   function updateOpacity() {
-  //     // console.log(scrollY.get());
-  //   }
-
-  //   const unsubscribeY = scrollY.onChange(updateOpacity);
-
-  //   return () => {
-  //     unsubscribeY();
-  //   };
-  // }, [scrollY]);
-
   const onDragEnd = useCallback(
     (result) => {
       // dropped outside the list
@@ -80,6 +68,7 @@ const TesterMain = ({ focus, fonts, reorderFonts }) => {
 };
 
 function mapStateToProps(state, ownProps) {
+  console.log(state.tester.fonts)
   return {
     focus: state.tester.global.focus,
     fonts: state.tester.fonts.map((f) => f.id),
