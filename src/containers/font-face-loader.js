@@ -5,7 +5,8 @@ import { injectGlobal } from 'emotion';
 
 const FontFaceLoader = ({ fonts }) => {
   useEffect(() => {
-    fonts.forEach((font) => {
+    Object.keys(fonts).forEach((fKey) => {
+      const font = fonts[fKey];
       injectGlobal`
         @font-face {
           font-family: '${font.metrics.familyName}';
@@ -26,7 +27,7 @@ const FontFaceLoader = ({ fonts }) => {
 
 function mapStateToProps(state) {
   return {
-    fonts: state.fonts.fonts,
+    fonts: state.library.fonts,
   };
 }
 

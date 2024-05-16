@@ -1,7 +1,6 @@
 import produce from 'immer';
 
-const UPDATE_FONTS = 'UPDATE_FONTS';
-const ADD_FONT = 'ADD_FONT';
+const ADD_FONT_TO_LIBRARY = 'ADD_FONT_TO_LIBRARY';
 const REMOVE_FONT = 'REMOVE_FONT';
 
 const SET_FONT_FEATURE = 'SET_FONT_FEATURE';
@@ -10,13 +9,13 @@ const SET_FONT_NAMED_VARIATION = 'SET_FONT_NAMED_VARIATION';
 const SET_FONT_CONFIG_PROP = 'SET_FONT_CONFIG_PROP';
 const RESET_FONT = 'RESET_FONT';
 
-import { initialFontsState } from './initial-state';
+// import { initialFontsState } from './initial-state';
 
 import { otFeatures } from '../constants';
 
-export function addFont({ id, metrics, blob }) {
+export function addFontToLibrary({ id, metrics, blob }) {
   return {
-    type: ADD_FONT,
+    type: ADD_FONT_TO_LIBRARY,
     payload: { id, metrics, blob },
   };
 }
@@ -27,6 +26,8 @@ export function removeFont(id) {
     payload: id,
   };
 }
+
+const UPDATE_FONTS = 'UPDATE_FONTS';
 
 export function updateFonts(fonts) {
   return {
@@ -92,8 +93,8 @@ export const fonts = produce((state = initialFontsState, action) => {
   let fontIndex = null;
   switch (action.type) {
     //
-    case ADD_FONT:
-      state.fonts.unshift(initializeFontEntry(payload));
+    case ADD_FONT_TO_LIBRARY:
+      state.fonts.unshift(payload);
       break;
     //
     case REMOVE_FONT:
@@ -113,11 +114,7 @@ export const fonts = produce((state = initialFontsState, action) => {
       });
       break;
     //
-    case SET_FONT_VARIATION_AXIS:
-      fontIndex = getFontIndex(payload.id);
-      state.fonts[fontIndex].config.variations[payload.axis] = payload.value;
-      break;
-    //
+
     case SET_FONT_NAMED_VARIATION:
       fontIndex = getFontIndex(payload.id);
 
@@ -130,52 +127,9 @@ export const fonts = produce((state = initialFontsState, action) => {
       fontIndex = getFontIndex(payload.id);
 
       break;
-    //
-    case UPDATE_FONTS:
-      state.fonts = action.payload.fonts;
-      break;
+
     //
     default:
       return state;
   }
 });
-
-//
-const initializeFontEntry = ({ id, metrics, blob }) => {
-  const {
-    availableFeatures = [],
-    variationAxes,
-    namedVariations,
-    defaultVariationName,
-  } = metrics;
-
-  const featuresConfig = Object.keys(otFeatures).reduce((res, cur) => {
-    if (availableFeatures.includes(cur)) {
-      res[cur] = false;
-    }
-    return res;
-  }, {});
-
-  const vAxes = Object.keys(variationAxes);
-
-  const variationsDefaults = defaultVariationName
-    ? namedVariations[defaultVariationName]
-    : [];
-
-  const variationsConfig = vAxes.reduce((res, cur) => {
-    res[cur] = variationsDefaults[cur] || variationAxes[cur].default;
-    return res;
-  }, {});
-
-  const config = {
-    id,
-    metrics,
-    blob,
-    config: {
-      features: featuresConfig,
-      variations: variationsConfig,
-    },
-  };
-
-  return config;
-};

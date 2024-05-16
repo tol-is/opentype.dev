@@ -53,14 +53,20 @@ const Button = ({ selected, label, line = 'bottom', onClick }) => {
     [state]
   );
 
+  const opacity = useMemo(
+    () => (state === 'hover' || state === 'selected' ? '1' : '0.5'),
+    [state]
+  );
+
   return (
     <button
       className={css`
         padding: 1em 0;
         text-align: left;
         font-weight: 400;
-        line-height: 1.5;
+        line-height: 1;
         color: #fff;
+        opacity: ${opacity};
         background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
         background-repeat: no-repeat;
         background-position: ${bgPositionX} ${bgPositionY};
@@ -70,6 +76,8 @@ const Button = ({ selected, label, line = 'bottom', onClick }) => {
           outline: none;
         }
       `}
+      onFocus={onMouseOver}
+      onBlur={onMouseOut}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={onClick}

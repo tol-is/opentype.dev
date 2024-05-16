@@ -9,18 +9,19 @@ import get from '../utils/get';
 import { uuid } from '../utils/uuid';
 
 import ButtonUpload from '../ui/btn-upload';
-import { addFont } from '../modules/fonts';
+import { addFontToLibrary } from '../modules/library';
+import { addFontToTester } from '../modules/tester';
 
 const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'];
 
 const FontLoaderContainer = (props) => {
-  const { addFont } = props;
+  const { addFontToLibrary, addFontToTester, library } = props;
 
-  useEffect(() => {
-    if (props.fonts.fonts.length === 0) {
-      loadURL('/Inter.otf');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (Object.keys(library.fonts).length === 0) {
+  //     loadURL('/Inter.otf');
+  //   }
+  // }, []);
 
   const useFont = useCallback(({ fontData, font }) => {
     if (!font) return;
@@ -34,18 +35,20 @@ const FontLoaderContainer = (props) => {
     const italic = font['OS/2'].fsSelection.italic;
 
     //
-    let defaultVariationSettings = mapValues(font.variationAxes, 'default');
+    let variationsDefaults = mapValues(font.variationAxes, 'default');
 
     //
-    let defaultVariationName =
+    let variationDefaultName =
       Object.keys(font.namedVariations).find((k) => {
-        return isEqual(font.namedVariations[k], defaultVariationSettings);
+        return isEqual(font.namedVariations[k], variationsDefaults);
       }) ||
       subfamilyName ||
       'Custom';
 
     //
     const isVariable = Object.keys(font.variationAxes).length > 0;
+    const availableVariationAxes = Object.keys(font.variationAxes || {});
+    const availableVariations = Object.keys(font.namedVariations || {});
 
     //
     const openTypeData = {
@@ -56,19 +59,32 @@ const FontLoaderContainer = (props) => {
       italic,
       isVariable,
       availableFeatures: font.availableFeatures,
-      defaultVariationSettings,
-      defaultVariationName,
+      availableVariations,
+      availableVariationAxes,
+      variationsDefaults,
+      variationDefaultName,
       variationAxes: font.variationAxes,
-      namedVariations: font.namedVariations,
+      variationsNamed: font.namedVariations,
     };
 
+<<<<<<< HEAD
     console.log(openTypeData);
 
     addFont({
+=======
+    addFontToLibrary({
+>>>>>>> origin/feature/text
       id,
       blob: fontData,
       metrics: openTypeData,
     });
+
+    addFontToTester({
+      id: uuid(),
+      font_id: id,
+      metrics: openTypeData,
+    });
+
   }, []);
 
   const onChange = (e) => {
@@ -96,7 +112,6 @@ const FontLoaderContainer = (props) => {
       var reader = new FileReader();
       reader.onload = function (e) {
         const font = fontkit.create(buffer);
-
         useFont({ fontData: reader.result, font });
       };
       reader.readAsDataURL(blob);
@@ -108,13 +123,14 @@ const FontLoaderContainer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    fonts: state.fonts,
+    library: state.library,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addFont: (payload) => dispatch(addFont(payload)),
+    addFontToLibrary: (payload) => dispatch(addFontToLibrary(payload)),
+    addFontToTester: (payload) => dispatch(addFontToTester(payload)),
   };
 }
 

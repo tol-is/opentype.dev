@@ -11,7 +11,7 @@ export default ({ onChange }) => (
       padding: 1em 0;
       display: inline-block;
       text-align: left;
-      line-height: 1.5;
+      line-height: 1;
       font-weight: 400;
       background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%);
       background-repeat: no-repeat;
@@ -26,7 +26,7 @@ export default ({ onChange }) => (
       }
     `}
   >
-    Upload Fonts
+    Fonts
     <input
       multiple
       type="file"

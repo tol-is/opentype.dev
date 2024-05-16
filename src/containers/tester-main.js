@@ -2,105 +2,58 @@ import React, { useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { css } from 'emotion';
+import { motion, useViewportScroll } from 'framer-motion';
 
-import {
-  updateFonts,
-  removeFont,
-  setFontFeature,
-  setFontVariationAxis,
-  setFontNamedVariation,
-  setFontConfigProp,
-  resetFont,
-} from '../modules/fonts';
+import { setActiveFont, reorderFonts } from '../modules/tester';
 
-import { setActiveFont } from '../modules/tester';
+import FontContainer from './font-container';
 
-import FontView from '../ui/font-view';
+const TesterMain = ({ focus, fonts, reorderFonts }) => {
+  const { scrollY } = useViewportScroll();
 
-const TesterMain = ({
-  fonts,
-  tester,
-  openPanel,
-  updateFonts,
-  removeFont,
-  resetFont,
-  setFontFeature,
-  setFontVariationAxis,
-  setFontNamedVariation,
-  setActiveFont,
-}) => {
   const onDragEnd = useCallback(
     (result) => {
       // dropped outside the list
       if (!result.destination) return;
-
       const startIndex = result.source.index;
       const endIndex = result.destination.index;
       const newFonts = Array.from(fonts);
       const [removed] = newFonts.splice(startIndex, 1);
       newFonts.splice(endIndex, 0, removed);
       // update font list
-      updateFonts(newFonts);
+      reorderFonts(newFonts);
     },
     [fonts]
   );
 
-  const onRemove = useCallback((id) => {
-    removeFont(id);
-  }, []);
-
-  const onReset = useCallback((id) => {
-    resetFont(id);
-  }, []);
-
-  const onSetFontFeature = useCallback((id, key, value) => {
-    setFontFeature(id, key, value);
-  }, []);
-
-  const onSetFontVariationAxis = useCallback((id, axis, value) => {
-    setFontVariationAxis(id, axis, value);
-  }, []);
-
-  const onSetFontNamedVariation = useCallback((id, variation) => {
-    setFontNamedVariation(id, variation);
-  }, []);
-
-  const onFontActivated = useCallback((id) => {
-    console.log('tester SET_ACTIVE_FONT', id);
-    setActiveFont(id);
+  const onDragStart = useCallback(() => {
+    // setActiveFont(null);
   }, []);
 
   return (
     <main
       className={css`
-        padding: ${openPanel === 'text' ? '16rem' : '5rem'} 5vw;
+        padding: ${focus ? '5rem' : 0} 5vw 100vh 5vw;
         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       `}
     >
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <Droppable droppableId="droppable">
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {fonts.map((font, index) => (
-                <Draggable key={font.id} draggableId={font.id} index={index}>
+              {fonts.map((id, index) => (
+                <Draggable key={id} draggableId={id} index={index}>
                   {(provided, snapshot) => (
                     <div
+                      className={css`
+                        padding: 0 0 6.5rem 0;
+                        transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                      `}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
                     >
-                      <FontView
-                        id={font.id}
-                        index={index}
-                        font={font}
-                        testerConfig={tester}
-                        setNamedVariation={onSetFontNamedVariation}
-                        setFontVariationAxis={onSetFontVariationAxis}
-                        setFontFeature={onSetFontFeature}
-                        onReset={onReset}
-                        onRemove={onRemove}
-                        onActivated={onFontActivated}
-                      />
+                      <FontContainer key={id} id={id} index={index} />
                     </div>
                   )}
                 </Draggable>
@@ -114,28 +67,18 @@ const TesterMain = ({
   );
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
+  console.log(state.tester.fonts)
   return {
-    fonts: state.fonts.fonts,
-    tester: state.tester,
-    openPanel: state.tester.openPanel,
+    focus: state.tester.global.focus,
+    fonts: state.tester.fonts.map((f) => f.id),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setActiveFont: (value) => dispatch(setActiveFont(value)),
-    setFontConfigProp: (id, key, value) =>
-      dispatch(setFontConfigProp(id, key, value)),
-    setFontFeature: (id, key, enabled) =>
-      dispatch(setFontFeature(id, key, enabled)),
-    setFontVariationAxis: (id, axis, value) =>
-      dispatch(setFontVariationAxis(id, axis, value)),
-    setFontNamedVariation: (id, name) =>
-      dispatch(setFontNamedVariation(id, name)),
-    removeFont: (id) => dispatch(removeFont(id)),
-    resetFont: (id) => dispatch(resetFont(id)),
-    updateFonts: (fonts) => dispatch(updateFonts(fonts)),
+    setActiveFont: (id) => dispatch(setActiveFont(id)),
+    reorderFonts: (fonts) => dispatch(reorderFonts(fonts)),
   };
 }
 
