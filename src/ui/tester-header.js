@@ -7,7 +7,7 @@ import FontLoader from '../containers/font-loader';
 const TesterHeader = ({ tester, toggleFocusMode }) => {
 
   const { global = {}} = tester;
-  const { focus } = global;
+  const { focus = false } = global;
   const onFocusToggleClick = useCallback(() => {
     toggleFocusMode();
   }, [tester, global, focus]);
@@ -41,7 +41,7 @@ const TesterHeader = ({ tester, toggleFocusMode }) => {
         <ButtonToggle
           label="Focus"
           onClick={onFocusToggleClick}
-          selected={tester.global.focus}
+          selected={focus}
         />
       </div>
     </>
