@@ -5,9 +5,12 @@ import ButtonToggle from '../ui/btn-toggle';
 import FontLoader from '../containers/font-loader';
 
 const TesterHeader = ({ tester, toggleFocusMode }) => {
+
+  const { global = {}} = tester;
+  const { focus } = global;
   const onFocusToggleClick = useCallback(() => {
     toggleFocusMode();
-  }, [tester.global.focus]);
+  }, [tester, global, focus]);
   //
   return (
     <>
