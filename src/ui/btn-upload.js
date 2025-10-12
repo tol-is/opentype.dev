@@ -3,7 +3,6 @@ import { css } from 'emotion';
 
 export default ({ onChange }) => (
   <div
-    className="upload_button"
     tabIndex={-1}
     aria-hidden={true}
     className={css`
