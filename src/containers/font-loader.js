@@ -102,10 +102,10 @@ const FontLoaderContainer = (props) => {
       if (err) {
         throw err;
       }
+      const font = fontkit.create(buffer);
 
       var reader = new FileReader();
       reader.onload = function (e) {
-        const font = fontkit.create(buffer);
         useFont({ fontData: reader.result, font });
       };
       reader.readAsDataURL(blob);
