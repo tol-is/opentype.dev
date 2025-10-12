@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -27,4 +27,6 @@ const App = () => {
   );
 };
 
-render(<App />, document.getElementById('__root'));
+const container = document.getElementById('__root');
+const root = createRoot(container);
+root.render(<App />);
