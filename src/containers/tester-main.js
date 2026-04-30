@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { connect } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { css } from 'emotion';
@@ -8,8 +8,33 @@ import { setActiveFont, reorderFonts } from '../modules/tester';
 
 import FontContainer from './font-container';
 
-const TesterMain = ({ focus, fonts, reorderFonts }) => {
+const TesterMain = ({ focus, topFont, fonts, reorderFonts }) => {
   const { scrollY } = useViewportScroll();
+  const prevFocus = useRef(focus);
+
+  useEffect(() => {
+    const wasFocus = prevFocus.current;
+    prevFocus.current = focus;
+    if (!wasFocus || focus || !topFont) return;
+
+    const el = document.getElementById(`font-${topFont}`);
+    if (!el) return;
+
+    const anchorTop = el.getBoundingClientRect().top;
+    let raf;
+    const tick = () => {
+      const delta = el.getBoundingClientRect().top - anchorTop;
+      if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    const stop = setTimeout(() => cancelAnimationFrame(raf), 800);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(stop);
+    };
+  }, [focus, topFont]);
 
   const onDragEnd = useCallback(
     (result) => {
@@ -45,6 +70,7 @@ const TesterMain = ({ focus, fonts, reorderFonts }) => {
                 <Draggable key={id} draggableId={id} index={index}>
                   {(provided, snapshot) => (
                     <div
+                      id={`font-${id}`}
                       className={css`
                         padding: 0 0 6.5rem 0;
                         transition: padding 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -71,6 +97,7 @@ function mapStateToProps(state, ownProps) {
   console.log(state.tester.fonts)
   return {
     focus: state.tester.global.focus,
+    topFont: state.tester.global.topFont,
     fonts: state.tester.fonts.map((f) => f.id),
   };
 }

@@ -19,7 +19,7 @@ const TesterHeader = ({ tester, toggleFocusMode }) => {
           position: fixed;
           transform: translate3d(0, 0, 0);
           backface-visibility: hidden;
-          display: block;
+          display: ${focus ? 'none' : 'block'};
           top: 0;
           left: 1rem;
           z-index: 6000;
